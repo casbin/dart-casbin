@@ -34,9 +34,11 @@ class DefaultRoleManager implements RoleManager {
   /// aka role: [name1] inherits role: [name2].
   /// [domain] is a prefix to the roles.
   @override
-  void addLink(String name1, String name2, String domain) {
-    name1 = domain + '::' + name1;
-    name2 = domain + '::' + name2;
+  void addLink(String name1, String name2, [String domain]) {
+    if (domain != null) {
+      name1 = domain + '::' + name1;
+      name2 = domain + '::' + name2;
+    }
 
     var role1 = createRole(name1);
     var role2 = createRole(name2);
@@ -48,9 +50,11 @@ class DefaultRoleManager implements RoleManager {
   /// aka role: [name1] does not inherit role: [name2] any more.
   /// [domain] is a prefix to the roles.
   @override
-  void deleteLink(String name1, String name2, String domain) {
-    name1 = domain + '::' + name1;
-    name2 = domain + '::' + name2;
+  void deleteLink(String name1, String name2, [String domain]) {
+    if (domain != null) {
+      name1 = domain + '::' + name1;
+      name2 = domain + '::' + name2;
+    }
 
     if (!hasRole(name1) || !hasRole(name2)) {
       throw ArgumentError('error: name1 or name2 does not exist');
@@ -64,9 +68,11 @@ class DefaultRoleManager implements RoleManager {
   /// Determines whether role: [name1] inherits role: [name2].
   /// [domain] is a prefix to the roles.
   @override
-  bool hasLink(String name1, String name2, String domain) {
-    name1 = domain + '::' + name1;
-    name2 = domain + '::' + name2;
+  bool hasLink(String name1, String name2, [String domain]) {
+    if (domain != null) {
+      name1 = domain + '::' + name1;
+      name2 = domain + '::' + name2;
+    }
 
     if (name1 == name2) {
       return true;
@@ -83,8 +89,10 @@ class DefaultRoleManager implements RoleManager {
   /// Returns the roles that a subject inherits.
   /// [domain] is a prefix to the roles.
   @override
-  List<String> getRoles(String name, String domain) {
-    name = domain + '::' + name;
+  List<String> getRoles(String name, [String domain]) {
+    if (domain != null) {
+      name = domain + '::' + name;
+    }
 
     if (!hasRole(name)) {
       throw ArgumentError('error: name does not exist');
