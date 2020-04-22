@@ -3,7 +3,6 @@ import 'package:test/test.dart';
 
 void main() {
   group('A group of tests', () {
-    Awesome awesome;
 
     setUp(() {
       awesome = Awesome();
@@ -13,4 +12,8 @@ void main() {
       expect(awesome.isAwesome, isTrue);
     });
   });
+}
+
+void testEnforce(Enforcer e, String sub, Object obj, String act, bool res) {
+  assert(res, e.enforce(sub, obj, act));
 }

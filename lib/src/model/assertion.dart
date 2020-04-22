@@ -24,6 +24,7 @@ class Assertion {
         throw ArgumentError(
             'the number of \"_\" in role definition should be at least 2');
       }
+
       if (rule.length < count) {
         throw ArgumentError(
             'grouping policy elements do not meet role definition');

@@ -3,7 +3,7 @@ import 'package:casbin/src/persist/adapter.dart';
 
 class Enforcer extends CoreEnforcer {
   /// Initializes an enforcer.
-  /// 
+  ///
   /// [model] is a model or the path of the model file.
   /// [policyFile] is the path of the policy file.
   /// [adapter] is the adapter.
