@@ -3,5 +3,5 @@ class FunctionMap {
 
   void addFunction(String name, Function function) {}
 
-  Map<String, Function> loadFunctionMap() => null;
+  static Map<String, Function> loadFunctionMap() => null;
 }
