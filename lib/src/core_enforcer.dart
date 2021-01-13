@@ -1,5 +1,6 @@
 import 'package:casbin/src/effect/default_effector.dart';
 import 'package:casbin/src/effect/effector.dart';
+import 'package:casbin/src/model/function_map.dart';
 import 'package:casbin/src/model/model.dart';
 import 'package:casbin/src/rbac/default_role_manager.dart';
 import 'package:casbin/src/rbac/role_manager.dart';
@@ -18,6 +19,9 @@ class CoreEnforcer {
   bool enabled;
   bool autoSave;
   bool autoBuildRoleLinks;
+  Map<String, Function> fm;
+
+  CoreEnforcer({this.modelPath, this.model, this.eft, this.rm});
 
   void initialize() {
     rm = DefaultRoleManager(10);

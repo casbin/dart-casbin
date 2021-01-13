@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:casbin/src/rbac/role.dart';
 import 'package:casbin/src/rbac/role_manager.dart';
 
@@ -8,10 +10,9 @@ class DefaultRoleManager implements RoleManager {
   /// DefaultRoleManager is the constructor for creating an instance of the
   /// default RoleManager implementation.
   ///
-  /// [maxHierarchyLevel] the maximized allowed RBAC hierarchy level. The default is 10.
-  DefaultRoleManager([
-    this.maxHierarchyLevel = 10,
-  ]) {
+  /// [maxHierarchyLevel] the maximized allowed RBAC hierarchy level.
+  DefaultRoleManager(int maxHierarchyLevel) {
+    this.maxHierarchyLevel = maxHierarchyLevel ?? 10;
     allRoles = {};
   }
 
