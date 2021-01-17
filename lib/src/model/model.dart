@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'package:casbin/src/config/config.dart';
-import '../rbac/role_manager.dart';
-import 'policy.dart';
+import 'package:casbin/src/rbac/role_manager.dart';
+import 'package:casbin/src/model/policy.dart';
 
 /// Model represents the whole access control model.
 class Model extends Policy {

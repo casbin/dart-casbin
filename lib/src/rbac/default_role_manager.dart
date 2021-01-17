@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:casbin/src/rbac/role.dart';
 import 'package:casbin/src/rbac/role_manager.dart';
 
