@@ -15,10 +15,9 @@ class Enforcer extends CoreEnforcer {
 
   factory Enforcer._() => _enforcer;
 
-  Enforcer(
-      {String modelPath, String policyFile, Adapter adapter, bool enableLog})
+  Enforcer(String modelPath, String policyFile, Adapter adapter, bool enableLog)
       : super(
-          modelPath: modelPath,
+          modelPath,
         );
 
   factory Enforcer.fromModelPathAndPolicyFile(
@@ -35,7 +34,7 @@ class Enforcer extends CoreEnforcer {
     return Enforcer.fromModelAndAdapter(model, adapter);
   }
 
-  factory Enforcer.fromModelAndAdapter(Model model, Adapter adapter) {
+  factory Enforcer.fromModelAndAdapter(Model model, Adapter? adapter) {
     _enforcer.model = model;
     _enforcer.fm = FunctionMap.loadFunctionMap();
     if (adapter != null) {

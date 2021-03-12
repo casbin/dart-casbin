@@ -3,9 +3,7 @@ class Role {
   String name;
   List<Role> roles;
 
-  Role(String name) {
-    this.name = name;
-  }
+  Role(this.name) : roles = [];
 
   void addRole(Role role) {
     for (var r in roles) {
@@ -55,28 +53,10 @@ class Role {
 
   @override
   String toString() {
-    Role role;
-    String names;
-
-    for (var i = 0; i < roles.length; i++) {
-      role = roles.elementAt(i);
-      if (i == 0) {
-        names = role.name;
-      } else {
-        name += ', ' + role.name;
-      }
-    }
-
-    return name + ' < ' + names;
+    return name + roles.join(',');
   }
 
   List<String> getRoles() {
-    List<String> names;
-
-    for (var role in roles) {
-      names.add(role.name);
-    }
-
-    return names;
+    return roles.map((r) => r.name).toList();
   }
 }

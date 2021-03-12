@@ -1,26 +1,33 @@
 import 'package:casbin/src/effect/default_effector.dart';
 import 'package:casbin/src/effect/effector.dart';
+import 'package:casbin/src/model/function_map.dart';
 import 'package:casbin/src/model/model.dart';
 import 'package:casbin/src/rbac/default_role_manager.dart';
 import 'package:casbin/src/rbac/role_manager.dart';
 
 /// Defines the core functionality of an enforcer.
 class CoreEnforcer {
+  //TODO: test the nullable and non nullable properties here
+
   String modelPath;
-  Model model;
+  late Model? model;
   //FunctionMap fm;
-  Effector eft;
+  Effector? eft;
 
   //Adapter adapter;
   //Watcher watcher;
-  RoleManager rm;
+  RoleManager? rm;
 
   bool enabled;
   bool autoSave;
   bool autoBuildRoleLinks;
   Map<String, Function> fm;
 
-  CoreEnforcer({this.modelPath, this.model, this.eft, this.rm});
+  CoreEnforcer(this.modelPath, {this.model, this.eft, this.rm})
+      : enabled = true,
+        autoSave = true,
+        autoBuildRoleLinks = true,
+        fm = FunctionMap.loadFunctionMap();
 
   void initialize() {
     rm = DefaultRoleManager(10);
@@ -53,13 +60,13 @@ class CoreEnforcer {
   /// and needs to be reloaded by calling loadPolicy().
   void loadModel() {
     model = newModel();
-    model.loadModel(modelPath);
-    model.printModel();
+    model!.loadModel(modelPath);
+    model!.printModel();
     //fm = FunctionMap.loadFunctionMap();
   }
 
   /// Returns the current model.
-  Model getModel() {
+  Model? getModel() {
     return model;
   }
 
@@ -100,15 +107,15 @@ class CoreEnforcer {
 
   /// Clears all policy.
   void clearPolicy() {
-    model.clearPolicy();
+    model!.clearPolicy();
   }
 
   /// Reloads the policy from file/database.
   void loadPolicy() {
-    model.clearPolicy();
+    model!.clearPolicy();
     //adapter.loadPolicy(model);
 
-    model.printPolicy();
+    model!.printPolicy();
     if (autoBuildRoleLinks) {
       buildRoleLinks();
     }
@@ -161,8 +168,8 @@ class CoreEnforcer {
 
   /// Manually rebuild the role inheritance relations.
   void buildRoleLinks() {
-    rm.clear();
-    model.buildRoleLinks(rm);
+    rm!.clear();
+    model!.buildRoleLinks(rm!);
   }
 
   /// Returns whether a "subject" can access a "object" with the operation "action", input parameters are usually: [sub, obj, act].

@@ -9,7 +9,7 @@ class Config {
   // todo(KNawm): Implement synchronization lock
 
   // Section:key=value
-  HashMap<String, Map<String, String>> data;
+  HashMap<String, Map<String, String>> data = HashMap();
 
   /// Create an empty configuration representation from file.
   ///
@@ -23,26 +23,50 @@ class Config {
   /// newConfigFromText create an empty configuration representation from text.
   ///
   /// [text] is the model text.
-  static Config newConfigFromText(String text) {}
+  static Config newConfigFromText(String text) {
+    //TODO: Implement after parseBuffer is implemented.
+    return Config();
+  }
 
   /// Adds a new section->key:value to the configuration.
-  bool addConfig(String section, String option, String value) {}
+  bool addConfig(String section, String option, String value) {
+    //TODO: Implement this properly
+    return true;
+  }
 
   void parse(String fname) {}
 
   void parseBuffer(File file) {}
 
-  bool getBool(String key) {}
+  bool getBool(String key) {
+    //TODO: Test after implementation of get method
+    return get(key) != '';
+  }
 
-  int getInt(String key) {}
+  int getInt(String key) {
+    //TODO: Test after implementation of get method
+    return int.parse(get(key));
+  }
 
-  double getFloat(String key) {}
+  double getFloat(String key) {
+    //TODO: Test after implementation of get method
+    return double.parse(get(key));
+  }
 
-  String getString(String key) {}
+  String getString(String key) {
+    //TODO: Test after implementation of get method
+    return get(key);
+  }
 
-  List<String> getStrings(String key) {}
+  List<String> getStrings(String key) {
+    //TODO: Test after implementation of get method
+    return get(key).split(',');
+  }
 
   void set(String key, String value) {}
 
-  String get(String key) {}
+  String get(String key) {
+    //TODO: Implement properly
+    return '';
+  }
 }
