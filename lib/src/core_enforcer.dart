@@ -18,6 +18,9 @@ class CoreEnforcer {
   bool enabled;
   bool autoSave;
   bool autoBuildRoleLinks;
+  Map<String, Function> fm;
+
+  CoreEnforcer({this.modelPath, this.model, this.eft, this.rm});
 
   void initialize() {
     rm = DefaultRoleManager(10);
