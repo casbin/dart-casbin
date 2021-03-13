@@ -9,10 +9,7 @@ class DefaultRoleManager implements RoleManager {
   /// default RoleManager implementation.
   ///
   /// [maxHierarchyLevel] the maximized allowed RBAC hierarchy level.
-  DefaultRoleManager(int maxHierarchyLevel) {
-    this.maxHierarchyLevel = maxHierarchyLevel ?? 10;
-    allRoles = {};
-  }
+  DefaultRoleManager(this.maxHierarchyLevel) : allRoles = {};
 
   bool hasRole(String name) {
     return allRoles.containsKey(name);
@@ -33,7 +30,7 @@ class DefaultRoleManager implements RoleManager {
   /// aka role: [name1] inherits role: [name2].
   /// [domain] is a prefix to the roles.
   @override
-  void addLink(String name1, String name2, [String domain]) {
+  void addLink(String name1, String name2, [String? domain]) {
     if (domain != null) {
       name1 = domain + '::' + name1;
       name2 = domain + '::' + name2;
@@ -49,7 +46,7 @@ class DefaultRoleManager implements RoleManager {
   /// aka role: [name1] does not inherit role: [name2] any more.
   /// [domain] is a prefix to the roles.
   @override
-  void deleteLink(String name1, String name2, [String domain]) {
+  void deleteLink(String name1, String name2, [String? domain]) {
     if (domain != null) {
       name1 = domain + '::' + name1;
       name2 = domain + '::' + name2;
@@ -67,7 +64,7 @@ class DefaultRoleManager implements RoleManager {
   /// Determines whether role: [name1] inherits role: [name2].
   /// [domain] is a prefix to the roles.
   @override
-  bool hasLink(String name1, String name2, [String domain]) {
+  bool hasLink(String name1, String name2, [String? domain]) {
     if (domain != null) {
       name1 = domain + '::' + name1;
       name2 = domain + '::' + name2;
@@ -88,7 +85,7 @@ class DefaultRoleManager implements RoleManager {
   /// Returns the roles that a subject inherits.
   /// [domain] is a prefix to the roles.
   @override
-  List<String> getRoles(String name, [String domain]) {
+  List<String> getRoles(String name, [String? domain]) {
     if (domain != null) {
       name = domain + '::' + name;
     }
@@ -100,7 +97,8 @@ class DefaultRoleManager implements RoleManager {
     final roles = createRole(name).getRoles();
 
     for (var i = 0; i < roles.length; i++) {
-      roles[i] = roles.elementAt(i).substring(domain.length + 2);
+      roles[i] =
+          roles.elementAt(i).substring(domain == null ? 2 : domain.length + 2);
     }
 
     return roles;

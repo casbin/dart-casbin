@@ -1,3 +1,4 @@
+import 'package:casbin/src/rbac/default_role_manager.dart';
 import 'package:casbin/src/rbac/role_manager.dart';
 
 /// Assertion represents an expression in a section of the model.
@@ -8,6 +9,13 @@ class Assertion {
   List<String> tokens;
   List<List<String>> policy;
   RoleManager rm;
+
+  Assertion()
+      : key = '',
+        value = '',
+        tokens = [],
+        policy = [],
+        rm = DefaultRoleManager(10);
 
   void buildRoleLinks(RoleManager rm) {
     this.rm = rm;
