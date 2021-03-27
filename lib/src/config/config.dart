@@ -5,11 +5,12 @@ class Config {
   static final DEFAULT_SECTION = 'default';
   static final DEFAULT_COMMENT = '#';
   static final DEFAULT_COMMENT_SEM = ';';
+  static final DEFAULT_MULTI_LINE_SEPARATOR = '\\';
 
   // todo(KNawm): Implement synchronization lock
 
   // Section:key=value
-  HashMap<String, Map<String, String>> data = HashMap();
+  HashMap<String, HashMap<String, String>> data = HashMap();
 
   /// Create an empty configuration representation from file.
   ///
@@ -24,49 +25,160 @@ class Config {
   ///
   /// [text] is the model text.
   static Config newConfigFromText(String text) {
-    //TODO: Implement after parseBuffer is implemented.
-    return Config();
+    final config = Config();
+    final buf = StringBuffer();
+
+    buf.write(text);
+    config.parseBuffer(buf);
+
+    return config;
   }
 
   /// Adds a new section->key:value to the configuration.
   bool addConfig(String section, String option, String value) {
-    //TODO: Implement this properly
-    return true;
+    if (section == '') {
+      section = Config.DEFAULT_SECTION;
+    }
+    final hasKey = data.containsKey(section);
+
+    if (!hasKey) {
+      data[section] = HashMap();
+    }
+
+    final item = data[section];
+    if (item != null) {
+      item[option] = value;
+      return item.containsKey(option);
+    } else {
+      return false;
+    }
   }
 
-  void parse(String fname) {}
+  void parse(String path) {
+    final buf = StringBuffer();
+    buf.write(File(path).readAsStringSync());
+    parseBuffer(buf);
+  }
 
-  void parseBuffer(File file) {}
+  void parseBuffer(StringBuffer buf) {
+    final lines = buf.toString().split('\n');
+
+    final linesCount = lines.length;
+    var section = '';
+    var currentLine = '';
+
+    lines.asMap().forEach((index, element) {
+      var commentPos = element.indexOf(Config.DEFAULT_COMMENT);
+
+      if (commentPos > -1) {
+        element = element.substring(0, commentPos);
+      }
+
+      commentPos = element.indexOf(Config.DEFAULT_COMMENT_SEM);
+      if (commentPos > -1) {
+        element = element.substring(0, commentPos);
+      }
+
+      final line = element.trim();
+      if (line.isEmpty) {
+        return;
+      }
+
+      final lineNumber = index + 1;
+
+      if (line.startsWith('[') && line.endsWith(']')) {
+        if (currentLine.isNotEmpty) {
+          write(section, lineNumber - 1, currentLine);
+          currentLine = '';
+        }
+        section = line.substring(1, line.length - 1);
+      } else {
+        var shouldWrite = false;
+        if (line.contains(Config.DEFAULT_MULTI_LINE_SEPARATOR)) {
+          currentLine += line.substring(0, line.length - 1).trim();
+        } else {
+          currentLine += line;
+          shouldWrite = true;
+        }
+        if (shouldWrite || lineNumber == linesCount) {
+          write(section, lineNumber, currentLine);
+          currentLine = '';
+        }
+      }
+    });
+  }
+
+  void write(String section, int lineNum, String line) {
+    final equalIndex = line.indexOf('=');
+
+    if (equalIndex == -1) {
+      throw Exception('parse the content error : line $lineNum');
+    }
+    final key = line.substring(0, equalIndex);
+    final value = line.substring(equalIndex + 1);
+
+    addConfig(section, key.trim(), value.trim());
+  }
 
   bool getBool(String key) {
-    //TODO: Test after implementation of get method
-    return get(key) != '';
+    return get(key).isNotEmpty;
   }
 
   int getInt(String key) {
-    //TODO: Test after implementation of get method
     return int.parse(get(key));
   }
 
   double getFloat(String key) {
-    //TODO: Test after implementation of get method
     return double.parse(get(key));
   }
 
   String getString(String key) {
-    //TODO: Test after implementation of get method
     return get(key);
   }
 
   List<String> getStrings(String key) {
-    //TODO: Test after implementation of get method
     return get(key).split(',');
   }
 
-  void set(String key, String value) {}
+  void set(String key, String value) {
+    if (key.isEmpty) {
+      throw Exception('key is empty');
+    }
+
+    var section = '';
+    var option;
+
+    final keys = key.toLowerCase().split('::');
+
+    if (keys.length >= 2) {
+      section = keys[0];
+      option = keys[1];
+    } else {
+      option = keys[0];
+    }
+
+    addConfig(section, option, value);
+  }
 
   String get(String key) {
-    //TODO: Implement properly
-    return '';
+    var section;
+    var option;
+
+    final keys = key.toLowerCase().split('::');
+
+    if (keys.length >= 2) {
+      section = keys[0];
+      option = keys[1];
+    } else {
+      section = Config.DEFAULT_SECTION;
+      option = keys[0];
+    }
+
+    final item = data[section];
+    if (item != null) {
+      return item[option] ?? '';
+    } else {
+      return '';
+    }
   }
 }
