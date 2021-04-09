@@ -1,7 +1,10 @@
 import 'dart:collection';
+
 import 'package:casbin/src/config/config.dart';
-import 'package:casbin/src/rbac/role_manager.dart';
 import 'package:casbin/src/model/policy.dart';
+import 'package:casbin/src/rbac/role_manager.dart';
+
+import 'assertion.dart';
 
 /// Model represents the whole access control model.
 class Model extends Policy {
@@ -13,23 +16,99 @@ class Model extends Policy {
     'm': 'matchers'
   });
 
-  bool loadAssertion(Model model, Config cfg, String sec, String key) => true;
+  bool loadAssertion(Model model, Config cfg, String sec, String key) {
+    var secName = sectionNameMap[sec];
+    var value = cfg.getString(secName! + '::' + key);
+    return model.addDef(sec, key, value);
+  }
 
   /// Adds an assertion to the model.
   ///
   /// [sec] is the section, "p" or "g".
   /// [key] is the policy type, "p", "p2", .. or "g", "g2", ..
   /// [value] is the policy rule, separated by ", ".
-  bool addDef(String sec, String key, String value) => true;
+  bool addDef(String sec, String key, String value) {
+    var ast = Assertion();
+    ast.key = key;
+    ast.value = value;
 
-  String getKeySuffix(int i) => '';
+    if (ast.value.isEmpty) {
+      return false;
+    }
 
-  void loadSection(Model model, Config cfg, String sec) {}
+    if (sec == 'r' || sec == 'p') {
+      final tokens = value.split(',').map((e) => e.trim()).toList();
+      for (var i = 0; i < tokens.length; i++) {
+        tokens[i] = key + '_' + tokens[i];
+      }
+      ast.tokens = tokens;
+    } else if (sec == 'm') {
+      final regEx = RegExp('/\"(.*?)\"/g');
+      final str = regEx.allMatches(value).toList();
+
+      for (var i in str) {
+        value = value.replaceAll(i.toString(), '\$<$i>');
+      }
+
+      value = escapeAssertion(value);
+
+      for (var i in str) {
+        value = value.replaceAll('\$<$i>', i.toString());
+      }
+      ast.value = value;
+    } else {
+      ast.value = escapeAssertion(value);
+    }
+
+    final nodeMap = model[sec];
+
+    if (nodeMap != null) {
+      nodeMap[key] = ast;
+    } else {
+      final astMap = HashMap<String, Assertion>();
+      astMap[key] = ast;
+      model[sec] = astMap;
+    }
+
+    return true;
+  }
+
+  String getKeySuffix(int i) {
+    if (i == 1) {
+      return '';
+    }
+
+    return i.toString();
+  }
+
+  void loadSection(Model model, Config cfg, String sec) {
+    var i = 1;
+    while (true) {
+      if (!loadAssertion(model, cfg, sec, sec + getKeySuffix(i))) {
+        break;
+      } else {
+        i++;
+      }
+    }
+  }
+
+  /// Helper function for loadModel
+  void loadSections(Config cfg) {
+    loadSection(this, cfg, 'r');
+    loadSection(this, cfg, 'p');
+    loadSection(this, cfg, 'e');
+    loadSection(this, cfg, 'm');
+    loadSection(this, cfg, 'g');
+  }
 
   /// Loads the model from model CONF file.
   ///
   /// [path] is the path of the model file.
-  void loadModel(String path) {}
+  void loadModel(String path) {
+    final cfg = Config.newConfig(path);
+
+    loadSections(cfg);
+  }
 
   /// Loads the model from the text.
   ///
@@ -89,4 +168,12 @@ class Model extends Policy {
   List<String> getValuesForFieldInPolicy(
           String sec, String ptype, int fieldIndex) =>
       [];
+}
+
+/// escapeAssertion escapes the dots in the assertion, because the
+/// expression evaluation doesn't support such variable names.
+String escapeAssertion(String s) {
+  s = s.replaceAll(RegExp(r'r\.'), 'r_');
+  s = s.replaceAll(RegExp(r'p\.'), 'p_');
+  return s;
 }
