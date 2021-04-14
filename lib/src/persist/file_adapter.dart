@@ -24,13 +24,14 @@ void loadPolicyLine(String line, Model model) {
     return;
   }
 
-  final tokens = CsvToListConverter().convert(line).cast<List<String>>();
-
-  if (tokens.isEmpty || tokens.first.isEmpty) {
+  final tokensList = CsvToListConverter().convert(line);
+  if (tokensList.isEmpty || tokensList.first.isEmpty) {
     return;
   }
 
-  final key = tokens[0][0];
+  final tokens = tokensList.first.map((e) => (e as String).trim()).toList();
+
+  final key = tokens.first;
   final sec = key.substring(0, 1);
   final item = model.model[sec];
   if (item == null) {
@@ -42,7 +43,7 @@ void loadPolicyLine(String line, Model model) {
     return;
   }
 
-  policy.policy.add(tokens[0].sublist(1));
+  policy.policy.add(tokens.sublist(1));
 }
 
 /// FileAdapter is the file adapter for Casbin.
