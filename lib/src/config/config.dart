@@ -1,7 +1,36 @@
+// Copyright 2018-2021 The Casbin Authors. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import 'dart:collection';
 import 'dart:io';
 
-class Config {
+/// Defines the behavior of a Config implementation.
+abstract class ConfigInterface {
+  String getString(String key);
+
+  List<String> getStrings(String key);
+
+  bool getBool(String key);
+
+  int getInt(String key);
+
+  double getFloat(String key);
+
+  void set(String key, String value);
+}
+
+class Config implements ConfigInterface {
   static final DEFAULT_SECTION = 'default';
   static final DEFAULT_COMMENT = '#';
   static final DEFAULT_COMMENT_SEM = ';';
@@ -120,26 +149,32 @@ class Config {
     addConfig(section, key.trim(), value.trim());
   }
 
-  bool getBool(String key) {
-    return get(key).isNotEmpty;
-  }
-
-  int getInt(String key) {
-    return int.parse(get(key));
-  }
-
-  double getFloat(String key) {
-    return double.parse(get(key));
-  }
-
+  @override
   String getString(String key) {
     return get(key);
   }
 
+  @override
   List<String> getStrings(String key) {
     return get(key).split(',');
   }
 
+  @override
+  bool getBool(String key) {
+    return get(key).isNotEmpty;
+  }
+
+  @override
+  int getInt(String key) {
+    return int.parse(get(key));
+  }
+
+  @override
+  double getFloat(String key) {
+    return double.parse(get(key));
+  }
+
+  @override
   void set(String key, String value) {
     if (key.isEmpty) {
       throw Exception('key is empty');
