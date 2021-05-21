@@ -1,8 +1,8 @@
-import 'package:casbin/src/core_enforcer.dart';
-import 'package:casbin/src/model/function_map.dart';
-import 'package:casbin/src/persist/adapter.dart';
-import 'package:casbin/src/persist/file_adapter.dart';
-import 'package:casbin/src/model/model.dart';
+import 'core_enforcer.dart';
+import 'model/function_map.dart';
+import 'persist/adapter.dart';
+import 'persist/file_adapter.dart';
+import 'model/model.dart';
 
 class Enforcer extends CoreEnforcer {
   /// Initializes an enforcer.

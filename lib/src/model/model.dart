@@ -1,8 +1,8 @@
 import 'dart:collection';
 
-import 'package:casbin/src/config/config.dart';
-import 'package:casbin/src/model/policy.dart';
-import 'package:casbin/src/rbac/role_manager.dart';
+import '../config/config.dart';
+import 'policy.dart';
+import '../rbac/role_manager.dart';
 
 import 'assertion.dart';
 

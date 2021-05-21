@@ -1,9 +1,9 @@
-import 'package:casbin/src/effect/default_effector.dart';
-import 'package:casbin/src/effect/effector.dart';
-import 'package:casbin/src/model/function_map.dart';
-import 'package:casbin/src/model/model.dart';
-import 'package:casbin/src/rbac/default_role_manager.dart';
-import 'package:casbin/src/rbac/role_manager.dart';
+import 'effect/default_effector.dart';
+import 'effect/effector.dart';
+import 'model/function_map.dart';
+import 'model/model.dart';
+import 'rbac/default_role_manager.dart';
+import 'rbac/role_manager.dart';
 
 /// Defines the core functionality of an enforcer.
 class CoreEnforcer {

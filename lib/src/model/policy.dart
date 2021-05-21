@@ -1,6 +1,6 @@
 import 'dart:collection';
-import 'package:casbin/src/rbac/role_manager.dart';
-import 'package:casbin/src/model/assertion.dart';
+import '../rbac/role_manager.dart';
+import 'assertion.dart';
 
 class Policy {
   HashMap<String, HashMap<String, Assertion>> model = HashMap();

@@ -1,5 +1,5 @@
-import 'package:casbin/src/rbac/role.dart';
-import 'package:casbin/src/rbac/role_manager.dart';
+import 'role.dart';
+import 'role_manager.dart';
 
 class DefaultRoleManager implements RoleManager {
   Map<String, Role> allRoles;

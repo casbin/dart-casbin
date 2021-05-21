@@ -1,4 +1,4 @@
-import 'package:casbin/src/model/model.dart';
+import '../model/model.dart';
 
 /// Interface for Casbin adapters.
 abstract class Adapter {

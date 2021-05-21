@@ -1,5 +1,5 @@
-import 'package:casbin/src/rbac/default_role_manager.dart';
-import 'package:casbin/src/rbac/role_manager.dart';
+import '../rbac/default_role_manager.dart';
+import '../rbac/role_manager.dart';
 
 /// Assertion represents an expression in a section of the model.
 /// For example: r = sub, obj, act

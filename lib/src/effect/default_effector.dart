@@ -1,5 +1,5 @@
-import 'package:casbin/src/effect/effect.dart';
-import 'package:casbin/src/effect/effector.dart';
+import 'effect.dart';
+import 'effector.dart';
 
 /// Default effector for Casbin.
 class DefaultEffector implements Effector {
@@ -10,7 +10,8 @@ class DefaultEffector implements Effector {
       result = effects.any((eft) => eft == Effect.Allow);
     } else if (expr == '!some(where (p_eft == deny))') {
       result = !effects.any((eft) => eft == Effect.Deny);
-    } else if (expr == 'some(where (p_eft == allow)) && !some(where (p_eft == deny))') {
+    } else if (expr ==
+        'some(where (p_eft == allow)) && !some(where (p_eft == deny))') {
       if (effects.any((eft) => eft == Effect.Deny)) {
         result = false;
       } else if (effects.any((eft) => eft == Effect.Allow)) {

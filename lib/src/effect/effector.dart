@@ -1,4 +1,4 @@
-import 'package:casbin/src/effect/effect.dart';
+import 'effect.dart';
 
 /// Interface for Casbin effectors.
 abstract class Effector {
