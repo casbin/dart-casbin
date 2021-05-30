@@ -12,33 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:expressions/expressions.dart';
+
 import 'effect/default_effector.dart';
 import 'effect/effector.dart';
 import 'model/function_map.dart';
 import 'model/model.dart';
+import 'persist/adapter.dart';
+import 'persist/file_adapter.dart';
 import 'rbac/default_role_manager.dart';
 import 'rbac/role_manager.dart';
 
 /// Defines the core functionality of an enforcer.
 class CoreEnforcer {
-  //TODO: test the nullable and non nullable properties here
-
   String modelPath;
-  late Model? model;
-  //FunctionMap fm;
-  Effector? eft;
+  Model model;
+  FunctionMap fm;
+  Effector eft;
 
-  //Adapter adapter;
+  Adapter adapter;
   //Watcher watcher;
-  RoleManager? rm;
+  RoleManager rm;
 
   bool enabled;
   bool autoSave;
   bool autoBuildRoleLinks;
-  Map<String, Function> fm;
 
-  CoreEnforcer(this.modelPath, {this.model, this.eft, this.rm})
-      : enabled = true,
+  CoreEnforcer()
+      : modelPath = '',
+        model = Model(),
+        eft = DefaultEffector(),
+        rm = DefaultRoleManager(10),
+        adapter = FileAdapter(''),
+        enabled = true,
         autoSave = true,
         autoBuildRoleLinks = true,
         fm = FunctionMap.loadFunctionMap();
@@ -74,8 +80,8 @@ class CoreEnforcer {
   /// and needs to be reloaded by calling loadPolicy().
   void loadModel() {
     model = newModel();
-    model!.loadModel(modelPath);
-    model!.printModel();
+    model.loadModel(modelPath);
+    model.printModel();
     //fm = FunctionMap.loadFunctionMap();
   }
 
@@ -121,15 +127,15 @@ class CoreEnforcer {
 
   /// Clears all policy.
   void clearPolicy() {
-    model!.clearPolicy();
+    model.clearPolicy();
   }
 
   /// Reloads the policy from file/database.
   void loadPolicy() {
-    model!.clearPolicy();
-    //adapter.loadPolicy(model);
+    model.clearPolicy();
+    adapter.loadPolicy(model);
 
-    model!.printPolicy();
+    model.printPolicy();
     if (autoBuildRoleLinks) {
       buildRoleLinks();
     }
@@ -182,8 +188,8 @@ class CoreEnforcer {
 
   /// Manually rebuild the role inheritance relations.
   void buildRoleLinks() {
-    rm!.clear();
-    model!.buildRoleLinks(rm!);
+    rm.clear();
+    model.buildRoleLinks(rm);
   }
 
   /// Returns whether a "subject" can access a "object" with the operation "action", input parameters are usually: [sub, obj, act].
@@ -192,6 +198,65 @@ class CoreEnforcer {
   bool enforce(List<String> rvals) {
     if (!enabled) {
       return true;
+    }
+
+    var functions = <String, dynamic>{};
+    fm.functionMap.forEach((key, value) {
+      functions[key] = value;
+    });
+
+    //TODO: handle generating GFunctions
+
+    final expString = model.model['m']!['m']!.value;
+    if (expString.isEmpty) {
+      throw Exception('Unable to find matchers in model');
+    }
+
+    final effectExpr = model.model['e']!['e']!.value;
+    if (effectExpr.isEmpty) {
+      throw Exception('Unable to find policy_effect in model');
+    }
+
+    final p = model.model['p']!['p'];
+    final policyLen = p!.policy.length;
+
+    final rTokens = model.model['r']!['r']!.tokens;
+    final rTokensLen = rTokens.length;
+
+    //TODO: implement hasEval function
+    final hasEval = false;
+    Expression? expression;
+
+    if (policyLen != 0) {
+      for (var i = 0; i < policyLen; i++) {
+        final params = <String, dynamic>{};
+
+        if (rTokens.length != rvals.length) {
+          throw Exception(
+              'invalid request size: expected $rTokensLen, got ${rvals.length}, rvals: $rvals');
+        }
+
+        for (var j = 0; j < rTokensLen; j++) {
+          params[rTokens[j]] = rvals[j];
+        }
+
+        for (var j = 0; j < p.tokens.length; j++) {
+          params[p.tokens[j]] = p.policy[i][j];
+        }
+
+        if (hasEval) {
+          //TODO: implement this.
+        } else {
+          expression ??= Expression.parse(expString);
+        }
+
+        final context = {...params, ...functions};
+
+        final evaluator = const ExpressionEvaluator();
+        final result = evaluator.eval(expression!, context);
+
+        print(result);
+      }
     }
 
     return false;

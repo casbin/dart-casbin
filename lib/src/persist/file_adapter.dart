@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:io';
+
 import '../model/model.dart';
 import 'adapter.dart';
 
@@ -27,7 +29,14 @@ class FileAdapter implements Adapter {
 
   @override
   void loadPolicy(Model model) {
-    // TODO: implement loadPolicy
+    if (filePath.isNotEmpty) {
+      try {
+        var f = File(filePath);
+        loadPolicyData(model, loadPolicyLine, f);
+      } on IOException {
+        throw Exception('invalid file path for policy');
+      }
+    }
   }
 
   @override
@@ -45,4 +54,29 @@ class FileAdapter implements Adapter {
   void savePolicy(Model model) {
     // TODO: implement savePolicy
   }
+
+  void loadPolicyData(Model model, Function(Model, String) handler, File f) {
+    try {
+      var lines = f.readAsLinesSync();
+      lines.forEach((line) {
+        handler(model, line.trim());
+      });
+    } catch (e) {
+      throw Exception('Policy load error: $e');
+    }
+  }
+}
+
+void loadPolicyLine(Model model, String line) {
+  if (line.isEmpty || line.startsWith('#')) {
+    return;
+  }
+
+  line = line.replaceAll(RegExp(r' '), '');
+
+  var tokens = line.split(',').toList();
+
+  var key = tokens.first;
+  var sec = key.substring(0, 1);
+  model.model[sec]![key]!.policy.add(tokens.sublist(1));
 }
