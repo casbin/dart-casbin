@@ -15,6 +15,7 @@
 import 'package:expressions/expressions.dart';
 
 import 'effect/default_effector.dart';
+import 'effect/effect.dart';
 import 'effect/effector.dart';
 import 'model/function_map.dart';
 import 'model/model.dart';
@@ -227,7 +228,12 @@ class CoreEnforcer {
     final hasEval = false;
     Expression? expression;
 
+    List<Effect> policyEffects;
+    List<double> matcherResults;
+
     if (policyLen != 0) {
+      policyEffects = List<Effect>.filled(policyLen, Effect.Indeterminate);
+      matcherResults = List<double>.filled(policyLen, 0);
       for (var i = 0; i < policyLen; i++) {
         final params = <String, dynamic>{};
 
@@ -255,11 +261,65 @@ class CoreEnforcer {
         final evaluator = const ExpressionEvaluator();
         final result = evaluator.eval(expression!, context);
 
-        print(result);
+        if (result.runtimeType == bool) {
+          if (!result) {
+            policyEffects[i] = Effect.Indeterminate;
+            continue;
+          }
+        } else if (result.runtimeType == int) {
+          if (result == 0) {
+            policyEffects[i] = Effect.Indeterminate;
+            continue;
+          } else {
+            matcherResults[i] = result;
+          }
+        } else {
+          throw Exception('matcher result should be boolean or number');
+        }
+
+        if (params['p_eft'] != null) {
+          String eft = params['p_eft'];
+          if (eft == 'allow') {
+            policyEffects[i] = Effect.Allow;
+          } else if (eft == 'deny') {
+            policyEffects[i] = Effect.Deny;
+          } else {
+            policyEffects[i] = Effect.Indeterminate;
+          }
+        } else {
+          policyEffects[i] = Effect.Allow;
+        }
       }
+    } else {
+      if (hasEval && model.model['p']!['p']!.policy.isEmpty) {
+        throw Exception(
+            'please make sure rule exists in policy when using eval() in matcher');
+      }
+
+      final params = <String, dynamic>{};
+
+      policyEffects = <Effect>[Effect.Indeterminate];
+      matcherResults = <double>[0];
+
+      for (var j = 0; j < rTokensLen; j++) {
+        params[rTokens[j]] = rvals[j];
+      }
+
+      for (var j = 0; j < p.tokens.length; j++) {
+        params[p.tokens[j]] = '';
+      }
+
+      final context = {...params, ...functions};
+      final evaluator = const ExpressionEvaluator();
+      final result = evaluator.eval(expression!, context);
+
+      policyEffects[0] = result ? Effect.Allow : Effect.Indeterminate;
     }
 
-    return false;
+    final result = eft.mergeEffects(
+        model.model['e']!['e']!.value, policyEffects, matcherResults);
+
+    return result;
   }
 
   bool validateEnforce(List<String> rvals) {
