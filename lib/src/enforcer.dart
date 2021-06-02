@@ -27,31 +27,42 @@ class Enforcer extends CoreEnforcer {
   /// [enableLog] whether to enable Casbin's log.
   static final Enforcer _enforcer = Enforcer._();
 
-  factory Enforcer._() => _enforcer;
+  Enforcer._() : super();
 
-  Enforcer(String modelPath, String policyFile, Adapter adapter, bool enableLog)
-      : super(
-          modelPath,
-        );
+  Enforcer(
+    String modelPath,
+    String policyFile,
+    Adapter adapter,
+    bool enableLog,
+  ) : super();
 
   factory Enforcer.fromModelPathAndPolicyFile(
-      String modelPath, String policyFile) {
-    _enforcer.modelPath = modelPath;
+    String modelPath,
+    String policyFile,
+  ) {
     final fileAdapter = FileAdapter(policyFile);
     return Enforcer.fromModelPathAndAdapter(modelPath, fileAdapter);
   }
 
-  factory Enforcer.fromModelPathAndAdapter(String modelPath, Adapter adapter) {
+  factory Enforcer.fromModelPathAndAdapter(
+    String modelPath,
+    Adapter adapter,
+  ) {
     _enforcer.modelPath = modelPath;
     final model = Model();
     model.loadModel(modelPath);
     return Enforcer.fromModelAndAdapter(model, adapter);
   }
 
-  factory Enforcer.fromModelAndAdapter(Model model, Adapter? adapter) {
+  factory Enforcer.fromModelAndAdapter(
+    Model model,
+    Adapter? adapter,
+  ) {
     _enforcer.model = model;
     _enforcer.fm = FunctionMap.loadFunctionMap();
+
     if (adapter != null) {
+      _enforcer.adapter = adapter;
       _enforcer.loadPolicy();
     }
     return _enforcer;

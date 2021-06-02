@@ -19,5 +19,9 @@ class FunctionMap {
 
   void addFunction(String name, Function function) {}
 
-  static Map<String, Function> loadFunctionMap() => {};
+  static FunctionMap loadFunctionMap() {
+    var fm = FunctionMap();
+
+    return fm;
+  }
 }

@@ -1,5 +1,6 @@
 name: casbin
-description: An authorization library that supports access control models like ACL, RBAC, ABAC.
+description: An authorization library that supports access control models like
+  ACL, RBAC, ABAC.
 version: 0.0.1
 homepage: https://casbin.org/
 repository: https://github.com/casbin/dart-casbin
@@ -10,7 +11,8 @@ environment:
 
 #dependencies:
 #  path: ^1.6.0
-
 dev_dependencies:
   pedantic: ^1.11.0
   test: ^1.16.7
+dependencies:
+  expressions: ^0.2.2
