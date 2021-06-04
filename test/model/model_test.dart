@@ -5,8 +5,8 @@ import 'package:casbin/src/enforcer.dart';
 import '../utils/test_utils.dart';
 
 void main() {
-  final modelPath = 'examples\\basic_model.conf';
-  final policyFile = 'examples\\basic_policy.csv';
+  final modelPath = 'examples/basic_model.conf';
+  final policyFile = 'examples/basic_policy.csv';
   group('Test enforcing with basic model', () {
     final e = Enforcer.fromModelPathAndPolicyFile(modelPath, policyFile);
 
