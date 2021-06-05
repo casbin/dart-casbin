@@ -310,14 +310,19 @@ class CoreEnforcer {
       }
 
       final context = {...params, ...functions};
+
+      expression = Expression.parse(expString);
       final evaluator = const ExpressionEvaluator();
-      final result = evaluator.eval(expression!, context);
+      final result = evaluator.eval(expression, context);
 
       policyEffects[0] = result ? Effect.Allow : Effect.Indeterminate;
     }
 
     final result = eft.mergeEffects(
-        model.model['e']!['e']!.value, policyEffects, matcherResults);
+      model.model['e']!['e']!.value,
+      policyEffects,
+      matcherResults,
+    );
 
     return result;
   }
