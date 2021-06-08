@@ -22,7 +22,7 @@ abstract class RoleManager {
   /// [name1] is the first role (or user).
   /// [name2] is the second role.
   /// [domain] is the domain the roles belong to.
-  void addLink(String name1, String name2, [String domain]);
+  void addLink(String name1, String name2, [List<String> domain = const []]);
 
   /// Delete the inheritance link between two roles. role: name1 and role: name2.
   /// domain is a prefix to the roles.
@@ -30,7 +30,7 @@ abstract class RoleManager {
   /// [name1] is the first role (or user).
   /// [name2] is the second role.
   /// [domain] is the domain the roles belong to.
-  void deleteLink(String name1, String name2, [String domain]);
+  void deleteLink(String name1, String name2, [List<String> domain = const []]);
 
   /// Returns whether a link exists between two roles. role: name1 inherits role: name2.
   /// domain is a prefix to the roles.
@@ -38,19 +38,19 @@ abstract class RoleManager {
   /// [name1] is the first role (or a user).
   /// [name2] is the second role.
   /// [domain] is the domain the roles belong to.
-  bool hasLink(String name1, String name2, [String domain]);
+  bool hasLink(String name1, String name2, [List<String> domain = const []]);
 
   /// Returns the roles that a user inherits.
   /// domain is a prefix to the roles.
   ///
   /// [name] is the user (or a role).
   /// [domain] is the domain the roles belong to.
-  List<String> getRoles(String name, [String domain]);
+  List<String> getRoles(String name, [List<String> domain = const []]);
 
   /// Returns the users that inherits a role.
   ///
   /// [name] is the role.
-  List<String> getUsers(String name);
+  List<String> getUsers(String name, [List<String> domain = const []]);
 
   /// Prints all the roles to log.
   void printRoles();
