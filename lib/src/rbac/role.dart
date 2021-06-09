@@ -17,7 +17,7 @@ class Role {
   String name;
   List<Role> roles;
 
-  Role(this.name) : roles = [];
+  Role(this.name) : roles = <Role>[];
 
   void addRole(Role role) {
     for (var r in roles) {
@@ -30,11 +30,7 @@ class Role {
   }
 
   void deleteRole(Role role) {
-    for (var r in roles) {
-      if (r.name == role.name) {
-        roles.remove(r);
-      }
-    }
+    roles.removeWhere((element) => element == role);
   }
 
   bool hasRole(String name, int hierarchyLevel) {

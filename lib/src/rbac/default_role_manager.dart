@@ -144,7 +144,7 @@ class DefaultRoleManager implements RoleManager {
     }
 
     var role1 = loadOrDefault(allRoles.roles, name1, Role(name1));
-    var role2 = loadOrDefault(allRoles.roles, name1, Role(name1));
+    var role2 = loadOrDefault(allRoles.roles, name2, Role(name2));
     role1.deleteRole(role2);
   }
 
