@@ -1,4 +1,3 @@
 import 'package:casbin/casbin.dart';
 
-void main() {
-}
+void main() {}
