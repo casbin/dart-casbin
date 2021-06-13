@@ -61,7 +61,8 @@ class DefaultRoleManager implements RoleManager {
     } else if (name.runtimeType == MatchingFunc) {
       matchingFunc = name;
     } else {
-      throw Exception('error: domain should be 1 parameter');
+      throw ArgumentError(
+          'error: name should be only 1 parameter and it must be either a matching function or a string');
     }
   }
 
@@ -113,7 +114,7 @@ class DefaultRoleManager implements RoleManager {
     if (domain.isEmpty) {
       domain = [DEFAULT_DOMAIN];
     } else if (domain.length > 1) {
-      throw Exception('error: domain should be 1 parameter');
+      throw ArgumentError('error: domain should be only 1 parameter');
     }
     final allRoles = loadOrDefault(allDomains, domain[0], DomainRoles());
 
@@ -133,14 +134,19 @@ class DefaultRoleManager implements RoleManager {
     if (domain.isEmpty) {
       domain = [DEFAULT_DOMAIN];
     } else if (domain.length > 1) {
-      throw Exception('error: domain should be 1 parameter');
+      throw ArgumentError('error: domain should be only 1 parameter');
     }
 
     final allRoles = loadOrDefault(allDomains, domain[0], DomainRoles());
 
-    if (!allRoles.roles.containsKey(name1) ||
+    if (!allRoles.roles.containsKey(name1) &&
         !allRoles.roles.containsKey(name2)) {
-      throw ArgumentError('error: name1 or name2 does not exist');
+      throw ArgumentError('error: both name1 and name2 do not exist');
+    } else if (!allRoles.roles.containsKey(name1) ||
+        !allRoles.roles.containsKey(name2)) {
+      final missingParam =
+          (allRoles.roles.containsKey(name1)) ? 'name2' : 'name1';
+      throw ArgumentError('error: $missingParam does not exist');
     }
 
     var role1 = loadOrDefault(allRoles.roles, name1, Role(name1));
@@ -155,7 +161,7 @@ class DefaultRoleManager implements RoleManager {
     if (domain.isEmpty) {
       domain = [DEFAULT_DOMAIN];
     } else if (domain.length > 1) {
-      throw Exception('error: domain should be 1 parameter');
+      throw ArgumentError('error: domain should be only 1 parameter');
     }
 
     if (name1 == name2) {
@@ -185,7 +191,7 @@ class DefaultRoleManager implements RoleManager {
     if (domain.isEmpty) {
       domain = [DEFAULT_DOMAIN];
     } else if (domain.length > 1) {
-      throw Exception('error: domain should be 1 parameter');
+      throw ArgumentError('error: domain should be only 1 parameter');
     }
 
     var allRoles = DomainRoles();
@@ -209,7 +215,7 @@ class DefaultRoleManager implements RoleManager {
     if (domain.isEmpty) {
       domain = [DEFAULT_DOMAIN];
     } else if (domain.length > 1) {
-      throw Exception('error: domain should be 1 parameter');
+      throw ArgumentError('error: domain should be 1 parameter');
     }
 
     var allRoles = DomainRoles();
