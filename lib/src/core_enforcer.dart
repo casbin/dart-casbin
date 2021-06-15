@@ -23,6 +23,8 @@ import 'persist/adapter.dart';
 import 'persist/file_adapter.dart';
 import 'rbac/default_role_manager.dart';
 import 'rbac/role_manager.dart';
+import 'utils/builtin_operators.dart';
+import 'utils/utils.dart';
 
 /// Defines the core functionality of an enforcer.
 class CoreEnforcer {
@@ -206,7 +208,12 @@ class CoreEnforcer {
       functions[key] = value;
     });
 
-    //TODO: handle generating GFunctions
+    final astMap = model.model['g'];
+
+    astMap?.forEach((key, value) {
+      final rm = value.rm;
+      functions[key] = generateGFunction(rm);
+    });
 
     final expString = model.model['m']!['m']!.value;
     if (expString.isEmpty) {
@@ -224,8 +231,7 @@ class CoreEnforcer {
     final rTokens = model.model['r']!['r']!.tokens;
     final rTokensLen = rTokens.length;
 
-    //TODO: implement hasEval function
-    final hasEval = false;
+    var hasEval = hasEvalFn(expString);
     Expression? expression;
 
     List<Effect> policyEffects;
@@ -251,7 +257,18 @@ class CoreEnforcer {
         }
 
         if (hasEval) {
-          //TODO: implement this.
+          var ruleNames = getEvalValue(expString);
+          var expWithRule = expString;
+
+          for (var ruleName in ruleNames) {
+            if (params.containsKey(ruleName)) {
+              var rule = escapeAssertion(params[ruleName]);
+              expWithRule = replaceEval(expWithRule, rule);
+            } else {
+              throw Exception('$ruleName not in $params');
+            }
+          }
+          expression ??= Expression.parse(expWithRule);
         } else {
           expression ??= Expression.parse(expString);
         }
@@ -259,7 +276,7 @@ class CoreEnforcer {
         final context = {...params, ...functions};
 
         final evaluator = const ExpressionEvaluator();
-        final result = evaluator.eval(expression!, context);
+        final result = evaluator.eval(expression, context);
 
         if (result.runtimeType == bool) {
           if (!result) {

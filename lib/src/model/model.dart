@@ -30,6 +30,13 @@ class Model extends Policy {
     'm': 'matchers'
   });
 
+  int _modCount = 0;
+
+  int get modCount => _modCount;
+  set modCount(modCount) {
+    _modCount = modCount;
+  }
+
   bool loadAssertion(Model model, Config cfg, String sec, String key) {
     var secName = sectionNameMap[sec];
     var value = cfg.getString(secName! + '::' + key);
@@ -127,61 +134,65 @@ class Model extends Policy {
   /// Loads the model from the text.
   ///
   /// [text] is the model text.
-  void loadModelFromText(String text) {}
+  void loadModelFromText(String text) {
+    final cfg = Config.newConfigFromText(text);
+
+    loadSections(cfg);
+  }
 
   /// Saves the section to the text and returns the section text.
-  String saveSectionToText(String sec) => '';
+  String saveSectionToText(String sec) {
+    final res = StringBuffer('[' + sectionNameMap[sec]! + ']\n');
+
+    final section = model[sec];
+
+    if (section == null) {
+      return '';
+    }
+
+    for (var entry in section.entries) {
+      res.write('${entry.key} = ${entry.value.value.replaceAll('_', '.')}');
+    }
+
+    return res.toString();
+  }
 
   /// Saves the model to the text and returns the model text.
-  String saveModelToText() => '';
+  String saveModelToText() {
+    final res = StringBuffer();
+
+    res.write(saveSectionToText('r'));
+    res.write('\n\n');
+
+    res.write(saveSectionToText('p'));
+    res.write('\n\n');
+
+    var g = saveSectionToText('g');
+    g = g.replaceAll('.', '_');
+    res.write(g);
+
+    if (g.isNotEmpty) {
+      res.write('\n\n');
+    }
+
+    res.write(saveSectionToText('e'));
+    res.write('\n\n');
+    res.write(saveSectionToText('m'));
+
+    return res.toString();
+  }
 
   /// Prints the model to the log.
   void printModel() {}
 
   @override
-  void buildRoleLinks(RoleManager rm) {}
-
-  /// Prints the policy to log.
-  @override
-  void printPolicy() {}
-
-  /// Prints the policy to log.
-  @override
-  void clearPolicy() {}
-
-  /// Gets all rules in a policy.
-  @override
-  List<List<String>> getPolicy(String sec, String ptype) => [];
-
-  /// Gets rules based on field filters from a policy.
-  @override
-  List<List<String>> getFilteredPolicy(
-          String sec, String ptype, int fieldIndex, List<String> fieldValues) =>
-      [];
-
-  /// Determines whether a model has the specified policy rule.
-  @override
-  bool hasPolicy(String sec, String ptype, List<String> rule) => true;
-
-  /// Adds a policy rule to the model.
-  @override
-  bool addPolicy(String sec, String ptype, List<String> rule) => true;
-
-  /// Removes a policy rule from the model.
-  @override
-  bool removePolicy(String sec, String ptype, List<String> rule) => true;
-
-  /// Removes policy rules based on field filters from the model.
-  @override
-  bool removeFilteredPolicy(
-          String sec, String ptype, int fieldIndex, List<String> fieldValues) =>
-      true;
-
-  /// Gets all values for a field for all rules in a policy, duplicated values are removed.
-  @override
-  List<String> getValuesForFieldInPolicy(
-          String sec, String ptype, int fieldIndex) =>
-      [];
+  void buildRoleLinks(RoleManager rm) {
+    if (model.containsKey('g')) {
+      for (var ast in model['g']!.values) {
+        ast.buildRoleLinks(rm);
+      }
+    }
+  }
 }
 
 /// escapeAssertion escapes the dots in the assertion, because the
