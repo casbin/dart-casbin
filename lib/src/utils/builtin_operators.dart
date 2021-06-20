@@ -3,23 +3,19 @@ import '../rbac/role_manager.dart';
 dynamic generateGFunction(RoleManager? rm) {
   final memorized = <String, bool>{};
 
-  bool func(List? args) {
-    final key = args.toString();
+  bool func(String name1, String name2, [String? domain]) {
+    final key = name1 + name2 + (domain ?? '');
     var value = memorized[key];
 
     if (value != null) {
       return value;
     }
 
-    final name1 = args?[0] ?? '';
-    final name2 = args?[1] ?? '';
-
     if (rm == null) {
       value = name1 == name2;
-    } else if (args!.length == 2) {
+    } else if (domain == null) {
       value = rm.hasLink(name1, name2);
     } else {
-      final domain = args[2];
       value = rm.hasLink(name1, name2, [domain]);
     }
     memorized[key] = value;
