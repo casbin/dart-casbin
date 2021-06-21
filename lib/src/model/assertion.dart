@@ -14,6 +14,7 @@
 
 import '../rbac/default_role_manager.dart';
 import '../rbac/role_manager.dart';
+import 'model.dart';
 
 /// Assertion represents an expression in a section of the model.
 /// For example: r = sub, obj, act
@@ -60,5 +61,45 @@ class Assertion {
 
     // todo(KNawm): Log "Role links for: " + key
     rm.printRoles();
+  }
+
+  void buildIncrementalRoleLinks(
+    RoleManager rm,
+    PolicyOperations op,
+    List<List<String>> rules,
+  ) {
+    this.rm = rm;
+    var count = 0;
+
+    for (var i = 0; i < value.length; i++) {
+      if (value[i] == '_') {
+        count++;
+      }
+    }
+
+    if (count < 2) {
+      throw ArgumentError(
+          'the number of \"_\" in role definition should be at least 2');
+    }
+
+    for (var rule in rules) {
+      if (rule.length < count) {
+        throw ArgumentError(
+            'grouping policy elements do not meet role definition');
+      }
+      if (rule.length > count) {
+        rule = rule.sublist(0, count);
+      }
+      switch (op) {
+        case PolicyOperations.PolicyAdd:
+          rm.addLink(rule[0], rule[1], rule.sublist(2));
+          break;
+        case PolicyOperations.PolicyRemove:
+          rm.deleteLink(rule[0], rule[1], rule.sublist(2));
+          break;
+        default:
+          throw ArgumentError('invalid operation:' + op.toString());
+      }
+    }
   }
 }

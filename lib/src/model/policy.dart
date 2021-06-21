@@ -17,6 +17,7 @@ import 'package:collection/collection.dart';
 
 import '../rbac/role_manager.dart';
 import 'assertion.dart';
+import 'model.dart';
 
 class Policy {
   HashMap<String, HashMap<String, Assertion>> model = HashMap();
@@ -280,5 +281,21 @@ class Policy {
     }
 
     return values;
+  }
+
+  void buildIncrementalRoleLinks(RoleManager rm, PolicyOperations op,
+      String sec, String ptype, List<List<String>> rules) {
+    if (sec == 'g') {
+      model[sec]?[ptype]?.buildIncrementalRoleLinks(rm, op, rules);
+    }
+  }
+
+  bool hasPolicies(String sec, String ptype, List<List<String>> rules) {
+    for (var rule in rules) {
+      if (hasPolicy(sec, ptype, rule)) {
+        return true;
+      }
+    }
+    return false;
   }
 }
