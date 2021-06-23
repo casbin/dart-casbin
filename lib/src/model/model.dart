@@ -20,6 +20,11 @@ import '../rbac/role_manager.dart';
 
 import 'assertion.dart';
 
+enum PolicyOperations {
+  PolicyAdd,
+  PolicyRemove,
+}
+
 /// Model represents the whole access control model.
 class Model extends Policy {
   static HashMap<String, String> sectionNameMap = HashMap.from({
