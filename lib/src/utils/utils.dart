@@ -26,3 +26,7 @@ List<String> getEvalValue(String s) {
 String replaceEval(String s, String rule) {
   return s.replaceAll(evalReg, '(' + rule + ')');
 }
+
+String arrayToString(List<String> s) {
+  return s.join(', ');
+}

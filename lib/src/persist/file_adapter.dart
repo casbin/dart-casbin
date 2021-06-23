@@ -14,6 +14,8 @@
 
 import 'dart:io';
 
+import '../utils/utils.dart';
+
 import '../model/model.dart';
 import 'adapter.dart';
 
@@ -21,11 +23,6 @@ class FileAdapter implements Adapter {
   final String filePath;
 
   FileAdapter(this.filePath);
-
-  @override
-  void addPolicy(String sec, String ptype, List<String> rule) {
-    // TODO: implement addPolicy
-  }
 
   @override
   void loadPolicy(Model model) {
@@ -40,19 +37,38 @@ class FileAdapter implements Adapter {
   }
 
   @override
-  void removeFilteredPolicy(
-      String sec, String ptype, int fieldIndex, List<String> fieldValues) {
-    // TODO: implement removeFilteredPolicy
-  }
-
-  @override
-  void removePolicy(String sec, String ptype, List<String> rule) {
-    // TODO: implement removePolicy
-  }
-
-  @override
   void savePolicy(Model model) {
-    // TODO: implement savePolicy
+    if (filePath.isEmpty) {
+      throw Exception('invalid file path, file path cannot be empty');
+    }
+    var result = '';
+
+    final pList = model.model['p'];
+
+    pList?.values.forEach((n) => {
+          n.policy.forEach((m) {
+            result += n.key + ', ';
+            result += arrayToString(m);
+            result += '\n';
+          })
+        });
+
+    final gList = model.model['g'];
+
+    gList?.values.forEach((n) => {
+          n.policy.forEach((m) {
+            result += n.key + ', ';
+            result += arrayToString(m);
+            result += '\n';
+          })
+        });
+
+    savePolicyFile(result.trim());
+  }
+
+  void savePolicyFile(String text) {
+    final file = File(filePath);
+    file.writeAsStringSync(text);
   }
 
   void loadPolicyData(Model model, Function(Model, String) handler, File f) {
@@ -65,18 +81,34 @@ class FileAdapter implements Adapter {
       throw Exception('Policy load error: $e');
     }
   }
-}
 
-void loadPolicyLine(Model model, String line) {
-  if (line.isEmpty || line.startsWith('#')) {
-    return;
+  void loadPolicyLine(Model model, String line) {
+    if (line.isEmpty || line.startsWith('#')) {
+      return;
+    }
+
+    line = line.replaceAll(RegExp(r' '), '');
+
+    var tokens = line.split(',').toList();
+
+    var key = tokens.first;
+    var sec = key.substring(0, 1);
+    model.model[sec]![key]!.policy.add(tokens.sublist(1));
   }
 
-  line = line.replaceAll(RegExp(r' '), '');
+  @override
+  void addPolicy(String sec, String ptype, List<String> rule) {
+    throw UnsupportedError('not implemented');
+  }
 
-  var tokens = line.split(',').toList();
+  @override
+  void removeFilteredPolicy(
+      String sec, String ptype, int fieldIndex, List<String> fieldValues) {
+    throw UnsupportedError('not implemented');
+  }
 
-  var key = tokens.first;
-  var sec = key.substring(0, 1);
-  model.model[sec]![key]!.policy.add(tokens.sublist(1));
+  @override
+  void removePolicy(String sec, String ptype, List<String> rule) {
+    throw UnsupportedError('not implemented');
+  }
 }
