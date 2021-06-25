@@ -14,9 +14,9 @@
 
 import 'core_enforcer.dart';
 import 'model/function_map.dart';
+import 'model/model.dart';
 import 'persist/adapter.dart';
 import 'persist/file_adapter.dart';
-import 'model/model.dart';
 
 class Enforcer extends CoreEnforcer {
   /// Initializes an enforcer.
@@ -78,5 +78,48 @@ class Enforcer extends CoreEnforcer {
     return _enforcer;
   }
 
-  Model newModel(List<String> text) => Model();
+  /// getRolesForUser gets the roles that a user has.
+  ///
+  /// [param] name the user.
+  /// [return] the roles that the user has.
+  List<String> getRolesForUser(String name) {
+    try {
+      return model.model['g']!['g']!.rm.getRoles(name);
+    } catch (e) {
+      if (e.toString() == 'Null check operator used on a null value') {
+        throw Exception("model does not contain 'g' section");
+      } else {
+        rethrow;
+      }
+    }
+  }
+
+  /// getUsersForRole gets the users that has a role.
+  ///
+  /// [param] name the role.
+  /// [return] the users that has the role.
+
+  List<String> getUsersForRole(String name) {
+    try {
+      return model.model['g']!['g']!.rm.getUsers(name);
+    } catch (e) {
+      if (e.toString() == 'Null check operator used on a null value') {
+        throw Exception("model does not contain 'g' section");
+      } else {
+        rethrow;
+      }
+    }
+  }
+
+  /// hasRoleForUser determines whether a user has a role.
+  ///
+  /// [param] name the user.
+  /// [param] role the role.
+  /// [return] whether the user has the role.
+
+  bool hasRoleForUser(String name, String role) {
+    var roles = getRolesForUser(name);
+
+    return roles.any((element) => element == role);
+  }
 }

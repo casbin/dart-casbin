@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:io';
+
 import 'package:expressions/expressions.dart';
 
 import 'effect/default_effector.dart';
@@ -41,6 +43,8 @@ class CoreEnforcer {
   bool autoSave;
   bool autoBuildRoleLinks;
 
+  int modelCount = 0;
+
   CoreEnforcer()
       : modelPath = '',
         model = Model(),
@@ -66,12 +70,9 @@ class CoreEnforcer {
   /// [model] is the model path or the model text.
   static Model newModel([String model = '']) {
     var m = Model();
-
-    if (model == 'path') {
-      // todo(KNawm): Check if it's a model file.
+    if (model.trim().endsWith('.conf') && File(model).existsSync()) {
       m.loadModel(model);
-    } else if (model == 'text') {
-      // todo(KNawm): Check if it's a model text.
+    } else if (model.isNotEmpty) {
       m.loadModelFromText(model);
     }
 
@@ -89,7 +90,7 @@ class CoreEnforcer {
   }
 
   /// Returns the current model.
-  Model? getModel() {
+  Model getModel() {
     return model;
   }
 
@@ -102,12 +103,16 @@ class CoreEnforcer {
   }
 
   /// Returns the current adapter.
-  //Adapter getAdapter() {}
+  Adapter getAdapter() {
+    return adapter;
+  }
 
   /// Sets the current adapter.
   ///
   /// [adapter] is the adapter.
-  //void setAdapter(Adapter adapter) {}
+  void setAdapter(Adapter adapter) {
+    this.adapter = adapter;
+  }
 
   /// Sets the current watcher.
   ///
@@ -158,7 +163,12 @@ class CoreEnforcer {
 
   /// Saves the current policy (usually after changed with Casbin API) back to file/database.
   void savePolicy() {
-    // TODO(KNawm): Implement
+    if (isFiltered()) {
+      throw ArgumentError('cannot save a filtered policy');
+    }
+
+    adapter.savePolicy(model);
+    // TODO: Implement watcher
   }
 
   /// Changes the enforcing state of Casbin, when Casbin is disabled, all access will be allowed by the enforce() function.
@@ -349,6 +359,23 @@ class CoreEnforcer {
   }
 
   bool _validateEnforceSection(String section, List<String> rvals) {
-    throw UnimplementedError();
+    var expectedParamSize = getModel()
+        .model
+        .entries
+        .where((element) => element.key == section)
+        .first
+        .value
+        .values
+        .where((element) => element.key == section)
+        .first
+        .tokens
+        .length;
+
+    if (rvals.length != expectedParamSize) {
+      print(
+          'Incorrect number of attributes to check for policy (expected $expectedParamSize but got ${rvals.length})');
+      return rvals.length >= expectedParamSize;
+    }
+    return true;
   }
 }
