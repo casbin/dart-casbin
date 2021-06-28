@@ -87,7 +87,7 @@ class Enforcer extends CoreEnforcer {
       return model.model['g']!['g']!.rm.getRoles(name);
     } catch (e) {
       if (e.toString() == 'Null check operator used on a null value') {
-        throw Exception("model does not contain 'g' section");
+        throw FormatException("model does not contain 'g' section");
       } else {
         rethrow;
       }
@@ -104,7 +104,7 @@ class Enforcer extends CoreEnforcer {
       return model.model['g']!['g']!.rm.getUsers(name);
     } catch (e) {
       if (e.toString() == 'Null check operator used on a null value') {
-        throw Exception("model does not contain 'g' section");
+        throw FormatException("model does not contain 'g' section");
       } else {
         rethrow;
       }

@@ -164,7 +164,7 @@ class CoreEnforcer {
   /// Saves the current policy (usually after changed with Casbin API) back to file/database.
   void savePolicy() {
     if (isFiltered()) {
-      throw ArgumentError('cannot save a filtered policy');
+      throw StateError('cannot save a filtered policy');
     }
 
     adapter.savePolicy(model);

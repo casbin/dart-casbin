@@ -31,7 +31,7 @@ class FileAdapter implements Adapter {
         var f = File(filePath);
         loadPolicyData(model, loadPolicyLine, f);
       } on IOException {
-        throw Exception('invalid file path for policy');
+        throw FileSystemException('invalid file path for policy');
       }
     }
   }
@@ -39,7 +39,7 @@ class FileAdapter implements Adapter {
   @override
   void savePolicy(Model model) {
     if (filePath.isEmpty) {
-      throw Exception('invalid file path, file path cannot be empty');
+      throw FileSystemException('invalid file path, file path cannot be empty');
     }
     var result = '';
 
@@ -78,7 +78,7 @@ class FileAdapter implements Adapter {
         handler(model, line.trim());
       });
     } catch (e) {
-      throw Exception('Policy load error: $e');
+      throw FileSystemException('Policy load error: $e');
     }
   }
 
