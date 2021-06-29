@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import '../internal_enforcer.dart';
-import '../model/assertion.dart';
-import '../utils/utils.dart' as utils;
+import 'internal_enforcer.dart';
+import 'model/assertion.dart';
+import 'utils/utils.dart' as utils;
 
 /// ManagementEnforcer = InternalEnforcer + Management API.
 
@@ -312,6 +312,52 @@ class ManagementEnforcer extends InternalEnforcer {
   //  bool removeFilteredNamedPolicy(String ptype, int fieldIndex, dynamic fieldValues) {
   //     return removeFilteredPolicy('p', ptype, fieldIndex, fieldValues);
   // }
+
+  /// addGroupingPolicy adds a role inheritance rule to the current policy.
+  /// If the rule already exists, the function returns false and the rule will not be added.
+  /// Otherwise the function returns true by adding the new rule.
+  ///
+  /// [params] the "g" policy rule, ptype "g" is implicitly used.
+  /// returns succeeds or not.
+
+  bool addGroupingPolicy(List<String> params) {
+    return addNamedGroupingPolicy('g', params);
+  }
+
+  /// addNamedGroupingPolicy adds a named role inheritance rule to the current policy.
+  /// If the rule already exists, the function returns false and the rule will not be added.
+  /// Otherwise the function returns true by adding the new rule.
+  ///
+  /// [ptype] the policy type, can be "g", "g2", "g3", ..
+  /// [params] the "g" policy rule.
+  /// return succeeds or not.
+
+  bool addNamedGroupingPolicy(String ptype, List<String> params) {
+    var ruleAdded = addPolicyInternal('g', ptype, params);
+
+    return ruleAdded;
+  }
+
+  /// removeGroupingPolicy removes a role inheritance rule from the current policy.
+  ///
+  /// params the "g" policy rule, ptype "g" is implicitly used.
+  /// succeeds or not.
+
+  bool removeGroupingPolicy(List<String> params) {
+    return removeNamedGroupingPolicy('g', params);
+  }
+
+  /// removeNamedGroupingPolicy removes a role inheritance rule from the current named policy.
+  ///
+  /// [ptype] the policy type, can be "g", "g2", "g3", ..
+  /// [params] the "g" policy rule.
+  /// return succeeds or not.
+
+  bool removeNamedGroupingPolicy(String ptype, List<String> params) {
+    var ruleRemoved = removePolicyInternal('g', ptype, params);
+
+    return ruleRemoved;
+  }
 
   /// getPermittedActions returns all valid actions to specific object for current subject.
   /// At present, the execution efficiency of this method is not high. Please avoid calling this method frequently.

@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:casbin/casbin.dart';
-import 'package:casbin/src/persist/file_adapter.dart';
 import 'package:test/test.dart';
+
+import 'package:casbin/casbin.dart';
+import 'package:casbin/src/model/model.dart';
+import 'package:casbin/src/persist/file_adapter.dart';
 
 import 'utils/test_utils.dart';
 
@@ -131,5 +133,46 @@ void main() {
     test('must return true', () {
       assert(e.validateEnforce(['alice', 'data1', 'read']), true);
     });
+  });
+
+  group('test RBAC Model In Memory Indeterminate', () {
+    var m = Model();
+    m.addDef('r', 'r', 'sub, obj, act');
+    m.addDef('p', 'p', 'sub, obj, act');
+    m.addDef('g', 'g', '_, _');
+    m.addDef('e', 'e', 'some(where (p.eft == allow))');
+    m.addDef('m', 'm', 'g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act');
+
+    var e = Enforcer.fromModelAndAdapter(m);
+
+    e.addPermissionForUser('alice', ['data1', 'invalid']);
+
+    testEnforce('test 1', e, 'alice', 'data1', 'read', false);
+  });
+
+  group('test RBAC Model In Memory', () {
+    var m = Model();
+    m.addDef('r', 'r', 'sub, obj, act');
+    m.addDef('p', 'p', 'sub, obj, act');
+    m.addDef('g', 'g', '_, _');
+    m.addDef('e', 'e', 'some(where (p.eft == allow))');
+    m.addDef('m', 'm', 'g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act');
+
+    var e = Enforcer.fromModelAndAdapter(m);
+
+    e.addPermissionForUser('alice', ['data1', 'read']);
+    e.addPermissionForUser('bob', ['data2', 'write']);
+    e.addPermissionForUser('data2_admin', ['data2', 'read']);
+    e.addPermissionForUser('data2_admin', ['data2', 'write']);
+    // e.addRoleForUser('alice', 'data2_admin');
+
+    testEnforce('test 1', e, 'alice', 'data1', 'read', true);
+    testEnforce('test 2', e, 'alice', 'data1', 'write', false);
+    testEnforce('test 3', e, 'alice', 'data2', 'read', false);
+    testEnforce('test 4', e, 'alice', 'data2', 'write', false);
+    testEnforce('test 5', e, 'bob', 'data1', 'read', false);
+    testEnforce('test 6', e, 'bob', 'data1', 'write', false);
+    testEnforce('test 7', e, 'bob', 'data2', 'read', false);
+    testEnforce('test 8', e, 'bob', 'data2', 'write', true);
   });
 }
