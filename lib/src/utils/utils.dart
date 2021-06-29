@@ -44,3 +44,17 @@ String replaceEval(String s, String rule) {
 String arrayToString(List<String> s) {
   return s.join(', ');
 }
+
+/// splitCommaDelimited splits a comma-delimited string into a string array. It assumes that any
+/// number of whitespace might exist before or after the comma and that tokens do not include
+/// whitespace as part of their value.
+///
+/// [s] the comma-delimited string.
+/// return the array with the string tokens.
+
+List<String>? splitCommaDelimited(String? s) {
+  if (s == null) {
+    return null;
+  }
+  return s.trim().split('\\s///,\\s///');
+}
