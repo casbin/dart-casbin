@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:collection/collection.dart';
+
 import '../model/assertion.dart';
 
 final evalReg = RegExp(r'\beval\(([^),]*)\)');
@@ -47,6 +49,11 @@ String arrayToString(List<String> s) {
   return s.join(', ');
 }
 
+/// arrayRemoveDuplicates removes any duplicated elements in a string array.
+List<String> arrayRemoveDuplicates(List<String> s) {
+  return [...s.toSet()];
+}
+
 /// splitCommaDelimited splits a comma-delimited string into a string array. It assumes that any
 /// number of whitespace might exist before or after the comma and that tokens do not include
 /// whitespace as part of their value.
@@ -78,4 +85,22 @@ int getElementIndex(Assertion? policy, String elementName) {
     i++;
   }
   return -1;
+}
+
+/// array2DEquals determines whether two 2-dimensional string arrays are identical.
+
+bool array2DEquals(List<List<String>> a, List<List<String>> b) {
+  var aLen = a.length;
+  var bLen = a.length;
+
+  if (aLen != bLen) {
+    return false;
+  }
+
+  for (var i = 0; i < aLen; i++) {
+    if (!ListEquality().equals(a[i], b[i])) {
+      return false;
+    }
+  }
+  return true;
 }
