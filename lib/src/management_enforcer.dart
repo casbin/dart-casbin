@@ -125,7 +125,8 @@ class ManagementEnforcer extends InternalEnforcer {
   /// means not to match this field.
   /// return the filtered "p" policy rules.
 
-  List<List<String>> getFilteredPolicy(int fieldIndex, dynamic fieldValues) {
+  List<List<String>> getFilteredPolicy(
+      int fieldIndex, List<String> fieldValues) {
     return getFilteredNamedPolicy('p', fieldIndex, fieldValues);
   }
 
@@ -147,7 +148,7 @@ class ManagementEnforcer extends InternalEnforcer {
   /// return the filtered "p" policy rules of the specified ptype.
 
   List<List<String>> getFilteredNamedPolicy(
-      String ptype, int fieldIndex, dynamic fieldValues) {
+      String ptype, int fieldIndex, List<String> fieldValues) {
     return model.getFilteredPolicy('p', ptype, fieldIndex, fieldValues);
   }
 
@@ -375,10 +376,10 @@ class ManagementEnforcer extends InternalEnforcer {
       relations = [];
     }
 
-    var actIndex = getElementIndex(ast, 'act');
-    var objIndex = getElementIndex(ast, 'obj');
-    var subIndex = getElementIndex(ast, 'sub');
-    var eftIndex = getElementIndex(ast, 'eft');
+    var actIndex = utils.getElementIndex(ast, 'act');
+    var objIndex = utils.getElementIndex(ast, 'obj');
+    var subIndex = utils.getElementIndex(ast, 'sub');
+    var eftIndex = utils.getElementIndex(ast, 'eft');
 
     var users = <String>{};
     users.add(sub);
@@ -409,24 +410,5 @@ class ManagementEnforcer extends InternalEnforcer {
       }
     }
     return actionSet;
-  }
-
-  /// getElementIndex returns the index of a specific element.
-  /// [policy] the policy. For example: policy.value = "sub, obj, act"
-  /// [elementName] the element's name. For example: elementName = "act"
-  /// return the index of a specific element.
-  /// If the above two example parameters are passed in, it will return 2.
-  /// -1 if the element does not exist.
-
-  int getElementIndex(Assertion? policy, String elementName) {
-    var tokens = utils.splitCommaDelimited(policy?.value);
-    var i = 0;
-    for (var token in tokens!) {
-      if (token == elementName) {
-        return i;
-      }
-      i++;
-    }
-    return -1;
   }
 }
