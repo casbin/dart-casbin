@@ -40,9 +40,9 @@ class InternalEnforcer extends CoreEnforcer {
       }
     }
 
-    model.addPolicy(sec, ptype, rule);
+    var res = model.addPolicy(sec, ptype, rule);
 
-    if (sec == 'g') {
+    if (sec == 'g' && res) {
       var rules = <List<String>>[];
       rules.add(rule);
       buildIncrementalRoleLinks(PolicyOperations.PolicyAdd, ptype, rules);
@@ -60,13 +60,19 @@ class InternalEnforcer extends CoreEnforcer {
   /// [op] Policy operations.
   /// [ptype] policy type.
   /// [rules] the rules.
+
   void buildIncrementalRoleLinks(
       PolicyOperations op, String ptype, List<List<String>> rules) {
     model.buildIncrementalRoleLinks(rm, op, 'g', ptype, rules);
   }
 
   /// removePolicy removes a rule from the current policy.
+
   bool removePolicyInternal(String sec, String ptype, List<String> rule) {
+    if (!model.hasPolicy(sec, ptype, rule)) {
+      return false;
+    }
+
     if ((adapter.runtimeType == FileAdapter &&
             (adapter as FileAdapter).filePath.isNotEmpty) &&
         autoSave) {

@@ -13,16 +13,17 @@
 // limitations under the License.
 
 import 'internal_enforcer.dart';
-import 'model/assertion.dart';
 import 'utils/utils.dart' as utils;
 
 /// ManagementEnforcer = InternalEnforcer + Management API.
+
 class ManagementEnforcer extends InternalEnforcer {
   /// getAllSubjects gets the list of subjects that show up in the current policy.
   ///
   /// returns all the subjects in "p" policy rules. It actually collects the
   /// 0-index elements of "p" policy rules. So make sure your subject
   /// is the 0-index element, like (sub, obj, act). Duplicates are removed.
+
   List<String> getAllSubjects() {
     return getAllNamedSubjects('p');
   }
@@ -34,6 +35,7 @@ class ManagementEnforcer extends InternalEnforcer {
   /// collects the 0-index elements of the policy rules. So make sure
   /// your subject is the 0-index element, like (sub, obj, act).
   /// Duplicates are removed.
+
   List<String> getAllNamedSubjects(String ptype) {
     return model.getValuesForFieldInPolicy('p', ptype, 0);
   }
@@ -44,6 +46,7 @@ class ManagementEnforcer extends InternalEnforcer {
   ///         1-index elements of "p" policy rules. So make sure your object
   ///         is the 1-index element, like (sub, obj, act).
   ///         Duplicates are removed.
+
   List<String> getAllObjects() {
     return getAllNamedObjects('p');
   }
@@ -55,6 +58,7 @@ class ManagementEnforcer extends InternalEnforcer {
   /// collects the 1-index elements of the policy rules. So make sure
   /// your object is the 1-index element, like (sub, obj, act).
   /// Duplicates are removed.
+
   List<String> getAllNamedObjects(String ptype) {
     return model.getValuesForFieldInPolicy('p', ptype, 1);
   }
@@ -65,6 +69,7 @@ class ManagementEnforcer extends InternalEnforcer {
   ///         the 2-index elements of "p" policy rules. So make sure your action
   ///         is the 2-index element, like (sub, obj, act).
   ///         Duplicates are removed.
+
   List<String> getAllActions() {
     return getAllNamedActions('p');
   }
@@ -76,6 +81,7 @@ class ManagementEnforcer extends InternalEnforcer {
   /// collects the 2-index elements of the policy rules. So make sure
   /// your action is the 2-index element, like (sub, obj, act).
   /// Duplicates are removed.
+
   List<String> getAllNamedActions(String ptype) {
     return model.getValuesForFieldInPolicy('p', ptype, 2);
   }
@@ -86,6 +92,7 @@ class ManagementEnforcer extends InternalEnforcer {
   /// the 1-index elements of "g" policy rules. So make sure your
   /// role is the 1-index element, like (sub, role).
   /// Duplicates are removed.
+
   List<String> getAllRoles() {
     return getAllNamedRoles('g');
   }
@@ -97,6 +104,7 @@ class ManagementEnforcer extends InternalEnforcer {
   /// collects the 0-index elements of the policy rules. So make
   /// sure your subject is the 0-index element, like (sub, obj, act).
   /// Duplicates are removed.
+
   List<String> getAllNamedRoles(String ptype) {
     return model.getValuesForFieldInPolicy('g', ptype, 1);
   }
@@ -104,6 +112,7 @@ class ManagementEnforcer extends InternalEnforcer {
   /// getPolicy gets all the authorization rules in the policy.
   ///
   /// return all the "p" policy rules.
+
   List<List<String>> getPolicy() {
     return getNamedPolicy('p');
   }
@@ -114,7 +123,9 @@ class ManagementEnforcer extends InternalEnforcer {
   /// [fieldValues] the field values to be matched, value ""
   /// means not to match this field.
   /// return the filtered "p" policy rules.
-  List<List<String>> getFilteredPolicy(int fieldIndex, dynamic fieldValues) {
+
+  List<List<String>> getFilteredPolicy(
+      int fieldIndex, List<String> fieldValues) {
     return getFilteredNamedPolicy('p', fieldIndex, fieldValues);
   }
 
@@ -122,6 +133,7 @@ class ManagementEnforcer extends InternalEnforcer {
   ///
   /// [ptype] the policy type, can be "p", "p2", "p3", ..
   /// return the "p" policy rules of the specified ptype.
+
   List<List<String>> getNamedPolicy(String ptype) {
     return model.getPolicy('p', ptype);
   }
@@ -133,14 +145,16 @@ class ManagementEnforcer extends InternalEnforcer {
   /// [fieldValues] the field values to be matched, value ""
   /// means not to match this field.
   /// return the filtered "p" policy rules of the specified ptype.
+
   List<List<String>> getFilteredNamedPolicy(
-      String ptype, int fieldIndex, dynamic fieldValues) {
+      String ptype, int fieldIndex, List<String> fieldValues) {
     return model.getFilteredPolicy('p', ptype, fieldIndex, fieldValues);
   }
 
   /// getGroupingPolicy gets all the role inheritance rules in the policy.
   ///
   /// return all the "g" policy rules.
+
   List<List<String>> getGroupingPolicy() {
     return getNamedGroupingPolicy('g');
   }
@@ -151,6 +165,7 @@ class ManagementEnforcer extends InternalEnforcer {
   /// [fieldValues] the field values to be matched, value ""
   /// means not to match this field.
   /// return the filtered "g" policy rules.
+
   List<List<String>> getFilteredGroupingPolicy(
       int fieldIndex, dynamic fieldValues) {
     return getFilteredNamedGroupingPolicy('g', fieldIndex, fieldValues);
@@ -160,6 +175,7 @@ class ManagementEnforcer extends InternalEnforcer {
   ///
   /// [ptype] the policy type, can be "g", "g2", "g3", ..
   /// return the "g" policy rules of the specified ptype.
+
   List<List<String>> getNamedGroupingPolicy(String ptype) {
     return model.getPolicy('g', ptype);
   }
@@ -171,6 +187,7 @@ class ManagementEnforcer extends InternalEnforcer {
   /// [fieldValues] the field values to be matched, value ""
   /// means not to match this field.
   /// return the filtered "g" policy rules of the specified ptype.
+
   List<List<String>> getFilteredNamedGroupingPolicy(
       String ptype, int fieldIndex, List<String> fieldValues) {
     return model.getFilteredPolicy('g', ptype, fieldIndex, fieldValues);
@@ -180,6 +197,7 @@ class ManagementEnforcer extends InternalEnforcer {
   ///
   /// [params] the "p" policy rule, ptype "p" is implicitly used.
   /// return whether the rule exists.
+
   bool hasPolicy(List<String> params) {
     return hasNamedPolicy('p', params);
   }
@@ -189,6 +207,7 @@ class ManagementEnforcer extends InternalEnforcer {
   /// [ptype] the policy type, can be "p", "p2", "p3", ..
   /// [params] the "p" policy rule.
   /// return whether the rule exists.
+
   bool hasNamedPolicy(String ptype, List<String> params) {
     return model.hasPolicy('p', ptype, params);
   }
@@ -199,6 +218,7 @@ class ManagementEnforcer extends InternalEnforcer {
   ///
   /// [params] the "p" policy rule, ptype "p" is implicitly used.
   /// return succeeds or not.
+
   bool addPolicy(List<String> params) {
     return addNamedPolicy('p', params);
   }
@@ -209,6 +229,7 @@ class ManagementEnforcer extends InternalEnforcer {
   /// [params1]  the old rule.
   /// [params2] the new rule.
   /// returns succeeds or not.
+
   //  bool updatePolicy(List<String> params1, List<String> params2) {
   //     return updateNamedPolicy('p', params1, params2);
   // }
@@ -219,6 +240,7 @@ class ManagementEnforcer extends InternalEnforcer {
   ///
   /// [params] the "p" policy rule, ptype "p" is implicitly used.
   /// return succeeds or not.
+
   bool addPolicyList(List<String> params) {
     return addPolicy(params);
   }
@@ -230,6 +252,7 @@ class ManagementEnforcer extends InternalEnforcer {
   /// [ptype] the policy type, can be "p", "p2", "p3", ..
   /// [params] the "p" policy rule.
   /// return succeeds or not.
+
   bool addNamedPolicy(String ptype, List<String> params) {
     return addPolicyInternal('p', ptype, params);
   }
@@ -241,6 +264,7 @@ class ManagementEnforcer extends InternalEnforcer {
   /// [params1]  the old rule.
   /// [params2] the new rule.
   /// return succeeds or not.
+
   //  bool updateNamedPolicy(String ptype, List<String> params1, List<String> params2) {
   //     return updatePolicy('p', ptype, params1, params2);
   // }
@@ -249,6 +273,7 @@ class ManagementEnforcer extends InternalEnforcer {
   ///
   /// [params] the "p" policy rule, ptype "p" is implicitly used.
   /// return succeeds or not.
+
   bool removePolicy(List<String> params) {
     return removeNamedPolicy('p', params);
   }
@@ -260,6 +285,7 @@ class ManagementEnforcer extends InternalEnforcer {
   /// [fieldValues] the field values to be matched, value ""
   ///                    means not to match this field.
   /// return succeeds or not.
+
   //  bool removeFilteredPolicy(int fieldIndex, dynamic fieldValues) {
   //     return removeFilteredNamedPolicy('p', fieldIndex, fieldValues);
   // }
@@ -269,6 +295,7 @@ class ManagementEnforcer extends InternalEnforcer {
   /// [ptype] the policy type, can be "p", "p2", "p3", ..
   /// [params] the "p" policy rule.
   /// return succeeds or not.
+
   bool removeNamedPolicy(String ptype, List<String> params) {
     return removePolicyInternal('p', ptype, params);
   }
@@ -281,6 +308,7 @@ class ManagementEnforcer extends InternalEnforcer {
   /// [fieldValues] the field values to be matched, value ""
   ///                    means not to match this field.
   /// return succeeds or not.
+
   //  bool removeFilteredNamedPolicy(String ptype, int fieldIndex, dynamic fieldValues) {
   //     return removeFilteredPolicy('p', ptype, fieldIndex, fieldValues);
   // }
@@ -291,6 +319,7 @@ class ManagementEnforcer extends InternalEnforcer {
   ///
   /// [params] the "g" policy rule, ptype "g" is implicitly used.
   /// returns succeeds or not.
+
   bool addGroupingPolicy(List<String> params) {
     return addNamedGroupingPolicy('g', params);
   }
@@ -302,6 +331,7 @@ class ManagementEnforcer extends InternalEnforcer {
   /// [ptype] the policy type, can be "g", "g2", "g3", ..
   /// [params] the "g" policy rule.
   /// return succeeds or not.
+
   bool addNamedGroupingPolicy(String ptype, List<String> params) {
     var ruleAdded = addPolicyInternal('g', ptype, params);
 
@@ -312,6 +342,7 @@ class ManagementEnforcer extends InternalEnforcer {
   ///
   /// params the "g" policy rule, ptype "g" is implicitly used.
   /// succeeds or not.
+
   bool removeGroupingPolicy(List<String> params) {
     return removeNamedGroupingPolicy('g', params);
   }
@@ -321,6 +352,7 @@ class ManagementEnforcer extends InternalEnforcer {
   /// [ptype] the policy type, can be "g", "g2", "g3", ..
   /// [params] the "g" policy rule.
   /// return succeeds or not.
+
   bool removeNamedGroupingPolicy(String ptype, List<String> params) {
     var ruleRemoved = removePolicyInternal('g', ptype, params);
 
@@ -333,6 +365,7 @@ class ManagementEnforcer extends InternalEnforcer {
   /// [sub] the subject(usually means user).
   /// [obj] the object(usually means resources).
   /// return all valid actions to specific object for current subject.
+
   Set<String> getPermittedActions(String sub, String obj) {
     var ast = model.model['p']?['p']; //"sub, obj, act, ..."
     List<List<String>> relations;
@@ -342,10 +375,10 @@ class ManagementEnforcer extends InternalEnforcer {
       relations = [];
     }
 
-    var actIndex = getElementIndex(ast, 'act');
-    var objIndex = getElementIndex(ast, 'obj');
-    var subIndex = getElementIndex(ast, 'sub');
-    var eftIndex = getElementIndex(ast, 'eft');
+    var actIndex = utils.getElementIndex(ast, 'act');
+    var objIndex = utils.getElementIndex(ast, 'obj');
+    var subIndex = utils.getElementIndex(ast, 'sub');
+    var eftIndex = utils.getElementIndex(ast, 'eft');
 
     var users = <String>{};
     users.add(sub);
@@ -376,23 +409,5 @@ class ManagementEnforcer extends InternalEnforcer {
       }
     }
     return actionSet;
-  }
-
-  /// getElementIndex returns the index of a specific element.
-  /// [policy] the policy. For example: policy.value = "sub, obj, act"
-  /// [elementName] the element's name. For example: elementName = "act"
-  /// return the index of a specific element.
-  /// If the above two example parameters are passed in, it will return 2.
-  /// -1 if the element does not exist.
-  int getElementIndex(Assertion? policy, String elementName) {
-    var tokens = utils.splitCommaDelimited(policy?.value);
-    var i = 0;
-    for (var token in tokens!) {
-      if (token == elementName) {
-        return i;
-      }
-      i++;
-    }
-    return -1;
   }
 }
