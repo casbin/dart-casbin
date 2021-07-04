@@ -15,10 +15,9 @@
 import 'dart:collection';
 
 import '../config/config.dart';
-import 'policy.dart';
 import '../rbac/role_manager.dart';
-
 import 'assertion.dart';
+import 'policy.dart';
 
 enum PolicyOperations {
   PolicyAdd,

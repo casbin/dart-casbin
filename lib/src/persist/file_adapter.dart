@@ -14,9 +14,8 @@
 
 import 'dart:io';
 
-import '../utils/utils.dart';
-
 import '../model/model.dart';
+import '../utils/utils.dart';
 import 'adapter.dart';
 
 class FileAdapter implements Adapter {

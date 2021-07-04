@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import '../model/assertion.dart';
+
 final evalReg = RegExp(r'\beval\(([^),]*)\)');
 
 bool hasEvalFn(String s) {
@@ -43,4 +45,37 @@ String replaceEval(String s, String rule) {
 
 String arrayToString(List<String> s) {
   return s.join(', ');
+}
+
+/// splitCommaDelimited splits a comma-delimited string into a string array. It assumes that any
+/// number of whitespace might exist before or after the comma and that tokens do not include
+/// whitespace as part of their value.
+///
+/// [s] the comma-delimited string.
+/// return the array with the string tokens.
+
+List<String>? splitCommaDelimited(String? s) {
+  if (s == null) {
+    return null;
+  }
+  return s.trim().split('\\s///,\\s///');
+}
+
+/// getElementIndex returns the index of a specific element.
+/// [policy] the policy. For example: policy.value = "sub, obj, act"
+/// [elementName] the element's name. For example: elementName = "act"
+/// return the index of a specific element.
+/// If the above two example parameters are passed in, it will return 2.
+/// -1 if the element does not exist.
+
+int getElementIndex(Assertion? policy, String elementName) {
+  var tokens = splitCommaDelimited(policy?.value);
+  var i = 0;
+  for (var token in tokens!) {
+    if (token == elementName) {
+      return i;
+    }
+    i++;
+  }
+  return -1;
 }

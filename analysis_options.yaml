@@ -10,6 +10,7 @@ linter:
     - camel_case_types
     - prefer_relative_imports
     - avoid_relative_lib_imports
+    - directives_ordering
 
 analyzer:
 #   exclude:
