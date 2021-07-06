@@ -14,6 +14,7 @@
 
 import 'dart:io';
 
+import 'package:casbin/src/persist/dispatcher.dart';
 import 'package:expressions/expressions.dart';
 
 import 'effect/default_effector.dart';
@@ -23,6 +24,7 @@ import 'model/function_map.dart';
 import 'model/model.dart';
 import 'persist/adapter.dart';
 import 'persist/file_adapter.dart';
+import 'persist/watcher.dart';
 import 'rbac/default_role_manager.dart';
 import 'rbac/role_manager.dart';
 import 'utils/builtin_operators.dart';
@@ -36,12 +38,15 @@ class CoreEnforcer {
   Effector eft;
 
   Adapter adapter;
-  //Watcher watcher;
+  Watcher? watcher;
   RoleManager rm;
+  Dispatcher? dispatcher;
 
   bool enabled;
   bool autoSave;
   bool autoBuildRoleLinks;
+  bool autoNotifyWatcher;
+  bool autoNotifyDispatcher;
 
   int modelCount = 0;
 
@@ -51,9 +56,13 @@ class CoreEnforcer {
         eft = DefaultEffector(),
         rm = DefaultRoleManager(10),
         adapter = FileAdapter(''),
+        watcher = null,
+        dispatcher = null,
         enabled = true,
         autoSave = true,
         autoBuildRoleLinks = true,
+        autoNotifyWatcher = true,
+        autoNotifyDispatcher = true,
         fm = FunctionMap.loadFunctionMap();
 
   void initialize() {
