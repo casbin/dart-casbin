@@ -14,16 +14,18 @@
 
 import 'dart:io';
 
-import 'package:casbin/src/persist/dispatcher.dart';
 import 'package:expressions/expressions.dart';
 
 import 'effect/default_effector.dart';
 import 'effect/effect.dart';
 import 'effect/effector.dart';
+import 'exception/casbin_adapter_exception.dart';
 import 'model/function_map.dart';
 import 'model/model.dart';
 import 'persist/adapter.dart';
+import 'persist/dispatcher.dart';
 import 'persist/file_adapter.dart';
+import 'persist/filtered_adapter.dart';
 import 'persist/watcher.dart';
 import 'rbac/default_role_manager.dart';
 import 'rbac/role_manager.dart';
@@ -42,7 +44,7 @@ class CoreEnforcer {
   RoleManager rm;
   Dispatcher? dispatcher;
 
-  bool enabled;
+  bool _enabled;
   bool autoSave;
   bool autoBuildRoleLinks;
   bool autoNotifyWatcher;
@@ -58,7 +60,7 @@ class CoreEnforcer {
         adapter = FileAdapter(''),
         watcher = null,
         dispatcher = null,
-        enabled = true,
+        _enabled = true,
         autoSave = true,
         autoBuildRoleLinks = true,
         autoNotifyWatcher = true,
@@ -69,7 +71,7 @@ class CoreEnforcer {
     rm = DefaultRoleManager(10);
     eft = DefaultEffector();
 
-    enabled = true;
+    _enabled = true;
     autoSave = true;
     autoBuildRoleLinks = true;
   }
@@ -126,7 +128,17 @@ class CoreEnforcer {
   /// Sets the current watcher.
   ///
   /// [watcher] is the watcher.
-  //void setWatcher(Watcher watcher) {}
+  void setWatcher(Watcher watcher) {
+    watcher.setUpdateCallback(loadPolicy);
+    this.watcher = watcher;
+  }
+
+  /// Sets the current dispatcher.
+  ///
+  /// [dispatcher] is the casbin dispatcher.
+  void setDispatcher(Dispatcher dispatcher) {
+    this.dispatcher = dispatcher;
+  }
 
   /// Sets the current role manager.
   ///
@@ -161,12 +173,32 @@ class CoreEnforcer {
   /// Reloads a filtered policy from file/database.
   ///
   /// [filter] is the filter used to specify which type of policy should be loaded.
+
   void loadFilteredPolicy(var filter) {
-    throw UnimplementedError();
+    model.clearPolicy();
+    FilteredAdapter filteredAdapter;
+    if (adapter.runtimeType == FilteredAdapter) {
+      filteredAdapter = (adapter as FilteredAdapter);
+    } else {
+      throw CasbinAdapterException(
+          'Filtered policies are not supported by this adapter.');
+    }
+    try {
+      filteredAdapter.loadFilteredPolicy(model, filter);
+    } catch (e, stacktrace) {
+      print(stacktrace);
+    }
+    model.printPolicy();
+    if (autoBuildRoleLinks) {
+      buildRoleLinks();
+    }
   }
 
   /// Returns if the loaded policy has been filtered.
   bool isFiltered() {
+    if (adapter.runtimeType == FilteredAdapter) {
+      (adapter as FilteredAdapter).isFiltered();
+    }
     return false;
   }
 
@@ -177,14 +209,17 @@ class CoreEnforcer {
     }
 
     adapter.savePolicy(model);
-    // TODO: Implement watcher
+
+    if (watcher != null && autoNotifyWatcher) {
+      watcher!.update();
+    }
   }
 
   /// Changes the enforcing state of Casbin, when Casbin is disabled, all access will be allowed by the enforce() function.
   ///
   /// [enable] whether to enable the enforcer.
   void enableEnforce(bool enable) {
-    enabled = enable;
+    _enabled = enable;
   }
 
   /// Changes whether to print Casbin log to the standard output.
@@ -218,7 +253,7 @@ class CoreEnforcer {
   ///
   /// [rvals] the request that needs to be mediated.
   bool enforce(List<String> rvals) {
-    if (!enabled) {
+    if (!_enabled) {
       return true;
     }
 
@@ -310,7 +345,7 @@ class CoreEnforcer {
             matcherResults[i] = result;
           }
         } else {
-          throw Exception('matcher result should be boolean or number');
+          throw Exception('matcher result should be bool or number');
         }
 
         if (params['p_eft'] != null) {
@@ -386,5 +421,21 @@ class CoreEnforcer {
       return rvals.length >= expectedParamSize;
     }
     return true;
+  }
+
+  bool isAutoNotifyWatcher() {
+    return autoNotifyWatcher;
+  }
+
+  void setAutoNotifyWatcher(bool autoNotifyWatcher) {
+    this.autoNotifyWatcher = autoNotifyWatcher;
+  }
+
+  bool isAutoNotifyDispatcher() {
+    return autoNotifyDispatcher;
+  }
+
+  void setAutoNotifyDispatcher(bool autoNotifyDispatcher) {
+    this.autoNotifyDispatcher = autoNotifyDispatcher;
   }
 }

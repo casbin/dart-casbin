@@ -106,44 +106,6 @@ class InternalEnforcer extends CoreEnforcer {
     model.buildIncrementalRoleLinks(rm, op, 'g', ptype, rules);
   }
 
-  /// removePolicy removes a rule from the current policy.
-
-  bool removePolicyInternal(String sec, String ptype, List<String> rule) {
-    if (!model.hasPolicy(sec, ptype, rule)) {
-      return false;
-    }
-
-    if ((adapter.runtimeType == FileAdapter &&
-            (adapter as FileAdapter).filePath.isNotEmpty) &&
-        autoSave) {
-      try {
-        adapter.removePolicy(sec, ptype, rule);
-      } on UnsupportedError {
-        print('Method not implemented');
-      } catch (e) {
-        print('An exception occurred: ${e.toString()}');
-        return false;
-      }
-    }
-
-    var ruleRemoved = model.removePolicy(sec, ptype, rule);
-
-    if (!ruleRemoved) {
-      return false;
-    }
-
-    if (sec == 'g') {
-      var rules = <List<String>>[];
-      rules.add(rule);
-      buildIncrementalRoleLinks(PolicyOperations.PolicyRemove, ptype, rules);
-    }
-    if (watcher != null && autoNotifyWatcher) {
-      watcher!.update();
-    }
-
-    return true;
-  }
-
   /// updatePolicy updates an authorization rule from the current policy.
   ///
   /// [sec]     the section, "p" or "g".
@@ -218,11 +180,83 @@ class InternalEnforcer extends CoreEnforcer {
     return true;
   }
 
-  /// removePolicies removes rules from the current policy.
-  // bool removePolicies(String sec, String ptype, List<List<String>> rules) {}
+  /// removePolicy removes a rule from the current policy.
 
-  /// removeFilteredPolicy removes rules based on field filters from the current policy.
-  bool removeFilteredPolicy(
+  bool removePolicyInternal(String sec, String ptype, List<String> rule) {
+    if (!model.hasPolicy(sec, ptype, rule)) {
+      return false;
+    }
+
+    if ((adapter.runtimeType == FileAdapter &&
+            (adapter as FileAdapter).filePath.isNotEmpty) &&
+        autoSave) {
+      try {
+        adapter.removePolicy(sec, ptype, rule);
+      } on UnsupportedError {
+        print('Method not implemented');
+      } catch (e) {
+        print('An exception occurred: ${e.toString()}');
+        return false;
+      }
+    }
+
+    var ruleRemoved = model.removePolicy(sec, ptype, rule);
+
+    if (!ruleRemoved) {
+      return false;
+    }
+
+    if (sec == 'g') {
+      var rules = <List<String>>[];
+      rules.add(rule);
+      buildIncrementalRoleLinks(PolicyOperations.PolicyRemove, ptype, rules);
+    }
+    if (watcher != null && autoNotifyWatcher) {
+      watcher!.update();
+    }
+
+    return true;
+  }
+
+  /// removePoliciesInternal removes rules from the current policy.
+  bool removePoliciesInternal(
+      String sec, String ptype, List<List<String>> rules) {
+    if (model.hasPolicies(sec, ptype, rules)) {
+      return false;
+    }
+
+    if ((adapter.runtimeType == FileAdapter &&
+            (adapter as FileAdapter).filePath.isNotEmpty) &&
+        autoSave) {
+      try {
+        if (adapter.runtimeType == BatchAdapter) {
+          (adapter as BatchAdapter).removePolicies(sec, ptype, rules);
+        }
+      } on UnsupportedError {
+        print('Method not implemented');
+      } catch (e) {
+        print('An exception occurred: ${e.toString()}');
+        return false;
+      }
+
+      var rulesRemoveed = model.removePolicies(sec, ptype, rules);
+
+      if (!rulesRemoveed) {
+        return false;
+      }
+
+      if (sec == 'g') {
+        buildIncrementalRoleLinks(PolicyOperations.PolicyRemove, ptype, rules);
+      }
+      if (watcher != null && autoNotifyWatcher) {
+        watcher!.update();
+      }
+    }
+    return true;
+  }
+
+  /// removeFilteredPolicyInternal removes rules based on field filters from the current policy.
+  bool removeFilteredPolicyInternal(
     String sec,
     String ptype,
     int fieldIndex,
@@ -259,7 +293,9 @@ class InternalEnforcer extends CoreEnforcer {
       buildIncrementalRoleLinks(PolicyOperations.PolicyRemove, ptype, effects);
     }
 
-    //TODO: after watcher
+    if (watcher != null && autoNotifyWatcher) {
+      watcher!.update();
+    }
 
     return true;
   }

@@ -38,7 +38,6 @@ class Enforcer extends ManagementEnforcer {
     this.model = model;
     fm = FunctionMap.loadFunctionMap();
     loadPolicy();
-    enabled = true;
   }
 
   Enforcer._();
