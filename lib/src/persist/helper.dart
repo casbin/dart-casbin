@@ -26,6 +26,6 @@ abstract class Helper {
 
     var key = tokens.first;
     var sec = key.substring(0, 1);
-    model.model[sec]![key]!.policy.add(tokens.sublist(1));
+    model.model[sec]?[key]?.policy.add(tokens.sublist(1));
   }
 }
