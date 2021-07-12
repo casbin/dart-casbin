@@ -18,7 +18,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('test Helper.loadPolicyLine', () {
-    final m =Model();
+    final m = Model();
     m.loadModelFromText('''
 
     [request_definition]
@@ -33,48 +33,43 @@ void main() {
     [matchers]
     m = r.sub == p.sub && r.obj == p.obj && r.act == p.act
 
-    ''') ;
-  var testdata = [
-    'p, admin, /, GET',
-    '# test comment 1',
-    '  # test comment 2',
-    'p,    admin,  /,  POST',
-    'p, admin, /,  PUT',
-    'p,admin,/, DELETE',
-    'p,   admin, / , PATCH',
-  ];
+    ''');
+    var testdata = [
+      'p, admin, /, GET',
+      '# test comment 1',
+      '  # test comment 2',
+      'p,    admin,  /,  POST',
+      'p, admin, /,  PUT',
+      'p,admin,/, DELETE',
+      'p,   admin, / , PATCH',
+    ];
 
-  var expectedPolicy = [
-    ['admin', '/', 'GET'],
-    ['admin', '/', 'POST'],
-    ['admin', '/', 'PUT'],
-    ['admin', '/', 'DELETE'],
-    ['admin', '/', 'PATCH'],
-  ];
+    var expectedPolicy = [
+      ['admin', '/', 'GET'],
+      ['admin', '/', 'POST'],
+      ['admin', '/', 'PUT'],
+      ['admin', '/', 'DELETE'],
+      ['admin', '/', 'PATCH'],
+    ];
 
-  testdata.forEach((line)  {
-    Helper.loadPolicyLine( m,line);
-  });
+    testdata.forEach((line) {
+      Helper.loadPolicyLine(m, line);
+    });
 
-  var ast = m.model['p']?['p'];
+    var ast = m.model['p']?['p'];
 
+    test('test 1', () {
+      expect(ast != null, true);
+    });
+    test('test 2', () {
+      expect(ast?.policy.length == expectedPolicy.length, true);
+    });
 
-test('test 1', (){ expect(ast!=null ,true);});
-test('test 2', (){
-  expect(ast?.policy.length == expectedPolicy.length,true);
-
-});
-
-test('test 3', (){
-  expect(ast?.policy,equals(expectedPolicy));
-
-});
-
- 
-
+    test('test 3', () {
+      expect(ast?.policy, equals(expectedPolicy));
+    });
   });
 }
-
 
 // void main() {
 //     final m =Model();
@@ -116,7 +111,6 @@ test('test 3', (){
 //   });
 
 //   var ast = m.model;
-//   print(m.model['p']); 
-
+//   print(m.model['p']);
 
 // }
