@@ -17,6 +17,7 @@ import 'dart:io';
 import '../model/model.dart';
 import '../utils/utils.dart';
 import 'adapter.dart';
+import 'helper.dart';
 
 class FileAdapter implements Adapter {
   final String filePath;
@@ -28,7 +29,7 @@ class FileAdapter implements Adapter {
     if (filePath.isNotEmpty) {
       try {
         var f = File(filePath);
-        loadPolicyData(model, loadPolicyLine, f);
+        loadPolicyData(model, Helper.loadPolicyLine, f);
       } on IOException {
         throw FileSystemException('invalid file path for policy');
       }
@@ -79,20 +80,6 @@ class FileAdapter implements Adapter {
     } catch (e) {
       throw FileSystemException('Policy load error: $e');
     }
-  }
-
-  void loadPolicyLine(Model model, String line) {
-    if (line.isEmpty || line.startsWith('#')) {
-      return;
-    }
-
-    line = line.replaceAll(RegExp(r' '), '');
-
-    var tokens = line.split(',').toList();
-
-    var key = tokens.first;
-    var sec = key.substring(0, 1);
-    model.model[sec]![key]!.policy.add(tokens.sublist(1));
   }
 
   @override

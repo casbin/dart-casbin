@@ -28,7 +28,7 @@ class ManagementEnforcer extends InternalEnforcer {
     return getAllNamedSubjects('p');
   }
 
-  /// GetAllNamedSubjects gets the list of subjects that show up in the currentnamed policy.
+  /// GetAllNamedSubjects gets the list of subjects that show up in the current named policy.
   ///
   /// [ptype] the policy type, can be "p", "p2", "p3", ..
   /// return all the subjects in policy rules of the ptype type. It actually
@@ -43,9 +43,9 @@ class ManagementEnforcer extends InternalEnforcer {
   /// getAllObjects gets the list of objects that show up in the current policy.
   ///
   /// return all the objects in "p" policy rules. It actually collects the
-  ///         1-index elements of "p" policy rules. So make sure your object
-  ///         is the 1-index element, like (sub, obj, act).
-  ///         Duplicates are removed.
+  /// 1-index elements of "p" policy rules. So make sure your object
+  /// is the 1-index element, like (sub, obj, act).
+  /// Duplicates are removed.
 
   List<String> getAllObjects() {
     return getAllNamedObjects('p');
@@ -66,9 +66,9 @@ class ManagementEnforcer extends InternalEnforcer {
   /// getAllActions gets the list of actions that show up in the current policy.
   ///
   /// @return all the actions in "p" policy rules. It actually collects
-  ///         the 2-index elements of "p" policy rules. So make sure your action
-  ///         is the 2-index element, like (sub, obj, act).
-  ///         Duplicates are removed.
+  /// the 2-index elements of "p" policy rules. So make sure your action
+  /// is the 2-index element, like (sub, obj, act).
+  /// Duplicates are removed.
 
   List<String> getAllActions() {
     return getAllNamedActions('p');
@@ -223,17 +223,6 @@ class ManagementEnforcer extends InternalEnforcer {
     return addNamedPolicy('p', params);
   }
 
-  //TODO: implement later
-  /// updatePolicy update an authorization rule to the current policy.
-  ///
-  /// [params1]  the old rule.
-  /// [params2] the new rule.
-  /// returns succeeds or not.
-
-  //  bool updatePolicy(List<String> params1, List<String> params2) {
-  //     return updateNamedPolicy('p', params1, params2);
-  // }
-
   /// addPolicy adds an authorization rule to the current policy.
   /// If the rule already exists, the function returns false and the rule will not be added.
   /// Otherwise the function returns true by adding the new rule.
@@ -257,7 +246,15 @@ class ManagementEnforcer extends InternalEnforcer {
     return addPolicyInternal('p', ptype, params);
   }
 
-  //TODO: implement after implementing in InternalEnforcer
+  /// updatePolicy update an authorization rule to the current policy.
+  /// [params1]  the old rule.
+  /// [params2] the new rule.
+  /// returns succeeds or not.
+
+  bool updatePolicy(List<String> params1, List<String> params2) {
+    return updateNamedPolicy('p', params1, params2);
+  }
+
   /// updateNamedPolicy updates an authorization rule to the current named policy.
   ///
   /// [ptype] the policy type, can be "p", "p2", "p3", ..
@@ -265,9 +262,10 @@ class ManagementEnforcer extends InternalEnforcer {
   /// [params2] the new rule.
   /// return succeeds or not.
 
-  //  bool updateNamedPolicy(String ptype, List<String> params1, List<String> params2) {
-  //     return updatePolicy('p', ptype, params1, params2);
-  // }
+  bool updateNamedPolicy(
+      String ptype, List<String> params1, List<String> params2) {
+    return updatePolicyInternal('p', ptype, params1, params2);
+  }
 
   /// removePolicy removes an authorization rule from the current policy.
   ///
@@ -278,7 +276,6 @@ class ManagementEnforcer extends InternalEnforcer {
     return removeNamedPolicy('p', params);
   }
 
-  //TODO: implement later
   /// removeFilteredPolicy removes an authorization rule from the current policy, field filters can be specified.
   ///
   /// [fieldIndex] the policy rule's start index to be matched.
@@ -286,9 +283,9 @@ class ManagementEnforcer extends InternalEnforcer {
   ///                    means not to match this field.
   /// return succeeds or not.
 
-  //  bool removeFilteredPolicy(int fieldIndex, dynamic fieldValues) {
-  //     return removeFilteredNamedPolicy('p', fieldIndex, fieldValues);
-  // }
+  bool removeFilteredPolicy(int fieldIndex, dynamic fieldValues) {
+    return removeFilteredNamedPolicy('p', fieldIndex, fieldValues);
+  }
 
   /// removeNamedPolicy removes an authorization rule from the current named policy.
   ///
@@ -300,7 +297,6 @@ class ManagementEnforcer extends InternalEnforcer {
     return removePolicyInternal('p', ptype, params);
   }
 
-  //TODO: implement later
   /// removeFilteredNamedPolicy removes an authorization rule from the current named policy, field filters can be specified.
   ///
   /// [ptype] the policy type, can be "p", "p2", "p3", ..
@@ -309,9 +305,30 @@ class ManagementEnforcer extends InternalEnforcer {
   ///                    means not to match this field.
   /// return succeeds or not.
 
-  //  bool removeFilteredNamedPolicy(String ptype, int fieldIndex, dynamic fieldValues) {
-  //     return removeFilteredPolicy('p', ptype, fieldIndex, fieldValues);
-  // }
+  bool removeFilteredNamedPolicy(
+    String ptype,
+    int fieldIndex,
+    dynamic fieldValues,
+  ) {
+    return removeFilteredPolicyInternal('p', ptype, fieldIndex, fieldValues);
+  }
+
+  /// hasGroupingPolicy determines whether a role inheritance rule exists.
+  /// [params] the "g" policy rule, ptype "g" is implicitly used.
+  /// return whether the rule exists.
+
+  bool hasGroupingPolicy(List<String> params) {
+    return hasNamedGroupingPolicy('g', params);
+  }
+
+  /// hasNamedGroupingPolicy determines whether a named role inheritance rule exists.
+  /// [ptype] the policy type, can be "g", "g2", "g3", ..
+  /// [params] the "g" policy rule.
+  /// return whether the rule exists.
+
+  bool hasNamedGroupingPolicy(String ptype, List<String> params) {
+    return model.hasPolicy('g', ptype, params);
+  }
 
   /// addGroupingPolicy adds a role inheritance rule to the current policy.
   /// If the rule already exists, the function returns false and the rule will not be added.
@@ -347,6 +364,16 @@ class ManagementEnforcer extends InternalEnforcer {
     return removeNamedGroupingPolicy('g', params);
   }
 
+  /// removeFilteredGroupingPolicy removes a role inheritance rule from the current policy, field filters can be specified.
+  /// [fieldIndex] the policy rule's start index to be matched.
+  /// [fieldValues] the field values to be matched, value ""
+  /// means not to match this field.
+  /// return succeeds or not.
+
+  bool removeFilteredGroupingPolicy(int fieldIndex, List<String> fieldValues) {
+    return removeFilteredNamedGroupingPolicy('g', fieldIndex, fieldValues);
+  }
+
   /// removeNamedGroupingPolicy removes a role inheritance rule from the current named policy.
   ///
   /// [ptype] the policy type, can be "g", "g2", "g3", ..
@@ -357,6 +384,32 @@ class ManagementEnforcer extends InternalEnforcer {
     var ruleRemoved = removePolicyInternal('g', ptype, params);
 
     return ruleRemoved;
+  }
+
+  /// removeFilteredNamedGroupingPolicy removes a role inheritance rule from the current named policy, field filters can be specified.
+  /// [ptype] the policy type, can be "g", "g2", "g3", ..
+  /// [fieldIndex] the policy rule's start index to be matched.
+  /// [fieldValues] the field values to be matched, value ""
+  /// means not to match this field.
+  /// return succeeds or not.
+
+  bool removeFilteredNamedGroupingPolicy(
+    String ptype,
+    int fieldIndex,
+    List<String> fieldValues,
+  ) {
+    var ruleRemoved =
+        removeFilteredPolicyInternal('g', ptype, fieldIndex, fieldValues);
+
+    return ruleRemoved;
+  }
+
+  /// addFunction adds a customized function.
+  /// [name] the name of the new function.
+  /// [function] the function.
+
+  void addFunction(String name, Function function) {
+    fm.addFunction(name, function);
   }
 
   /// getPermittedActions returns all valid actions to specific object for current subject.

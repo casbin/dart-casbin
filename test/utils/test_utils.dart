@@ -14,6 +14,7 @@
 
 import 'package:casbin/casbin.dart';
 import 'package:casbin/src/rbac/role_manager.dart';
+import 'package:casbin/src/utils/utils.dart' as utils;
 import 'package:test/test.dart';
 
 void testEnforce(
@@ -66,4 +67,15 @@ void testDomainRole(
   test(title, () {
     expect(rm.hasLink(name1, name2, domain), equals(res));
   });
+}
+
+void testGetPolicy(
+  String title,
+  Enforcer e,
+  List<List<String>> res,
+  bool r,
+) {
+  var myRes = e.getPolicy();
+
+  expect(utils.array2DEquals(myRes, res), equals(r));
 }
