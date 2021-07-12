@@ -13,9 +13,11 @@
 // limitations under the License.
 
 import 'dart:collection';
+
 import 'package:collection/collection.dart';
 
 import '../rbac/role_manager.dart';
+import '../utils/utils.dart' as utils;
 import 'assertion.dart';
 import 'model.dart';
 
@@ -276,9 +278,11 @@ class Policy {
       String sec, String ptype, int fieldIndex) {
     var values = <String>[];
 
-    for (var rule in model[sec]![ptype]!.policy) {
+    for (var rule in model[sec]?[ptype]?.policy ?? []) {
       values.add(rule[fieldIndex]);
     }
+
+    values = utils.arrayRemoveDuplicates(values);
 
     return values;
   }
