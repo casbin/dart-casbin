@@ -38,7 +38,6 @@ class Enforcer extends ManagementEnforcer {
     this.model = model;
     fm = FunctionMap.loadFunctionMap();
     loadPolicy();
-    enabled = true;
   }
 
   Enforcer._();
@@ -77,7 +76,7 @@ class Enforcer extends ManagementEnforcer {
 
   /// getRolesForUser gets the roles that a user has.
   ///
-  /// [param] name the user.
+  /// [name] the user.
   /// [return] the roles that the user has.
   List<String> getRolesForUser(String name) {
     try {
@@ -93,7 +92,7 @@ class Enforcer extends ManagementEnforcer {
 
   /// getUsersForRole gets the users that has a role.
   ///
-  /// [param] name the role.
+  /// [name] the role.
   /// [return] the users that has the role.
   List<String> getUsersForRole(String name) {
     try {
@@ -109,7 +108,7 @@ class Enforcer extends ManagementEnforcer {
 
   /// hasRoleForUser determines whether a user has a role.
   ///
-  /// [param] name the user.
+  /// [name] the user.
   /// [param] role the role.
   /// [return] whether the user has the role.
   bool hasRoleForUser(String name, String role) {
