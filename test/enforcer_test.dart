@@ -174,4 +174,75 @@ void main() {
     testEnforce('test 7', e, 'bob', 'data2', 'read', false);
     testEnforce('test 8', e, 'bob', 'data2', 'write', true);
   });
+
+  group('test keyMatch in Enforcer', () {
+    var m = Model();
+    m.addDef('r', 'r', 'sub, obj, act');
+    m.addDef('p', 'p', 'sub, obj, act');
+    m.addDef('e', 'e', 'some(where (p.eft == allow))');
+    m.addDef('m', 'm',
+        'r.sub == p.sub && keyMatch(r.obj, p.obj) && regexMatch(r.act, p.act)');
+
+    var a = FileAdapter('examples/keymatch_policy.csv');
+
+    var e = Enforcer.fromModelAndAdapter(m, a);
+
+    testEnforce('test 1', e, 'alice', '/alice_data/resource1', 'GET', true);
+    testEnforce('test 2', e, 'alice', '/alice_data/resource1', 'POST', true);
+    testEnforce('test 3', e, 'alice', '/alice_data/resource2', 'GET', true);
+    testEnforce('test 4', e, 'alice', '/alice_data/resource2', 'POST', false);
+    testEnforce('test 5', e, 'alice', '/bob_data/resource1', 'GET', false);
+    testEnforce('test 6', e, 'alice', '/bob_data/resource1', 'POST', false);
+    testEnforce('test 7', e, 'alice', '/bob_data/resource2', 'GET', false);
+    testEnforce('test 8', e, 'alice', '/bob_data/resource2', 'POST', false);
+
+    testEnforce('test 9', e, 'bob', '/alice_data/resource1', 'GET', false);
+    testEnforce('test 10', e, 'bob', '/alice_data/resource1', 'POST', false);
+    testEnforce('test 11', e, 'bob', '/alice_data/resource2', 'GET', true);
+    testEnforce('test 12', e, 'bob', '/alice_data/resource2', 'POST', false);
+    testEnforce('test 13', e, 'bob', '/bob_data/resource1', 'GET', false);
+    testEnforce('test 14', e, 'bob', '/bob_data/resource1', 'POST', true);
+    testEnforce('test 15', e, 'bob', '/bob_data/resource2', 'GET', false);
+    testEnforce('test 16', e, 'bob', '/bob_data/resource2', 'POST', true);
+
+    testEnforce('test 17', e, 'cathy', '/cathy_data', 'GET', true);
+    testEnforce('test 18', e, 'cathy', '/cathy_data', 'POST', true);
+    testEnforce('test 19', e, 'cathy', '/cathy_data', 'DELETE', false);
+  });
+
+  group('test keyMatch In memory deny', () {
+    var m = Model();
+    m.addDef('r', 'r', 'sub, obj, act');
+    m.addDef('p', 'p', 'sub, obj, act');
+    m.addDef('e', 'e', '!some(where (p.eft == deny))');
+    m.addDef('m', 'm',
+        'r.sub == p.sub && keyMatch(r.obj, p.obj) && regexMatch(r.act, p.act)');
+
+    var a = FileAdapter('examples/keymatch_policy.csv');
+
+    var e = Enforcer.fromModelAndAdapter(m, a);
+
+    testEnforce('test 1', e, 'alice', '/alice_data/resource2', 'POST', true);
+  });
+
+  group('test Init Empty', () {
+    {
+      var e = Enforcer();
+
+      var m = Model();
+      m.addDef('r', 'r', 'sub, obj, act');
+      m.addDef('p', 'p', 'sub, obj, act');
+      m.addDef('e', 'e', 'some(where (p.eft == allow))');
+      m.addDef('m', 'm',
+          'r.sub == p.sub && keyMatch(r.obj, p.obj) && regexMatch(r.act, p.act)');
+
+      var a = FileAdapter('examples/keymatch_policy.csv');
+
+      e.setModel(m);
+      e.setAdapter(a);
+      e.loadPolicy();
+
+      testEnforce('test 1', e, 'alice', '/alice_data/resource1', 'GET', true);
+    }
+  });
 }
