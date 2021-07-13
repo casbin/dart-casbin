@@ -25,15 +25,16 @@ class Enforcer extends ManagementEnforcer {
   /// [policyFile] is the path of the policy file.
   /// [adapter] is the adapter.
   /// [enableLog] whether to enable Casbin's log.
-  Enforcer(
-    String modelPath, [
-    String? policyFile,
+  Enforcer([
+    String modelPath = '',
+    String policyFile = '',
   ]) {
-    adapter = FileAdapter(policyFile ?? '');
+    adapter = FileAdapter(policyFile);
 
     this.modelPath = modelPath;
     final model = Model();
-    model.loadModel(modelPath);
+
+    if (modelPath.isNotEmpty) model.loadModel(modelPath);
 
     this.model = model;
     fm = FunctionMap.loadFunctionMap();

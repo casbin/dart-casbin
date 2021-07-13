@@ -12,15 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import '../utils/builtin_operators.dart';
+
 class FunctionMap {
   Map<String, Function> functionMap;
 
   FunctionMap() : functionMap = {};
 
-  void addFunction(String name, Function function) {}
+  void addFunction(String name, Function function) {
+    functionMap[name] = function;
+  }
 
   static FunctionMap loadFunctionMap() {
     var fm = FunctionMap();
+    fm.functionMap = <String, Function>{};
+
+    fm.addFunction('keyMatch', keyMatch);
+    fm.addFunction('keyMatch2', keyMatch2);
+    fm.addFunction('keyMatch3', keyMatch3);
+    fm.addFunction('keyMatch4', keyMatch4);
+    fm.addFunction('keyGet', keyGetFunc);
+    fm.addFunction('keyGet2', keyGet2Func);
+    fm.addFunction('regexMatch', regexMatch);
+    fm.addFunction('globMatch', globMatch);
+    // fm.addFunction('ipMatch', ipMatchFunc());
 
     return fm;
   }
