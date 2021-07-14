@@ -77,7 +77,6 @@ void testGetPolicy(
   bool r,
 ) {
   var myRes = e.getPolicy();
-
   test(title, () {
     expect(utils.array2DEquals(myRes, res), equals(r));
   });
