@@ -12,11 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// InternalEnforcer = CoreEnforcer + Internal API.
-
 import 'core_enforcer.dart';
 import 'model/model.dart';
+import 'persist/batch_adapter.dart';
 import 'persist/file_adapter.dart';
+// InternalEnforcer = CoreEnforcer + Internal API.
+
+import 'persist/updatableAdapter.dart';
 
 class InternalEnforcer extends CoreEnforcer {
   /// addPolicy adds a rule to the current policy.
@@ -48,13 +50,48 @@ class InternalEnforcer extends CoreEnforcer {
       buildIncrementalRoleLinks(PolicyOperations.PolicyAdd, ptype, rules);
     }
 
-    //TODO: implement after implementing watcher
-
+    if (watcher != null && autoNotifyWatcher) {
+      watcher!.update();
+    }
     return true;
   }
 
-  //TODO: implement after implementing batchAdapter
-  // bool addPoliciesInternal(String sec, String ptype, List<List<String>> rules) {}
+  /// addPolicies adds multiple rules to the current policy.
+
+  bool addPoliciesInternal(String sec, String ptype, List<List<String>> rules) {
+    if (model.hasPolicies(sec, ptype, rules)) {
+      return false;
+    }
+
+    if ((adapter.runtimeType == FileAdapter &&
+            (adapter as FileAdapter).filePath.isNotEmpty) &&
+        autoSave) {
+      try {
+        if (adapter.runtimeType == BatchAdapter) {
+          (adapter as BatchAdapter).addPolicies(sec, ptype, rules);
+        } else {
+          throw UnsupportedError(
+              'cannot to save policy, the adapter does not implement the BatchAdapter');
+        }
+      } on UnsupportedError {
+        print('Method not implemented');
+      } catch (e) {
+        print('An exception occurred: ${e.toString()}');
+        return false;
+      }
+    }
+
+    var res = model.addPolicies(sec, ptype, rules);
+
+    if (sec == 'g' && res) {
+      buildIncrementalRoleLinks(PolicyOperations.PolicyAdd, ptype, rules);
+    }
+
+    if (watcher != null && autoNotifyWatcher) {
+      watcher!.update();
+    }
+    return true;
+  }
 
   /// buildIncrementalRoleLinks provides incremental build the role inheritance relations.
   /// [op] Policy operations.
@@ -62,8 +99,85 @@ class InternalEnforcer extends CoreEnforcer {
   /// [rules] the rules.
 
   void buildIncrementalRoleLinks(
-      PolicyOperations op, String ptype, List<List<String>> rules) {
+    PolicyOperations op,
+    String ptype,
+    List<List<String>> rules,
+  ) {
     model.buildIncrementalRoleLinks(rm, op, 'g', ptype, rules);
+  }
+
+  /// updatePolicy updates an authorization rule from the current policy.
+  ///
+  /// [sec]     the section, "p" or "g".
+  /// [ptype]   the policy type, "p", "p2", .. or "g", "g2", ..
+  /// [oldRule] the old rule.
+  /// [newRule] the new rule.
+  ///  returns whether the action succeeds or not.
+
+  bool updatePolicyInternal(
+    String sec,
+    String ptype,
+    List<String> oldRule,
+    List<String> newRule,
+  ) {
+    if (dispatcher != null && autoNotifyDispatcher) {
+      dispatcher!.updatePolicy(sec, ptype, oldRule, newRule);
+      return true;
+    }
+
+    if ((adapter.runtimeType == FileAdapter &&
+            (adapter as FileAdapter).filePath.isNotEmpty) &&
+        autoSave) {
+      try {
+        (adapter as UpdatabelAdapter)
+            .updatePolicy(sec, ptype, oldRule, newRule);
+      } on UnsupportedError {
+        print('Method not implemented');
+      } catch (e) {
+        print('An exception occurred: ${e.toString()}');
+        return false;
+      }
+    }
+
+    var ruleUpdated = model.updatePolicy(sec, ptype, oldRule, newRule);
+
+    if (!ruleUpdated) {
+      return false;
+    }
+
+    if ('g' == sec) {
+      try {
+        // remove the old rule
+        var oldRules = <List<String>>[];
+        oldRules.add(oldRule);
+        buildIncrementalRoleLinks(
+            PolicyOperations.PolicyRemove, ptype, oldRules);
+      } catch (e) {
+        print('An exception occurred:' + e.toString());
+        return false;
+      }
+
+      try {
+        // add the new rule
+        var newRules = <List<String>>[];
+        newRules.add(newRule);
+        buildIncrementalRoleLinks(PolicyOperations.PolicyAdd, ptype, newRules);
+      } catch (e) {
+        print('An exception occurred:' + e.toString());
+        return false;
+      }
+    }
+
+    if (watcher != null && autoNotifyWatcher) {
+      try {
+        watcher!.update();
+      } catch (e) {
+        print('An exception occurred:' + e.toString());
+        return false;
+      }
+    }
+
+    return true;
   }
 
   /// removePolicy removes a rule from the current policy.
@@ -97,25 +211,92 @@ class InternalEnforcer extends CoreEnforcer {
       rules.add(rule);
       buildIncrementalRoleLinks(PolicyOperations.PolicyRemove, ptype, rules);
     }
-    //TODO: implement after implementing watcher
+    if (watcher != null && autoNotifyWatcher) {
+      watcher!.update();
+    }
 
     return true;
   }
 
-  //TODO: implement later
-  /// updatePolicy updates an authorization rule from the current policy.
-  ///
-  /// [sec]     the section, "p" or "g".
-  /// [ptype]   the policy type, "p", "p2", .. or "g", "g2", ..
-  /// [oldRule] the old rule.
-  /// [newRule] the new rule.
-  ///  returns whether the action succeeds or not.
-  // bool updatePolicy(
-  //     String sec, String ptype, List<String> oldRule, List<String> newRule) {}
+  /// removePoliciesInternal removes rules from the current policy.
+  bool removePoliciesInternal(
+      String sec, String ptype, List<List<String>> rules) {
+    if (model.hasPolicies(sec, ptype, rules)) {
+      return false;
+    }
 
-  /// removePolicies removes rules from the current policy.
-  // bool removePolicies(String sec, String ptype, List<List<String>> rules) {}
+    if ((adapter.runtimeType == FileAdapter &&
+            (adapter as FileAdapter).filePath.isNotEmpty) &&
+        autoSave) {
+      try {
+        if (adapter.runtimeType == BatchAdapter) {
+          (adapter as BatchAdapter).removePolicies(sec, ptype, rules);
+        }
+      } on UnsupportedError {
+        print('Method not implemented');
+      } catch (e) {
+        print('An exception occurred: ${e.toString()}');
+        return false;
+      }
 
-  /// removeFilteredPolicy removes rules based on field filters from the current policy.
-  // bool removeFilteredPolicy(String sec, String ptype, int fieldIndex, dynamic fieldValues) {}
+      var rulesRemoveed = model.removePolicies(sec, ptype, rules);
+
+      if (!rulesRemoveed) {
+        return false;
+      }
+
+      if (sec == 'g') {
+        buildIncrementalRoleLinks(PolicyOperations.PolicyRemove, ptype, rules);
+      }
+      if (watcher != null && autoNotifyWatcher) {
+        watcher!.update();
+      }
+    }
+    return true;
+  }
+
+  /// removeFilteredPolicyInternal removes rules based on field filters from the current policy.
+  bool removeFilteredPolicyInternal(
+    String sec,
+    String ptype,
+    int fieldIndex,
+    List<String> fieldValues,
+  ) {
+    if (fieldValues.isEmpty) {
+      print('Invalid fieldValues parameter');
+      return false;
+    }
+
+    if ((adapter.runtimeType == FileAdapter &&
+            (adapter as FileAdapter).filePath.isNotEmpty) &&
+        autoSave) {
+      try {
+        adapter.removeFilteredPolicy(sec, ptype, fieldIndex, fieldValues);
+      } on UnsupportedError {
+        print('Method not implemented');
+      } catch (e) {
+        print('An exception occurred: ${e.toString()}');
+        return false;
+      }
+    }
+
+    var effects = model.removeFilteredPolicyReturnsEffects(
+        sec, ptype, fieldIndex, fieldValues);
+
+    var ruleRemoved = effects.isNotEmpty;
+
+    if (!ruleRemoved) {
+      return false;
+    }
+
+    if (sec == 'g') {
+      buildIncrementalRoleLinks(PolicyOperations.PolicyRemove, ptype, effects);
+    }
+
+    if (watcher != null && autoNotifyWatcher) {
+      watcher!.update();
+    }
+
+    return true;
+  }
 }
