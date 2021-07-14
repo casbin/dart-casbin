@@ -83,6 +83,17 @@ void testGetPolicy(
   });
 }
 
+void testRegexMatch(
+  String title,
+  String key1,
+  String key2,
+  bool res,
+) {
+  test(title, () {
+    expect(regexMatch(key1, key2), res);
+  });
+}
+
 void testKeyMatch(
   String title,
   String key1,
@@ -116,6 +127,17 @@ void testKeyMatch3(
   });
 }
 
+void testKeyMatch4(
+  String title,
+  String key1,
+  String key2,
+  bool res,
+) {
+  test(title, () {
+    expect(keyMatch4(key1, key2), res);
+  });
+}
+
 void testKeyGet(
   String title,
   String key1,
@@ -136,5 +158,27 @@ void testKeyGet2(
 ) {
   test(title, () {
     expect(keyGet2Func(key1, key2, pathVar), equals(res));
+  });
+}
+
+void testAllMatch(
+  String title,
+  String key1,
+  String key2,
+  bool res,
+) {
+  test(title, () {
+    expect(allMatch(key1, key2), equals(res));
+  });
+}
+
+void testGlobMatch(
+  String title,
+  String key1,
+  String key2,
+  bool res,
+) {
+  test(title, () {
+    expect(globMatch(key1, key2), equals(res));
   });
 }

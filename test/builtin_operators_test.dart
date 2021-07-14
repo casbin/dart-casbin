@@ -17,6 +17,17 @@ import 'package:test/test.dart';
 import 'utils/test_utils.dart';
 
 void main() {
+  group('test regexMatch', () {
+    testRegexMatch('test 1', '/topic/create', '/topic/create', true);
+    testRegexMatch('test 2', '/topic/create/123', '/topic/create', true);
+    testRegexMatch('test 3', '/topic/delete', '/topic/create', false);
+    testRegexMatch('test 4', '/topic/edit', '/topic/edit/[0-9]+', false);
+    testRegexMatch('test 5', '/topic/edit/123', '/topic/edit/[0-9]+', true);
+    testRegexMatch('test 6', '/topic/edit/abc', '/topic/edit/[0-9]+', false);
+    testRegexMatch('test 7', '/foo/delete/123', '/topic/delete/[0-9]+', false);
+    testRegexMatch('test 8', '/topic/delete/0', '/topic/delete/[0-9]+', true);
+    testRegexMatch('test 9', '/topic/edit/123s', '/topic/delete/[0-9]+', false);
+  });
   group('test keyMatch Function', () {
     testKeyMatch('test 1', '/foo', '/foo', true);
     testKeyMatch('test 2', '/foo', '/foo*', true);
@@ -149,5 +160,120 @@ void main() {
 
       testKeyGet2('test 26', '/alice/all', '/:/all', '', '');
     }
+  });
+
+  group('test keyMatch4', () {
+    testKeyMatch4(
+      'test 1',
+      '/parent/123/child/123',
+      '/parent/{id}/child/{id}',
+      true,
+    );
+    testKeyMatch4(
+      'test 2',
+      '/parent/123/child/456',
+      '/parent/{id}/child/{id}',
+      false,
+    );
+
+    testKeyMatch4(
+      'test 3',
+      '/parent/123/child/123',
+      '/parent/{id}/child/{another_id}',
+      true,
+    );
+    testKeyMatch4(
+      'test 4',
+      '/parent/123/child/456',
+      '/parent/{id}/child/{another_id}',
+      true,
+    );
+
+    testKeyMatch4(
+      'test 5',
+      '/parent/123/child/123/book/123',
+      '/parent/{id}/child/{id}/book/{id}',
+      true,
+    );
+    testKeyMatch4(
+      'test 6',
+      '/parent/123/child/123/book/456',
+      '/parent/{id}/child/{id}/book/{id}',
+      false,
+    );
+    testKeyMatch4(
+      'test 7',
+      '/parent/123/child/456/book/123',
+      '/parent/{id}/child/{id}/book/{id}',
+      false,
+    );
+    testKeyMatch4(
+      'test 8',
+      '/parent/123/child/456/book/',
+      '/parent/{id}/child/{id}/book/{id}',
+      false,
+    );
+    testKeyMatch4(
+      'test 9',
+      '/parent/123/child/456',
+      '/parent/{id}/child/{id}/book/{id}',
+      false,
+    );
+
+    testKeyMatch4(
+      'test 10',
+      '/parent/123/child/123',
+      '/parent/{i/d}/child/{i/d}',
+      false,
+    );
+  });
+
+  group('test allMatch', () {
+    testAllMatch('test 1', '*', '/foo', true);
+    testAllMatch('test 2', '/foo/*', '/foo', false);
+    testAllMatch('test 3', '/foo', '/foo', true);
+    testAllMatch('test 4', '/foo/bar', '/foo/*', false);
+  });
+
+  group('test globMatch', () {
+    testGlobMatch('test 1', '/foo', '/foo', true);
+    testGlobMatch('test 2', '/foo', '/foo*', true);
+    testGlobMatch('test 3', '/foo', '/foo/*', false);
+    testGlobMatch('test 4', '/foo/bar', '/foo', false);
+    testGlobMatch('test 5', '/foo/bar', '/foo*', false);
+    testGlobMatch('test 6', '/foo/bar', '/foo/*', true);
+    testGlobMatch('test 7', '/foobar', '/foo', false);
+    testGlobMatch('test 8', '/foobar', '/foo*', true);
+    testGlobMatch('test 9', '/foobar', '/foo/*', false);
+
+    testGlobMatch('test 10', '/foo', '*/foo', true);
+    testGlobMatch('test 11', '/foo', '*/foo*', true);
+    testGlobMatch('test 12', '/foo', '*/foo/*', false);
+    testGlobMatch('test 13', '/foo/bar', '*/foo', false);
+    testGlobMatch('test 14', '/foo/bar', '*/foo*', false);
+    testGlobMatch('test 15', '/foo/bar', '*/foo/*', true);
+    testGlobMatch('test 16', '/foobar', '*/foo', false);
+    testGlobMatch('test 17', '/foobar', '*/foo*', true);
+    testGlobMatch('test 18', '/foobar', '*/foo/*', false);
+
+    testGlobMatch('test 19', '/prefix/foo', '*/foo', false);
+    testGlobMatch('test 20', '/prefix/foo', '*/foo*', false);
+    testGlobMatch('test 21', '/prefix/foo', '*/foo/*', false);
+    testGlobMatch('test 22', '/prefix/foo/bar', '*/foo', false);
+    testGlobMatch('test 23', '/prefix/foo/bar', '*/foo*', false);
+    testGlobMatch('test 24', '/prefix/foo/bar', '*/foo/*', false);
+    testGlobMatch('test 25', '/prefix/foobar', '*/foo', false);
+    testGlobMatch('test 26', '/prefix/foobar', '*/foo*', false);
+    testGlobMatch('test 27', '/prefix/foobar', '*/foo/*', false);
+
+    testGlobMatch('test 28', '/prefix/subprefix/foo', '*/foo', false);
+    testGlobMatch('test 29', '/prefix/subprefix/foo', '*/foo*', false);
+    testGlobMatch('test 30', '/prefix/subprefix/foo', '*/foo/*', false);
+    testGlobMatch('test 31', '/prefix/subprefix/foo/bar', '*/foo', false);
+    testGlobMatch('test 32', '/prefix/subprefix/foo/bar', '*/foo*', false);
+    testGlobMatch('test 33', '/prefix/subprefix/foo/bar', '*/foo/*', false);
+    testGlobMatch('test 34', '/prefix/subprefix/foobar', '*/foo', false);
+    testGlobMatch('test 35', '/prefix/subprefix/foobar', '*/foo*', false);
+    testGlobMatch('test 36', '/prefix/subprefix/foobar', '*/foo/*', false);
   });
 }
