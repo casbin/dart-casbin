@@ -14,6 +14,7 @@
 
 import 'package:casbin/casbin.dart';
 import 'package:casbin/src/rbac/role_manager.dart';
+import 'package:casbin/src/utils/builtin_operators.dart';
 import 'package:casbin/src/utils/utils.dart' as utils;
 import 'package:test/test.dart';
 
@@ -77,5 +78,107 @@ void testGetPolicy(
 ) {
   var myRes = e.getPolicy();
 
-  expect(utils.array2DEquals(myRes, res), equals(r));
+  test(title, () {
+    expect(utils.array2DEquals(myRes, res), equals(r));
+  });
+}
+
+void testRegexMatch(
+  String title,
+  String key1,
+  String key2,
+  bool res,
+) {
+  test(title, () {
+    expect(regexMatch(key1, key2), res);
+  });
+}
+
+void testKeyMatch(
+  String title,
+  String key1,
+  String key2,
+  bool res,
+) {
+  test(title, () {
+    expect(keyMatch(key1, key2), res);
+  });
+}
+
+void testKeyMatch2(
+  String title,
+  String key1,
+  String key2,
+  bool res,
+) {
+  test(title, () {
+    expect(keyMatch2(key1, key2), res);
+  });
+}
+
+void testKeyMatch3(
+  String title,
+  String key1,
+  String key2,
+  bool res,
+) {
+  test(title, () {
+    expect(keyMatch3(key1, key2), res);
+  });
+}
+
+void testKeyMatch4(
+  String title,
+  String key1,
+  String key2,
+  bool res,
+) {
+  test(title, () {
+    expect(keyMatch4(key1, key2), res);
+  });
+}
+
+void testKeyGet(
+  String title,
+  String key1,
+  String key2,
+  String res,
+) {
+  test(title, () {
+    expect(keyGetFunc(key1, key2), equals(res));
+  });
+}
+
+void testKeyGet2(
+  String title,
+  String key1,
+  String key2,
+  String pathVar,
+  String res,
+) {
+  test(title, () {
+    expect(keyGet2Func(key1, key2, pathVar), equals(res));
+  });
+}
+
+void testAllMatch(
+  String title,
+  String key1,
+  String key2,
+  bool res,
+) {
+  test(title, () {
+    expect(allMatch(key1, key2), equals(res));
+  });
+}
+
+void testGlobMatch(
+  String title,
+  String key1,
+  String key2,
+  bool res,
+) {
+  test(title, () {
+    expect(globMatch(key1, key2), equals(res));
+  });
 }

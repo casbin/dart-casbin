@@ -25,15 +25,16 @@ class Enforcer extends ManagementEnforcer {
   /// [policyFile] is the path of the policy file.
   /// [adapter] is the adapter.
   /// [enableLog] whether to enable Casbin's log.
-  Enforcer(
-    String modelPath, [
-    String? policyFile,
+  Enforcer([
+    String modelPath = '',
+    String policyFile = '',
   ]) {
-    adapter = FileAdapter(policyFile ?? '');
+    adapter = FileAdapter(policyFile);
 
     this.modelPath = modelPath;
     final model = Model();
-    model.loadModel(modelPath);
+
+    if (modelPath.isNotEmpty) model.loadModel(modelPath);
 
     this.model = model;
     fm = FunctionMap.loadFunctionMap();
@@ -77,7 +78,7 @@ class Enforcer extends ManagementEnforcer {
   /// getRolesForUser gets the roles that a user has.
   ///
   /// [name] the user.
-  /// [return] the roles that the user has.
+  /// return the roles that the user has.
   List<String> getRolesForUser(String name) {
     try {
       return model.model['g']!['g']!.rm.getRoles(name);
@@ -93,7 +94,7 @@ class Enforcer extends ManagementEnforcer {
   /// getUsersForRole gets the users that has a role.
   ///
   /// [name] the role.
-  /// [return] the users that has the role.
+  /// return the users that has the role.
   List<String> getUsersForRole(String name) {
     try {
       return model.model['g']!['g']!.rm.getUsers(name);
@@ -109,8 +110,8 @@ class Enforcer extends ManagementEnforcer {
   /// hasRoleForUser determines whether a user has a role.
   ///
   /// [name] the user.
-  /// [param] role the role.
-  /// [return] whether the user has the role.
+  /// [role] the role.
+  /// return whether the user has the role.
   bool hasRoleForUser(String name, String role) {
     var roles = getRolesForUser(name);
 
