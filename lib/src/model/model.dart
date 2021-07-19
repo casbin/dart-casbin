@@ -15,6 +15,7 @@
 import 'dart:collection';
 
 import '../config/config.dart';
+import '../log/log_util.dart' as logutil;
 import '../rbac/role_manager.dart';
 import 'assertion.dart';
 import 'policy.dart';
@@ -187,7 +188,10 @@ class Model extends Policy {
   }
 
   /// Prints the model to the log.
-  void printModel() {}
+  void printModel() {
+    var logger = logutil.getLogger();
+    logger.logModel(model);
+  }
 
   @override
   void buildRoleLinks(RoleManager rm) {

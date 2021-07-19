@@ -65,8 +65,9 @@ class DefaultFilteredAdapter implements FilteredAdapter {
     try {
       loadFilteredPolicyFile(model, filter, Helper.loadPolicyLine);
       _filtered = true;
-    } catch (e) {
+    } catch (e, stacktrace) {
       print(e.toString());
+      print(stacktrace);
     }
   }
 
