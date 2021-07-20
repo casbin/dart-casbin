@@ -33,9 +33,9 @@ class InternalEnforcer extends CoreEnforcer {
       try {
         adapter.addPolicy(sec, ptype, rule);
       } on UnsupportedError {
-        getLogger().logPrint('Method not implemented');
+        logger.logPrint('Method not implemented');
       } catch (e) {
-        getLogger().logPrint('An exception occurred: ${e.toString()}');
+        logger.logPrint('An exception occurred: ${e.toString()}');
         return false;
       }
     }
@@ -72,9 +72,9 @@ class InternalEnforcer extends CoreEnforcer {
               'cannot to save policy, the adapter does not implement the BatchAdapter');
         }
       } on UnsupportedError {
-        getLogger().logPrint('Method not implemented');
+        logger.logPrint('Method not implemented');
       } catch (e) {
-        getLogger().logPrint('An exception occurred: ${e.toString()}');
+        logger.logPrint('An exception occurred: ${e.toString()}');
         return false;
       }
     }
@@ -130,9 +130,9 @@ class InternalEnforcer extends CoreEnforcer {
         (adapter as UpdatabelAdapter)
             .updatePolicy(sec, ptype, oldRule, newRule);
       } on UnsupportedError {
-        getLogger().logPrint('Method not implemented');
+        logger.logPrint('Method not implemented');
       } catch (e) {
-        getLogger().logPrint('An exception occurred: ${e.toString()}');
+        logger.logPrint('An exception occurred: ${e.toString()}');
         return false;
       }
     }
@@ -151,7 +151,7 @@ class InternalEnforcer extends CoreEnforcer {
         buildIncrementalRoleLinks(
             PolicyOperations.PolicyRemove, ptype, oldRules);
       } catch (e) {
-        getLogger().logPrint('An exception occurred:' + e.toString());
+        logger.logPrint('An exception occurred:' + e.toString());
         return false;
       }
 
@@ -161,7 +161,7 @@ class InternalEnforcer extends CoreEnforcer {
         newRules.add(newRule);
         buildIncrementalRoleLinks(PolicyOperations.PolicyAdd, ptype, newRules);
       } catch (e) {
-        getLogger().logPrint('An exception occurred:' + e.toString());
+        logger.logPrint('An exception occurred:' + e.toString());
         return false;
       }
     }
@@ -170,7 +170,7 @@ class InternalEnforcer extends CoreEnforcer {
       try {
         watcher!.update();
       } catch (e) {
-        getLogger().logPrint('An exception occurred:' + e.toString());
+        logger.logPrint('An exception occurred:' + e.toString());
         return false;
       }
     }
@@ -191,9 +191,9 @@ class InternalEnforcer extends CoreEnforcer {
       try {
         adapter.removePolicy(sec, ptype, rule);
       } on UnsupportedError {
-        getLogger().logPrint('Method not implemented');
+        logger.logPrint('Method not implemented');
       } catch (e) {
-        getLogger().logPrint('An exception occurred: ${e.toString()}');
+        logger.logPrint('An exception occurred: ${e.toString()}');
         return false;
       }
     }
@@ -231,9 +231,9 @@ class InternalEnforcer extends CoreEnforcer {
           (adapter as BatchAdapter).removePolicies(sec, ptype, rules);
         }
       } on UnsupportedError {
-        getLogger().logPrint('Method not implemented');
+        logger.logPrint('Method not implemented');
       } catch (e) {
-        getLogger().logPrint('An exception occurred: ${e.toString()}');
+        logger.logPrint('An exception occurred: ${e.toString()}');
         return false;
       }
 
@@ -261,7 +261,7 @@ class InternalEnforcer extends CoreEnforcer {
     List<String> fieldValues,
   ) {
     if (fieldValues.isEmpty) {
-      getLogger().logPrint('Invalid fieldValues parameter');
+      logger.logPrint('Invalid fieldValues parameter');
       return false;
     }
 
@@ -271,9 +271,9 @@ class InternalEnforcer extends CoreEnforcer {
       try {
         adapter.removeFilteredPolicy(sec, ptype, fieldIndex, fieldValues);
       } on UnsupportedError {
-        getLogger().logPrint('Method not implemented');
+        logger.logPrint('Method not implemented');
       } catch (e) {
-        getLogger().logPrint('An exception occurred: ${e.toString()}');
+        logger.logPrint('An exception occurred: ${e.toString()}');
         return false;
       }
     }
