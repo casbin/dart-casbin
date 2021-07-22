@@ -16,6 +16,7 @@ import 'dart:collection';
 
 import 'package:collection/collection.dart';
 
+import '../log/log_util.dart' as logutil;
 import '../rbac/role_manager.dart';
 import '../utils/utils.dart' as utils;
 import 'assertion.dart';
@@ -63,7 +64,11 @@ class Policy {
   }
 
   /// Prints the policy to log.
-  void printPolicy() {}
+  void printPolicy() {
+    var logger = logutil.getLogger();
+
+    logger.logPolicy(model);
+  }
 
   /// Clears all current policy.
   void clearPolicy() {

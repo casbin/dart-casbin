@@ -13,13 +13,13 @@
 // limitations under the License.
 
 import 'core_enforcer.dart';
+import 'log/log_util.dart';
 import 'model/model.dart';
 import 'persist/batch_adapter.dart';
 import 'persist/file_adapter.dart';
-// InternalEnforcer = CoreEnforcer + Internal API.
-
 import 'persist/updatableAdapter.dart';
 
+/// InternalEnforcer = CoreEnforcer + Internal API.
 class InternalEnforcer extends CoreEnforcer {
   /// addPolicy adds a rule to the current policy.
   bool addPolicyInternal(String sec, String ptype, List<String> rule) {
@@ -33,11 +33,9 @@ class InternalEnforcer extends CoreEnforcer {
       try {
         adapter.addPolicy(sec, ptype, rule);
       } on UnsupportedError {
-        //TODO: change after log printing is implemented
-        print('Method not implemented');
+        logger.logPrint('Method not implemented');
       } catch (e) {
-        //TODO: change after log printing is implemented
-        print('An exception occurred: ${e.toString()}');
+        logger.logPrint('An exception occurred: ${e.toString()}');
         return false;
       }
     }
@@ -74,9 +72,9 @@ class InternalEnforcer extends CoreEnforcer {
               'cannot to save policy, the adapter does not implement the BatchAdapter');
         }
       } on UnsupportedError {
-        print('Method not implemented');
+        logger.logPrint('Method not implemented');
       } catch (e) {
-        print('An exception occurred: ${e.toString()}');
+        logger.logPrint('An exception occurred: ${e.toString()}');
         return false;
       }
     }
@@ -132,9 +130,9 @@ class InternalEnforcer extends CoreEnforcer {
         (adapter as UpdatabelAdapter)
             .updatePolicy(sec, ptype, oldRule, newRule);
       } on UnsupportedError {
-        print('Method not implemented');
+        logger.logPrint('Method not implemented');
       } catch (e) {
-        print('An exception occurred: ${e.toString()}');
+        logger.logPrint('An exception occurred: ${e.toString()}');
         return false;
       }
     }
@@ -153,7 +151,7 @@ class InternalEnforcer extends CoreEnforcer {
         buildIncrementalRoleLinks(
             PolicyOperations.PolicyRemove, ptype, oldRules);
       } catch (e) {
-        print('An exception occurred:' + e.toString());
+        logger.logPrint('An exception occurred:' + e.toString());
         return false;
       }
 
@@ -163,7 +161,7 @@ class InternalEnforcer extends CoreEnforcer {
         newRules.add(newRule);
         buildIncrementalRoleLinks(PolicyOperations.PolicyAdd, ptype, newRules);
       } catch (e) {
-        print('An exception occurred:' + e.toString());
+        logger.logPrint('An exception occurred:' + e.toString());
         return false;
       }
     }
@@ -172,7 +170,7 @@ class InternalEnforcer extends CoreEnforcer {
       try {
         watcher!.update();
       } catch (e) {
-        print('An exception occurred:' + e.toString());
+        logger.logPrint('An exception occurred:' + e.toString());
         return false;
       }
     }
@@ -193,9 +191,9 @@ class InternalEnforcer extends CoreEnforcer {
       try {
         adapter.removePolicy(sec, ptype, rule);
       } on UnsupportedError {
-        print('Method not implemented');
+        logger.logPrint('Method not implemented');
       } catch (e) {
-        print('An exception occurred: ${e.toString()}');
+        logger.logPrint('An exception occurred: ${e.toString()}');
         return false;
       }
     }
@@ -233,9 +231,9 @@ class InternalEnforcer extends CoreEnforcer {
           (adapter as BatchAdapter).removePolicies(sec, ptype, rules);
         }
       } on UnsupportedError {
-        print('Method not implemented');
+        logger.logPrint('Method not implemented');
       } catch (e) {
-        print('An exception occurred: ${e.toString()}');
+        logger.logPrint('An exception occurred: ${e.toString()}');
         return false;
       }
 
@@ -263,7 +261,7 @@ class InternalEnforcer extends CoreEnforcer {
     List<String> fieldValues,
   ) {
     if (fieldValues.isEmpty) {
-      print('Invalid fieldValues parameter');
+      logger.logPrint('Invalid fieldValues parameter');
       return false;
     }
 
@@ -273,9 +271,9 @@ class InternalEnforcer extends CoreEnforcer {
       try {
         adapter.removeFilteredPolicy(sec, ptype, fieldIndex, fieldValues);
       } on UnsupportedError {
-        print('Method not implemented');
+        logger.logPrint('Method not implemented');
       } catch (e) {
-        print('An exception occurred: ${e.toString()}');
+        logger.logPrint('An exception occurred: ${e.toString()}');
         return false;
       }
     }

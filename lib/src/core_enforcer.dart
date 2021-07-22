@@ -20,6 +20,9 @@ import 'effect/default_effector.dart';
 import 'effect/effect.dart';
 import 'effect/effector.dart';
 import 'exception/casbin_adapter_exception.dart';
+import 'log/default_logger.dart';
+import 'log/log_util.dart';
+import 'log/logger.dart';
 import 'model/function_map.dart';
 import 'model/model.dart';
 import 'persist/adapter.dart';
@@ -43,6 +46,7 @@ class CoreEnforcer {
   Watcher? watcher;
   RoleManager rm;
   Dispatcher? dispatcher;
+  Logger logger;
 
   bool _enabled;
   bool autoSave;
@@ -57,6 +61,7 @@ class CoreEnforcer {
         model = Model(),
         eft = DefaultEffector(),
         rm = DefaultRoleManager(10),
+        logger = DefaultLogger(),
         adapter = FileAdapter(''),
         watcher = null,
         dispatcher = null,
@@ -65,15 +70,8 @@ class CoreEnforcer {
         autoBuildRoleLinks = true,
         autoNotifyWatcher = true,
         autoNotifyDispatcher = true,
-        fm = FunctionMap.loadFunctionMap();
-
-  void initialize() {
-    rm = DefaultRoleManager(10);
-    eft = DefaultEffector();
-
-    _enabled = true;
-    autoSave = true;
-    autoBuildRoleLinks = true;
+        fm = FunctionMap.loadFunctionMap() {
+    setLogger(logger);
   }
 
   /// Creates a model.
@@ -226,7 +224,7 @@ class CoreEnforcer {
   ///
   /// [enable] whether to enable Casbin's log.
   void enableLog(bool enable) {
-    // TODO(KNawm): Implement logger
+    logger.enableLog(enable);
   }
 
   /// Controls whether to save a policy rule automatically to the adapter when it is added or removed.
@@ -416,7 +414,7 @@ class CoreEnforcer {
         .length;
 
     if (rvals.length != expectedParamSize) {
-      print(
+      logger.logPrint(
           'Incorrect number of attributes to check for policy (expected $expectedParamSize but got ${rvals.length})');
       return rvals.length >= expectedParamSize;
     }

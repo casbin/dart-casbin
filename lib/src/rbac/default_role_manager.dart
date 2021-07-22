@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import '../log/log_util.dart' as logutil;
 import 'domain_roles.dart';
 import 'role.dart';
 import 'role_manager.dart';
@@ -238,8 +239,7 @@ class DefaultRoleManager implements RoleManager {
   /// Prints all the roles to log.
   @override
   void printRoles() {
-    for (var role in allDomains.values) {
-      // todo(KNawm): Print role.toString() to logger
-    }
+    var logger = logutil.getLogger();
+    logger.logRole(allDomains);
   }
 }

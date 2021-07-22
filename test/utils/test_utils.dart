@@ -13,6 +13,9 @@
 // limitations under the License.
 
 import 'package:casbin/casbin.dart';
+import 'package:casbin/src/log/logger.dart';
+import 'package:casbin/src/model/model.dart';
+import 'package:casbin/src/rbac/default_role_manager.dart';
 import 'package:casbin/src/rbac/role_manager.dart';
 import 'package:casbin/src/utils/builtin_operators.dart';
 import 'package:casbin/src/utils/utils.dart' as utils;
@@ -180,5 +183,38 @@ void testGlobMatch(
 ) {
   test(title, () {
     expect(globMatch(key1, key2), equals(res));
+  });
+}
+
+void testLogModel(
+  String title,
+  Logger logger,
+  Model model,
+  String res,
+) {
+  test(title, () {
+    expect(() => logger.logModel(model.model), prints(contains(res)));
+  });
+}
+
+void testLogPolicy(
+  String title,
+  Logger logger,
+  Model model,
+  String res,
+) {
+  test(title, () {
+    expect(() => logger.logPolicy(model.model), prints(contains(res)));
+  });
+}
+
+void testLogRole(
+  String title,
+  Logger logger,
+  DefaultRoleManager rm,
+  String res,
+) {
+  test(title, () {
+    expect(() => logger.logRole(rm.allDomains), prints(contains(res)));
   });
 }

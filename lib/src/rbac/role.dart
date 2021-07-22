@@ -61,12 +61,21 @@ class Role {
     return false;
   }
 
-  @override
-  String toString() {
-    return name + roles.join(',');
-  }
-
   List<String> getRoles() {
     return roles.map((r) => r.name).toList();
+  }
+
+  @override
+  String toString() {
+    var names = <String>[];
+    for (var i = 0; i < roles.length; i++) {
+      var role = roles[i];
+      if (i == 0) {
+        names.add(role.name);
+      } else {
+        names.add(', ' + role.name);
+      }
+    }
+    return name + ' < ' + names.toString();
   }
 }
