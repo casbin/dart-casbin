@@ -165,7 +165,7 @@ class Enforcer extends ManagementEnforcer {
 
   void deleteRole(String role) {
     removeFilteredGroupingPolicy(1, [role]);
-    removeFilteredPolicy(0, role);
+    removeFilteredPolicy(0, [role]);
   }
 
   /// deletePermission deletes a permission.
@@ -175,7 +175,7 @@ class Enforcer extends ManagementEnforcer {
   /// return succeeds or not.
 
   bool deletePermission(List<String> permission) {
-    return deletePermission(permission);
+    return removeFilteredPolicy(1, permission);
   }
 
   /// addPermissionForUser adds a permission for a user or role.
@@ -238,7 +238,7 @@ class Enforcer extends ManagementEnforcer {
   /// return succeeds or not.
 
   bool deletePermissionsForUser(String user) {
-    return removeFilteredPolicy(0, user);
+    return removeFilteredPolicy(0, [user]);
   }
 
   /// getPermissionsForUser gets permissions for a user or role.

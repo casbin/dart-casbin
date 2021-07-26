@@ -283,7 +283,7 @@ class ManagementEnforcer extends InternalEnforcer {
   ///                    means not to match this field.
   /// return succeeds or not.
 
-  bool removeFilteredPolicy(int fieldIndex, dynamic fieldValues) {
+  bool removeFilteredPolicy(int fieldIndex, List<String> fieldValues) {
     return removeFilteredNamedPolicy('p', fieldIndex, fieldValues);
   }
 
@@ -308,7 +308,7 @@ class ManagementEnforcer extends InternalEnforcer {
   bool removeFilteredNamedPolicy(
     String ptype,
     int fieldIndex,
-    dynamic fieldValues,
+    List<String> fieldValues,
   ) {
     return removeFilteredPolicyInternal('p', ptype, fieldIndex, fieldValues);
   }
