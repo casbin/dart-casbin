@@ -17,7 +17,7 @@ import 'log/log_util.dart';
 import 'model/model.dart';
 import 'persist/batch_adapter.dart';
 import 'persist/file_adapter.dart';
-import 'persist/updatableAdapter.dart';
+import 'persist/updatable_adapter.dart';
 
 /// InternalEnforcer = CoreEnforcer + Internal API.
 class InternalEnforcer extends CoreEnforcer {
