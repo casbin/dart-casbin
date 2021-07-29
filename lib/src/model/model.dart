@@ -34,6 +34,17 @@ class Model extends Policy {
     'e': 'policy_effect',
     'm': 'matchers'
   });
+  Model();
+
+  /// creates a model from a .CONF file.
+  Model.fromFile(String path) {
+    loadModel(path);
+  }
+
+  /// creates a model from a String.
+  Model.fromString(String text) {
+    loadModelFromText(text);
+  }
 
   int _modCount = 0;
 

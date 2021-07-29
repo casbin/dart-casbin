@@ -297,4 +297,17 @@ class InternalEnforcer extends CoreEnforcer {
 
     return true;
   }
+
+  int getDomainIndex(String ptype) {
+    var ast = model.model['p']![ptype];
+    var pattern = '${ptype}_dom';
+    var index = ast!.tokens.length;
+    for (var i = 0; i < ast.tokens.length; i++) {
+      if (ast.tokens[i] == pattern) {
+        index = i;
+        break;
+      }
+    }
+    return index;
+  }
 }
