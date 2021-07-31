@@ -99,6 +99,21 @@ void main() {
     testDomainEnforce('test 8', e, 'bob', 'domain2', 'data2', 'write', true);
   });
 
+  group('Test enforcing with abac model with Domains', () {
+    var e = Enforcer(
+      'examples/abac_rule_with_domains_model.conf',
+      'examples/abac_rule_with_domains_policy.csv',
+    );
+    testDomainEnforce('test 1', e, 'alice', 'domain1', 'data1', 'read', true);
+    testDomainEnforce('test 2', e, 'alice', 'domain1', 'data1', 'write', true);
+    testDomainEnforce('test 3', e, 'alice', 'domain2', 'data1', 'read', false);
+    testDomainEnforce('test 4', e, 'alice', 'domain2', 'data1', 'write', false);
+    testDomainEnforce('test 5', e, 'bob', 'domain1', 'data2', 'read', false);
+    testDomainEnforce('test 6', e, 'bob', 'domain1', 'data2', 'write', false);
+    testDomainEnforce('test 7', e, 'bob', 'domain2', 'data2', 'read', true);
+    testDomainEnforce('test 8', e, 'bob', 'domain2', 'data2', 'read', true);
+  });
+
   group('Test enforcing with rbac model with deny', () {
     final e = Enforcer(rbacWithDenyModel, rbacWithDenyPolicy);
 

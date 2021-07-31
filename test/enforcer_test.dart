@@ -13,12 +13,28 @@
 // limitations under the License.
 
 import 'package:casbin/casbin.dart';
+import 'package:casbin/src/abac/class.dart';
 import 'package:casbin/src/model/model.dart';
 import 'package:casbin/src/persist/file_adapter.dart';
 import 'package:casbin/src/utils/utils.dart';
 import 'package:test/test.dart';
 
 import 'utils/test_utils.dart';
+
+class AbacTest implements AbacClass {
+  String Name;
+  int Age;
+
+  AbacTest(this.Name, this.Age);
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'Name': Name,
+      'Age': Age,
+    };
+  }
+}
 
 void main() {
   group('test enable enforce with false', () {
@@ -518,5 +534,29 @@ m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act
     ];
 
     expect(array2DEquals(actual, e.getPolicy()), true);
+  });
+
+  group('test ABAC Scaling', () {
+    final e = Enforcer(
+      'examples/abac_rule_model.conf',
+      'examples/abac_rule_policy.csv',
+    );
+
+    final sub1 = AbacTest('alice', 16);
+    final sub2 = AbacTest('alice', 20);
+    final sub3 = AbacTest('alice', 65);
+
+    testEnforce('test 1', e, sub1, '/data1', 'read', false);
+    testEnforce('test 2', e, sub1, '/data2', 'read', false);
+    testEnforce('test 3', e, sub1, '/data1', 'write', false);
+    testEnforce('test 4', e, sub1, '/data2', 'write', true);
+    testEnforce('test 5', e, sub2, '/data1', 'read', true);
+    testEnforce('test 6', e, sub2, '/data2', 'read', false);
+    testEnforce('test 7', e, sub2, '/data1', 'write', false);
+    testEnforce('test 8', e, sub2, '/data2', 'write', true);
+    testEnforce('test 9', e, sub3, '/data1', 'read', true);
+    testEnforce('test 10', e, sub3, '/data2', 'read', false);
+    testEnforce('test 11', e, sub3, '/data1', 'write', false);
+    testEnforce('test 12', e, sub3, '/data2', 'write', false);
   });
 }
