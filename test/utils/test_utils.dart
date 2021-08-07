@@ -24,7 +24,7 @@ import 'package:test/test.dart';
 void testEnforce(
   String title,
   Enforcer e,
-  String sub,
+  dynamic sub,
   String obj,
   String act,
   bool res,
@@ -37,7 +37,7 @@ void testEnforce(
 void testDomainEnforce(
   String title,
   Enforcer e,
-  String sub,
+  dynamic sub,
   String domain,
   String obj,
   String act,

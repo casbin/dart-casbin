@@ -16,6 +16,7 @@ import 'dart:io';
 
 import 'package:expressions/expressions.dart';
 
+import 'abac/class.dart';
 import 'effect/default_effector.dart';
 import 'effect/effect.dart';
 import 'effect/effector.dart';
@@ -250,7 +251,15 @@ class CoreEnforcer {
   /// Returns whether a "subject" can access a "object" with the operation "action", input parameters are usually: [sub, obj, act].
   ///
   /// [rvals] the request that needs to be mediated.
-  bool enforce(List<String> rvals) {
+  /// [rvals] must contain AbacClass for ABAC requests and String for other requests.
+  bool enforce(List<dynamic> rvals) {
+    if (rvals
+        .any((element) => (!(element is String) && !(element is AbacClass)))) {
+      throw ArgumentError(
+        'rvals can only contain String or subclass of AbacClass',
+      );
+    }
+    ;
     if (!_enabled) {
       return true;
     }
@@ -320,14 +329,14 @@ class CoreEnforcer {
               throw Exception('$ruleName not in $params');
             }
           }
-          expression ??= Expression.parse(expWithRule);
+          expression = Expression.parse(expWithRule);
         } else {
           expression ??= Expression.parse(expString);
         }
 
         final context = {...params, ...functions};
 
-        final evaluator = const ExpressionEvaluator();
+        final evaluator = const CasbinEvaluator();
         final result = evaluator.eval(expression, context);
 
         if (result.runtimeType == bool) {
@@ -381,7 +390,7 @@ class CoreEnforcer {
       final context = {...params, ...functions};
 
       expression = Expression.parse(expString);
-      final evaluator = const ExpressionEvaluator();
+      final evaluator = const CasbinEvaluator();
       final result = evaluator.eval(expression, context);
 
       policyEffects[0] = result ? Effect.Allow : Effect.Indeterminate;

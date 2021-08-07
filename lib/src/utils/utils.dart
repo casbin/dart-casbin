@@ -13,8 +13,20 @@
 // limitations under the License.
 
 import 'package:collection/collection.dart';
+import 'package:expressions/expressions.dart';
 
 import '../model/assertion.dart';
+
+class CasbinEvaluator extends ExpressionEvaluator {
+  const CasbinEvaluator();
+
+  @override
+  dynamic evalMemberExpression(
+      MemberExpression expression, Map<String, dynamic> context) {
+    var object = eval(expression.object, context).toMap();
+    return object[expression.property.name];
+  }
+}
 
 final evalReg = RegExp(r'\beval\(([^),]*)\)');
 
