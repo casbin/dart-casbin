@@ -16,7 +16,7 @@ import 'dart:io';
 
 import 'package:expressions/expressions.dart';
 
-import 'abac/class.dart';
+import 'abac/abac_class.dart';
 import 'effect/default_effector.dart';
 import 'effect/effect.dart';
 import 'effect/effector.dart';
