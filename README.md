@@ -98,6 +98,36 @@ You can also use the online editor (https://casbin.org/editor/) to write your Ca
 
 https://casbin.org/docs/en/tutorials
 
+## Get started
+
+1. New a Casbin enforcer with a model file and a policy file:
+
+   ```dart
+   var e = Enforcer.fromModelPathAndPolicyFile('path/to/model.conf', 'path/to/policy.csv');
+   ```
+
+2. Add an enforcement hook into your code right before the access happens:
+
+   ```dart
+   var sub = 'alice'; // the user that wants to access a resource.
+   var obj = 'data1'; // the resource that is going to be accessed.
+   var act = 'read'; // the operation that the user performs on the resource.
+
+   if (e.enforce([sub, obj, act])){
+       // permit alice to read data1
+   } else {
+       // deny the request, show an error
+   }
+   ```
+
+3. Besides the static policy file, Casbin also provides API for permission management at run-time. For example, You can get all the roles assigned to a user as below:
+
+   ```dart
+   var roles = e.getRolesForUser(sub);
+   ```
+
+See [Policy management APIs](#policy-management) for more usage.
+
 ## Policy management
 
 Casbin provides two sets of APIs to manage permissions:
