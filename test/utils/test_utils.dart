@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'package:casbin/casbin.dart';
+import 'package:casbin/src/abac/abac_class.dart';
 import 'package:casbin/src/log/logger.dart';
 import 'package:casbin/src/model/model.dart';
 import 'package:casbin/src/rbac/default_role_manager.dart';
@@ -20,6 +21,21 @@ import 'package:casbin/src/rbac/role_manager.dart';
 import 'package:casbin/src/utils/builtin_operators.dart';
 import 'package:casbin/src/utils/utils.dart' as utils;
 import 'package:test/test.dart';
+
+class AbacTest implements AbacClass {
+  String Name;
+  int Age;
+
+  AbacTest(this.Name, this.Age);
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'Name': Name,
+      'Age': Age,
+    };
+  }
+}
 
 void testEnforce(
   String title,

@@ -15,6 +15,7 @@
 /// An authorization library that supports access control models like ACL, RBAC, ABAC in Dart.
 library casbin;
 
+export 'src/abac/abac_class.dart';
 export 'src/config/config.dart';
 export 'src/core_enforcer.dart';
 export 'src/effect/index.dart';
