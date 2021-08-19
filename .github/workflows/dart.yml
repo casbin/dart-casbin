@@ -13,7 +13,7 @@ env:
 jobs:
   # Check code formatting and static analysis on Ubuntu.
   analyze:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
@@ -42,3 +42,40 @@ jobs:
         run: dart pub get
       - name: Run VM tests
         run: dart test --platform vm
+
+  # release on Github and pub.dev
+  publish:
+    needs: test
+    if: github.repository == 'casbin/dart-casbin' && github.event_name == 'push'
+    runs-on: ubuntu-20.04
+    steps:    
+      - uses: actions/checkout@v2
+      - uses: cedx/setup-dart@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - run: npm install -g "@semantic-release/changelog"
+      - run: npm install -g "@semantic-release/git"
+      - run: npm install -g "pub-semantic-release"
+
+      - name: Bump version
+        run: |
+          export NODE_PATH="$(npm root -g)"
+          npx semantic-release@17
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Publish to pub
+        run: dart pub publish --dry-run
+
+      - uses: sakebook/actions-flutter-pub-publisher@v1.3.1
+        with:
+          package_directory: ${{ matrix.package }}
+          credential: ${{ secrets.PUB_CREDENTIALS }}
+          flutter_package: true
+          skip_test: true
+        
+      - name: Commit updated pubspec and changelog files
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update pubspec and changelog
