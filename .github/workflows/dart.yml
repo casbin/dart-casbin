@@ -58,7 +58,7 @@ jobs:
       - run: npm install -g "@semantic-release/git"
       - run: npm install -g "pub-semantic-release"
 
-      - name: Bump version
+      - name: Semantic Release
         run: |
           export NODE_PATH="$(npm root -g)"
           npx semantic-release@17
@@ -74,8 +74,3 @@ jobs:
           credential: ${{ secrets.PUB_CREDENTIALS }}
           flutter_package: true
           skip_test: true
-        
-      - name: Commit updated pubspec and changelog files
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Update pubspec and changelog
