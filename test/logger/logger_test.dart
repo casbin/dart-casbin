@@ -68,8 +68,8 @@ void main() {
     });
     group('test logPolicy', () {
       final enf = Enforcer.fromModelPathAndPolicyFile(
-        'examples/basic_model.conf',
-        'examples/basic_policy.csv',
+        'casbin_examples/basic_model.conf',
+        'casbin_examples/basic_policy.csv',
       );
 
       testLogPolicy('test 1', logger, enf.model, 'Policy:');
@@ -80,8 +80,8 @@ void main() {
 
     group('test logRole', () {
       final enf = Enforcer.fromModelPathAndPolicyFile(
-        'examples/rbac_with_domains_model.conf',
-        'examples/rbac_with_domains_policy.csv',
+        'casbin_examples/rbac_with_domains_model.conf',
+        'casbin_examples/rbac_with_domains_policy.csv',
       );
       final rm = enf.rm as DefaultRoleManager;
 

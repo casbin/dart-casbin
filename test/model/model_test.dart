@@ -19,19 +19,20 @@ import 'package:casbin/src/enforcer.dart';
 import '../utils/test_utils.dart';
 
 void main() {
-  final basicModelPath = 'examples/basic_model.conf';
-  final basicPolicyFile = 'examples/basic_policy.csv';
-  final rbacModelPath = 'examples/rbac_model.conf';
-  final rbacPolicyFile = 'examples/rbac_policy.csv';
-  final rbacWithResourcesModel = 'examples/rbac_with_resource_roles_model.conf';
+  final basicModelPath = 'casbin_examples/basic_model.conf';
+  final basicPolicyFile = 'casbin_examples/basic_policy.csv';
+  final rbacModelPath = 'casbin_examples/rbac_model.conf';
+  final rbacPolicyFile = 'casbin_examples/rbac_policy.csv';
+  final rbacWithResourcesModel =
+      'casbin_examples/rbac_with_resource_roles_model.conf';
   final rbacWithResourcesPolicy =
-      'examples/rbac_with_resource_roles_policy.csv';
-  final rbacWithDomainsModel = 'examples/rbac_with_domains_model.conf';
-  final rbacWithDomainsPolicy = 'examples/rbac_with_domains_policy.csv';
-  final rbacWithDenyModel = 'examples/rbac_with_deny_model.conf';
-  final rbacWithDenyPolicy = 'examples/rbac_with_deny_policy.csv';
+      'casbin_examples/rbac_with_resource_roles_policy.csv';
+  final rbacWithDomainsModel = 'casbin_examples/rbac_with_domains_model.conf';
+  final rbacWithDomainsPolicy = 'casbin_examples/rbac_with_domains_policy.csv';
+  final rbacWithDenyModel = 'casbin_examples/rbac_with_deny_model.conf';
+  final rbacWithDenyPolicy = 'casbin_examples/rbac_with_deny_policy.csv';
 
-  final rbacWithNotDenyModel = 'examples/rbac_with_not_deny_model.conf';
+  final rbacWithNotDenyModel = 'casbin_examples/rbac_with_not_deny_model.conf';
 
   group('Test enforcing with basic model', () {
     final e =
@@ -101,8 +102,8 @@ void main() {
 
   group('Test enforcing with abac model with Domains', () {
     var e = Enforcer(
-      'examples/abac_rule_with_domains_model.conf',
-      'examples/abac_rule_with_domains_policy.csv',
+      'casbin_examples/abac_rule_with_domains_model.conf',
+      'casbin_examples/abac_rule_with_domains_policy.csv',
     );
     testDomainEnforce('test 1', e, 'alice', 'domain1', 'data1', 'read', true);
     testDomainEnforce('test 2', e, 'alice', 'domain1', 'data1', 'write', true);

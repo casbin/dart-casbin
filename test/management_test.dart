@@ -19,7 +19,8 @@ import 'package:test/test.dart';
 import 'package:casbin/src/utils/utils.dart' as utils;
 
 void main() {
-  var e = Enforcer('examples/rbac_model.conf', 'examples/rbac_policy.csv');
+  var e = Enforcer(
+      'casbin_examples/rbac_model.conf', 'casbin_examples/rbac_policy.csv');
 
   test('test getAllSubjects', () {
     var allSubjects = e.getAllSubjects();
