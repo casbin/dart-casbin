@@ -22,7 +22,8 @@ import 'utils/test_utils.dart';
 
 void main() {
   group('test enable enforce with false', () {
-    var e = Enforcer('examples/basic_model.conf', 'examples/basic_policy.csv');
+    var e = Enforcer(
+        'casbin_examples/basic_model.conf', 'casbin_examples/basic_policy.csv');
 
     e.enableEnforce(false);
 
@@ -37,7 +38,8 @@ void main() {
   });
 
   group('test enable enforce with true', () {
-    var e = Enforcer('examples/basic_model.conf', 'examples/basic_policy.csv');
+    var e = Enforcer(
+        'casbin_examples/basic_model.conf', 'casbin_examples/basic_policy.csv');
 
     e.enableEnforce(true);
 
@@ -52,9 +54,9 @@ void main() {
   });
 
   group('test enforcer initialization with adapter', () {
-    var adapter = FileAdapter('examples/basic_policy.csv');
-    var e =
-        Enforcer.fromModelPathAndAdapter('examples/basic_model.conf', adapter);
+    var adapter = FileAdapter('casbin_examples/basic_policy.csv');
+    var e = Enforcer.fromModelPathAndAdapter(
+        'casbin_examples/basic_model.conf', adapter);
 
     testEnforce('test 1', e, 'alice', 'data1', 'read', true);
     testEnforce('test 2', e, 'alice', 'data1', 'write', false);
@@ -68,20 +70,20 @@ void main() {
 
   group('test getModel and setModel', () {
     group('before setting model', () {
-      var e =
-          Enforcer('examples/basic_model.conf', 'examples/basic_policy.csv');
+      var e = Enforcer('casbin_examples/basic_model.conf',
+          'casbin_examples/basic_policy.csv');
       // var e2 = Enforcer(
-      //     'examples/basic_with_root_model.conf', 'examples/basic_policy.csv');
+      //     'casbin_examples/basic_with_root_model.conf', 'casbin_examples/basic_policy.csv');
 
       testEnforce(
           'test before setting Model', e, 'root', 'data1', 'read', false);
     });
 
     group('after setting model', () {
-      var e =
-          Enforcer('examples/basic_model.conf', 'examples/basic_policy.csv');
-      var e2 = Enforcer(
-          'examples/basic_with_root_model.conf', 'examples/basic_policy.csv');
+      var e = Enforcer('casbin_examples/basic_model.conf',
+          'casbin_examples/basic_policy.csv');
+      var e2 = Enforcer('casbin_examples/basic_with_root_model.conf',
+          'casbin_examples/basic_policy.csv');
       e.setModel(e2.getModel());
 
       testEnforce('test after setting Model', e, 'root', 'data1', 'read', true);
@@ -90,20 +92,20 @@ void main() {
 
   group('test getAdapter and setAdapter', () {
     group('before setting adapter', () {
-      var e =
-          Enforcer('examples/basic_model.conf', 'examples/basic_policy.csv');
+      var e = Enforcer('casbin_examples/basic_model.conf',
+          'casbin_examples/basic_policy.csv');
       // var e2 = Enforcer(
-      //     'examples/basic_model.conf', 'examples/basic_inverse_policy.csv');
+      //     'casbin_examples/basic_model.conf', 'casbin_examples/basic_inverse_policy.csv');
 
       testEnforce('test 1', e, 'alice', 'data1', 'read', true);
       testEnforce('test 2', e, 'alice', 'data1', 'write', false);
     });
 
     group('after setting adapter', () {
-      var e =
-          Enforcer('examples/basic_model.conf', 'examples/basic_policy.csv');
-      var e2 = Enforcer(
-          'examples/basic_model.conf', 'examples/basic_inverse_policy.csv');
+      var e = Enforcer('casbin_examples/basic_model.conf',
+          'casbin_examples/basic_policy.csv');
+      var e2 = Enforcer('casbin_examples/basic_model.conf',
+          'casbin_examples/basic_inverse_policy.csv');
       var a2 = e2.getAdapter();
       e.setAdapter(a2);
       e.loadPolicy();
@@ -114,9 +116,9 @@ void main() {
   });
 
   group('test setAdapter from file', () {
-    var e = Enforcer('examples/basic_model.conf');
+    var e = Enforcer('casbin_examples/basic_model.conf');
 
-    var a = FileAdapter('examples/basic_policy.csv');
+    var a = FileAdapter('casbin_examples/basic_policy.csv');
     e.setAdapter(a);
     e.loadPolicy();
 
@@ -124,7 +126,7 @@ void main() {
   });
 
   group('test enforce param validation', () {
-    var e = Enforcer('examples/rbac_model.conf');
+    var e = Enforcer('casbin_examples/rbac_model.conf');
     test('must return false as there are 4 params instead of 3', () {
       assert(
           e.validateEnforce(['alice', 'data1', 'read', 'extra param']), false);
@@ -184,7 +186,7 @@ void main() {
     m.addDef('m', 'm',
         'r.sub == p.sub && keyMatch(r.obj, p.obj) && regexMatch(r.act, p.act)');
 
-    var a = FileAdapter('examples/keymatch_policy.csv');
+    var a = FileAdapter('casbin_examples/keymatch_policy.csv');
 
     var e = Enforcer.fromModelAndAdapter(m, a);
 
@@ -219,7 +221,7 @@ void main() {
     m.addDef('m', 'm',
         'r.sub == p.sub && keyMatch(r.obj, p.obj) && regexMatch(r.act, p.act)');
 
-    var a = FileAdapter('examples/keymatch_policy.csv');
+    var a = FileAdapter('casbin_examples/keymatch_policy.csv');
 
     var e = Enforcer.fromModelAndAdapter(m, a);
 
@@ -237,7 +239,7 @@ void main() {
       m.addDef('m', 'm',
           'r.sub == p.sub && keyMatch(r.obj, p.obj) && regexMatch(r.act, p.act)');
 
-      var a = FileAdapter('examples/keymatch_policy.csv');
+      var a = FileAdapter('casbin_examples/keymatch_policy.csv');
 
       e.setModel(m);
       e.setAdapter(a);
@@ -506,7 +508,8 @@ m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act
   });
 
   test('TestReloadPolicy', () {
-    final e = Enforcer('examples/rbac_model.conf', 'examples/rbac_policy.csv');
+    final e = Enforcer(
+        'casbin_examples/rbac_model.conf', 'casbin_examples/rbac_policy.csv');
 
     e.loadPolicy();
 
@@ -522,8 +525,8 @@ m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act
 
   group('test ABAC Scaling', () {
     final e = Enforcer(
-      'examples/abac_rule_model.conf',
-      'examples/abac_rule_policy.csv',
+      'casbin_examples/abac_rule_model.conf',
+      'casbin_examples/abac_rule_policy.csv',
     );
 
     final sub1 = AbacTest('alice', 16);
