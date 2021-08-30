@@ -2,6 +2,14 @@
 
 An authorization library that supports access control models like ACL, RBAC, ABAC in Dart.
 
+---
+
+## GSoC'21 final report
+
+Dart-casbin is a part of Google Summer of Code 2021. To view the final report, check [this out](https://gist.github.com/MrUnfunny/386b2f5d1cac666f7e47b46db98c3dc6).
+
+---
+
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/casbin/lobby)
 
 **News**: Are you still worried about how to write the correct Casbin policy? `Casbin online editor` is coming to help! Try it at: http://casbin.org/editor/
