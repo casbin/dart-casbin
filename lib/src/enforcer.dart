@@ -44,26 +44,26 @@ class Enforcer extends ManagementEnforcer {
 
   Enforcer._();
 
-  factory Enforcer.fromModelPathAndPolicyFile(
+  factory Enforcer.initWithFile(
     String modelPath,
     String policyFile,
   ) {
     final fileAdapter = FileAdapter(policyFile);
-    return Enforcer.fromModelPathAndAdapter(modelPath, fileAdapter);
+    return Enforcer.initWithAdapter(modelPath, fileAdapter);
   }
 
-  factory Enforcer.fromModelPathAndAdapter(
+  factory Enforcer.initWithAdapter(
     String modelPath,
     Adapter adapter,
   ) {
     final model = Model();
     model.loadModel(modelPath);
-    final enf = Enforcer.fromModelAndAdapter(model, adapter);
+    final enf = Enforcer.initWithModelAndAdapter(model, adapter);
     enf.modelPath = modelPath;
     return enf;
   }
 
-  factory Enforcer.fromModelAndAdapter(Model model, [Adapter? adapter]) {
+  factory Enforcer.initWithModelAndAdapter(Model model, [Adapter? adapter]) {
     final _enforcer = Enforcer._();
     _enforcer.model = model;
     _enforcer.fm = FunctionMap.loadFunctionMap();

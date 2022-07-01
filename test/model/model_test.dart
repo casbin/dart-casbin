@@ -35,8 +35,7 @@ void main() {
   final rbacWithNotDenyModel = 'casbin_examples/rbac_with_not_deny_model.conf';
 
   group('Test enforcing with basic model', () {
-    final e =
-        Enforcer.fromModelPathAndPolicyFile(basicModelPath, basicPolicyFile);
+    final e = Enforcer.initWithFile(basicModelPath, basicPolicyFile);
 
     testEnforce('test 1', e, 'alice', 'data1', 'read', true);
     testEnforce('test 2', e, 'alice', 'data1', 'write', false);
