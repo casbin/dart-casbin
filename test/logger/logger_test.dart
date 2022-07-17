@@ -67,7 +67,7 @@ void main() {
           'm.m: r_sub == p_sub && keyMatch(r_obj, p_obj) && regexMatch(r_act, p_act)');
     });
     group('test logPolicy', () {
-      final enf = Enforcer.fromModelPathAndPolicyFile(
+      final enf = Enforcer.initWithFile(
         'casbin_examples/basic_model.conf',
         'casbin_examples/basic_policy.csv',
       );
@@ -79,7 +79,7 @@ void main() {
     });
 
     group('test logRole', () {
-      final enf = Enforcer.fromModelPathAndPolicyFile(
+      final enf = Enforcer.initWithFile(
         'casbin_examples/rbac_with_domains_model.conf',
         'casbin_examples/rbac_with_domains_policy.csv',
       );

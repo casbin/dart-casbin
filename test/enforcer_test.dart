@@ -55,8 +55,8 @@ void main() {
 
   group('test enforcer initialization with adapter', () {
     var adapter = FileAdapter('casbin_examples/basic_policy.csv');
-    var e = Enforcer.fromModelPathAndAdapter(
-        'casbin_examples/basic_model.conf', adapter);
+    var e =
+        Enforcer.initWithAdapter('casbin_examples/basic_model.conf', adapter);
 
     testEnforce('test 1', e, 'alice', 'data1', 'read', true);
     testEnforce('test 2', e, 'alice', 'data1', 'write', false);
@@ -145,7 +145,7 @@ void main() {
     m.addDef('e', 'e', 'some(where (p.eft == allow))');
     m.addDef('m', 'm', 'g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act');
 
-    var e = Enforcer.fromModelAndAdapter(m);
+    var e = Enforcer.initWithModelAndAdapter(m);
 
     e.addPermissionForUser('alice', ['data1', 'invalid']);
 
@@ -160,7 +160,7 @@ void main() {
     m.addDef('e', 'e', 'some(where (p.eft == allow))');
     m.addDef('m', 'm', 'g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act');
 
-    var e = Enforcer.fromModelAndAdapter(m);
+    var e = Enforcer.initWithModelAndAdapter(m);
 
     e.addPermissionForUser('alice', ['data1', 'read']);
     e.addPermissionForUser('bob', ['data2', 'write']);
@@ -188,7 +188,7 @@ void main() {
 
     var a = FileAdapter('casbin_examples/keymatch_policy.csv');
 
-    var e = Enforcer.fromModelAndAdapter(m, a);
+    var e = Enforcer.initWithModelAndAdapter(m, a);
 
     testEnforce('test 1', e, 'alice', '/alice_data/resource1', 'GET', true);
     testEnforce('test 2', e, 'alice', '/alice_data/resource1', 'POST', true);
@@ -223,7 +223,7 @@ void main() {
 
     var a = FileAdapter('casbin_examples/keymatch_policy.csv');
 
-    var e = Enforcer.fromModelAndAdapter(m, a);
+    var e = Enforcer.initWithModelAndAdapter(m, a);
 
     testEnforce('test 1', e, 'alice', '/alice_data/resource2', 'POST', true);
   });
@@ -257,7 +257,7 @@ void main() {
     m.addDef('e', 'e', 'some(where (p.eft == allow))');
     m.addDef('m', 'm', 'g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act');
 
-    final e = Enforcer.fromModelAndAdapter(m);
+    final e = Enforcer.initWithModelAndAdapter(m);
 
     e.addPermissionForUser('alice', ['data1', 'read']);
     e.addPermissionForUser('bob', ['data2', 'write']);
@@ -282,7 +282,7 @@ void main() {
     m.addDef('e', 'e', 'some(where (p.eft == allow))');
     m.addDef('m', 'm', 'g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act');
 
-    final e = Enforcer.fromModelAndAdapter(m);
+    final e = Enforcer.initWithModelAndAdapter(m);
 
     e.addPermissionForUser('alice', ['data1', 'read']);
     e.addPermissionForUser('bob', ['data2', 'write']);
@@ -313,7 +313,7 @@ void main() {
     m.addDef('e', 'e', 'some(where (p.eft == allow))');
     m.addDef('m', 'm', 'g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act');
 
-    final e = Enforcer.fromModelAndAdapter(m);
+    final e = Enforcer.initWithModelAndAdapter(m);
 
     e.addPermissionForUser('alice', ['data1', 'read']);
     e.addPermissionForUser('bob', ['data2', 'write']);
@@ -345,7 +345,7 @@ void main() {
     m.addDef('e', 'e', 'some(where (p.eft == allow))');
     m.addDef('m', 'm', 'g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act');
 
-    final e = Enforcer.fromModelAndAdapter(m);
+    final e = Enforcer.initWithModelAndAdapter(m);
 
     e.addPermissionForUser('alice', ['data1', 'read']);
     e.addPermissionForUser('bob', ['data2', 'write']);
@@ -379,7 +379,7 @@ void main() {
     m.addDef('e', 'e', 'some(where (p.eft == allow))');
     m.addDef('m', 'm', 'g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act');
 
-    final e = Enforcer.fromModelAndAdapter(m);
+    final e = Enforcer.initWithModelAndAdapter(m);
 
     e.addPermissionForUser('alice', ['data1', 'read']);
     e.addPermissionForUser('bob', ['data2', 'write']);
@@ -415,7 +415,7 @@ void main() {
     m.addDef('e', 'e', 'some(where (p.eft == allow))');
     m.addDef('m', 'm', 'g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act');
 
-    final e = Enforcer.fromModelAndAdapter(m);
+    final e = Enforcer.initWithModelAndAdapter(m);
 
     e.addPermissionForUser('alice', ['data1', 'read']);
     e.addPermissionForUser('bob', ['data2', 'write']);
@@ -465,7 +465,7 @@ m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act
     final model = Model();
     model.loadModelFromText(text);
 
-    final e = Enforcer.fromModelAndAdapter(model);
+    final e = Enforcer.initWithModelAndAdapter(model);
 
     e.addPermissionForUser('alice', ['data1', 'read']);
     e.addPermissionForUser('bob', ['data2', 'write']);
@@ -492,7 +492,7 @@ m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act
     model.addDef(
         'm', 'm', 'g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act');
 
-    final e = Enforcer.fromModelAndAdapter(model);
+    final e = Enforcer.initWithModelAndAdapter(model);
 
     e.addPermissionForUser('alice', ['data1', 'read']);
     e.addPermissionForUser('bob', ['data2', 'write']);
