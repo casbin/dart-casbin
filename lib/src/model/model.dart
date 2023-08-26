@@ -20,7 +20,7 @@ import '../rbac/role_manager.dart';
 import 'assertion.dart';
 import 'policy.dart';
 
-enum PolicyOperations {
+enum PolicyOp {
   PolicyAdd,
   PolicyRemove,
 }
@@ -37,12 +37,12 @@ class Model extends Policy {
   Model();
 
   /// creates a model from a .CONF file.
-  Model.fromFile(String path) {
+  Model.newModelFromFile(String path) {
     loadModel(path);
   }
 
   /// creates a model from a String.
-  Model.fromString(String text) {
+  Model.newModelFromString(String text) {
     loadModelFromText(text);
   }
 
@@ -130,7 +130,7 @@ class Model extends Policy {
   }
 
   /// Helper function for loadModel
-  void loadSections(Config cfg) {
+  void loadModelFromConfig(Config cfg) {
     loadSection(this, cfg, 'r');
     loadSection(this, cfg, 'p');
     loadSection(this, cfg, 'e');
@@ -144,7 +144,7 @@ class Model extends Policy {
   void loadModel(String path) {
     final cfg = Config.newConfig(path);
 
-    loadSections(cfg);
+    loadModelFromConfig(cfg);
   }
 
   /// Loads the model from the text.
@@ -153,7 +153,7 @@ class Model extends Policy {
   void loadModelFromText(String text) {
     final cfg = Config.newConfigFromText(text);
 
-    loadSections(cfg);
+    loadModelFromConfig(cfg);
   }
 
   /// Saves the section to the text and returns the section text.

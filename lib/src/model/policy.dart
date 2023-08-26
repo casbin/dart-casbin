@@ -294,8 +294,8 @@ class Policy {
     return values;
   }
 
-  void buildIncrementalRoleLinks(RoleManager rm, PolicyOperations op,
-      String sec, String ptype, List<List<String>> rules) {
+  void buildIncrementalRoleLinks(RoleManager rm, PolicyOp op, String sec,
+      String ptype, List<List<String>> rules) {
     if (sec == 'g') {
       model[sec]?[ptype]?.buildIncrementalRoleLinks(rm, op, rules);
     }

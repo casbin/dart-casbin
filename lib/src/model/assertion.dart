@@ -65,7 +65,7 @@ class Assertion {
 
   void buildIncrementalRoleLinks(
     RoleManager rm,
-    PolicyOperations op,
+    PolicyOp op,
     List<List<String>> rules,
   ) {
     this.rm = rm;
@@ -91,10 +91,10 @@ class Assertion {
         rule = rule.sublist(0, count);
       }
       switch (op) {
-        case PolicyOperations.PolicyAdd:
+        case PolicyOp.PolicyAdd:
           rm.addLink(rule[0], rule[1], rule.sublist(2));
           break;
-        case PolicyOperations.PolicyRemove:
+        case PolicyOp.PolicyRemove:
           rm.deleteLink(rule[0], rule[1], rule.sublist(2));
           break;
         default:
