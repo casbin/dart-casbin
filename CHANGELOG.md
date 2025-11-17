@@ -1,3 +1,29 @@
+# [1.0.0](https://github.com/casbin/dart-casbin/compare/v0.1.0...v1.0.0) (2025-01-17)
+
+
+### Features
+
+* **release**: stable 1.0.0 release ([#XX](https://github.com/casbin/dart-casbin/issues/XX))
+* updated SDK constraints to support Dart 3.x and Flutter SDK 4.x
+* replaced deprecated pedantic package with lints for better code quality
+* improved README with installation instructions and quick start guide
+* fixed all linter warnings for cleaner codebase
+
+
+### Code Quality
+
+* fixed unnecessary set literal warnings in file_adapter.dart
+* removed unnecessary imports in test files
+* fixed directives ordering in test files
+* updated dependencies to latest stable versions
+
+
+### BREAKING CHANGES
+
+* Minimum SDK version is now 2.12.0 with null safety support
+* SDK upper bound extended to <4.0.0 for future compatibility
+
+
 # [0.1.0](https://github.com/casbin/dart-casbin/compare/v0.0.1...v0.1.0) (2021-08-20)
 
 

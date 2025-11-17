@@ -13,9 +13,6 @@
 // limitations under the License.
 
 import 'package:casbin/casbin.dart';
-import 'package:casbin/src/model/model.dart';
-import 'package:casbin/src/persist/file_adapter.dart';
-import 'package:casbin/src/utils/utils.dart';
 import 'package:test/test.dart';
 
 import 'utils/test_utils.dart';

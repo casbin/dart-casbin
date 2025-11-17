@@ -1,12 +1,59 @@
 # dart-casbin
 
-An authorization library that supports access control models like ACL, RBAC, ABAC in Dart.
-
+[![pub package](https://img.shields.io/pub/v/casbin.svg)](https://pub.dev/packages/casbin)
+[![Dart CI](https://github.com/casbin/dart-casbin/workflows/Dart%20CI/badge.svg)](https://github.com/casbin/dart-casbin/actions)
 [![Discord](https://img.shields.io/discord/1022748306096537660?logo=discord&label=discord&color=5865F2)](https://discord.gg/S5UjpzGZjN)
+
+An authorization library that supports access control models like ACL, RBAC, ABAC in Dart.
 
 **News**: Are you still worried about how to write the correct Casbin policy? `Casbin online editor` is coming to help! Try it at: http://casbin.org/editor/
 
 ![casbin Logo](casbin-logo.png)
+
+## Installation
+
+Add this to your package's `pubspec.yaml` file:
+
+```yaml
+dependencies:
+  casbin: ^1.0.0
+```
+
+Then run:
+
+```bash
+dart pub get
+```
+
+Or if you're using Flutter:
+
+```bash
+flutter pub get
+```
+
+## Quick Start
+
+Here's a simple example of how to use Casbin:
+
+```dart
+import 'package:casbin/casbin.dart';
+
+void main() {
+  // Create an enforcer with a model file and a policy file
+  var enforcer = Enforcer('path/to/model.conf', 'path/to/policy.csv');
+  
+  // Check permissions
+  var sub = 'alice'; // the user
+  var obj = 'data1'; // the resource
+  var act = 'read';  // the action
+  
+  if (enforcer.enforce([sub, obj, act])) {
+    print('Permission granted');
+  } else {
+    print('Permission denied');
+  }
+}
+```
 
 ## All the languages supported by Casbin:
 
@@ -100,10 +147,21 @@ https://casbin.org/docs/tutorials
 
 ## Get started
 
-1. New a Casbin enforcer with a model file and a policy file:
+1. Create a Casbin enforcer with a model file and a policy file:
 
    ```dart
-   var e = Enforcer.fromModelPathAndPolicyFile('path/to/model.conf', 'path/to/policy.csv');
+   import 'package:casbin/casbin.dart';
+   
+   var enforcer = Enforcer('path/to/model.conf', 'path/to/policy.csv');
+   ```
+
+   Or create from file paths:
+   
+   ```dart
+   var enforcer = Enforcer.fromModelPathAndPolicyFile(
+     'path/to/model.conf', 
+     'path/to/policy.csv'
+   );
    ```
 
 2. Add an enforcement hook into your code right before the access happens:
@@ -113,17 +171,17 @@ https://casbin.org/docs/tutorials
    var obj = 'data1'; // the resource that is going to be accessed.
    var act = 'read'; // the operation that the user performs on the resource.
 
-   if (e.enforce([sub, obj, act])){
+   if (enforcer.enforce([sub, obj, act])){
        // permit alice to read data1
    } else {
        // deny the request, show an error
    }
    ```
 
-3. Besides the static policy file, Casbin also provides API for permission management at run-time. For example, You can get all the roles assigned to a user as below:
+3. Besides the static policy file, Casbin also provides API for permission management at run-time. For example, you can get all the roles assigned to a user as below:
 
    ```dart
-   var roles = e.getRolesForUser(sub);
+   var roles = enforcer.getRolesForUser(sub);
    ```
 
 See [Policy management APIs](#policy-management) for more usage.

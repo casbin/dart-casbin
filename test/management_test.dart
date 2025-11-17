@@ -13,10 +13,9 @@
 // limitations under the License.
 
 import 'package:casbin/src/enforcer.dart';
+import 'package:casbin/src/utils/utils.dart' as utils;
 import 'package:collection/collection.dart';
 import 'package:test/test.dart';
-
-import 'package:casbin/src/utils/utils.dart' as utils;
 
 void main() {
   var e = Enforcer(
