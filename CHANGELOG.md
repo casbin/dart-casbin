@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/casbin/dart-casbin/compare/v1.2.0...v1.3.0) (2025-11-18)
+
+
+### Features
+
+* add dart analyze to CI workflow and fix code formats ([#73](https://github.com/casbin/dart-casbin/issues/73)) ([5ea7487](https://github.com/casbin/dart-casbin/commit/5ea7487941ef66e872f4143c3c2bdf2ca6f8e066))
+
 # [1.2.0](https://github.com/casbin/dart-casbin/compare/v1.1.0...v1.2.0) (2025-11-18)
 
 
