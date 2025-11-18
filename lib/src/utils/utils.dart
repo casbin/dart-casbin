@@ -12,9 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:convert';
+
 import 'package:collection/collection.dart';
 import 'package:expressions/expressions.dart';
 
+import '../abac/abac_class.dart';
 import '../model/assertion.dart';
 
 class CasbinEvaluator extends ExpressionEvaluator {
@@ -23,7 +26,35 @@ class CasbinEvaluator extends ExpressionEvaluator {
   @override
   dynamic evalMemberExpression(
       MemberExpression expression, Map<String, dynamic> context) {
-    var object = eval(expression.object, context).toMap();
+    var objectValue = eval(expression.object, context);
+    Map<String, dynamic> object;
+    
+    // Handle different types of objects
+    if (objectValue is String) {
+      // Try to parse as JSON
+      try {
+        var parsed = jsonDecode(objectValue);
+        if (parsed is Map<String, dynamic>) {
+          object = parsed;
+        } else {
+          throw Exception('JSON string must represent an object/map');
+        }
+      } catch (e) {
+        throw Exception('Failed to parse JSON string: $e');
+      }
+    } else if (objectValue is AbacClass) {
+      object = objectValue.toMap();
+    } else if (objectValue is Map<String, dynamic>) {
+      object = objectValue;
+    } else {
+      // Fall back to trying toMap() for backward compatibility
+      try {
+        object = objectValue.toMap();
+      } catch (e) {
+        throw Exception('Object must be a JSON string, Map, or implement AbacClass: ${objectValue.runtimeType}');
+      }
+    }
+    
     return object[expression.property.name];
   }
 }
