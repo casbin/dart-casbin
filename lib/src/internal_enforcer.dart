@@ -45,7 +45,7 @@ class InternalEnforcer extends CoreEnforcer {
     if (sec == 'g' && res) {
       var rules = <List<String>>[];
       rules.add(rule);
-      buildIncrementalRoleLinks(PolicyOperations.PolicyAdd, ptype, rules);
+      buildIncrementalRoleLinks(PolicyOperations.policyAdd, ptype, rules);
     }
 
     if (watcher != null && autoNotifyWatcher) {
@@ -82,7 +82,7 @@ class InternalEnforcer extends CoreEnforcer {
     var res = model.addPolicies(sec, ptype, rules);
 
     if (sec == 'g' && res) {
-      buildIncrementalRoleLinks(PolicyOperations.PolicyAdd, ptype, rules);
+      buildIncrementalRoleLinks(PolicyOperations.policyAdd, ptype, rules);
     }
 
     if (watcher != null && autoNotifyWatcher) {
@@ -149,9 +149,9 @@ class InternalEnforcer extends CoreEnforcer {
         var oldRules = <List<String>>[];
         oldRules.add(oldRule);
         buildIncrementalRoleLinks(
-            PolicyOperations.PolicyRemove, ptype, oldRules);
+            PolicyOperations.policyRemove, ptype, oldRules);
       } catch (e) {
-        logger.logPrint('An exception occurred:' + e.toString());
+        logger.logPrint('An exception occurred: ${e.toString()}');
         return false;
       }
 
@@ -159,9 +159,9 @@ class InternalEnforcer extends CoreEnforcer {
         // add the new rule
         var newRules = <List<String>>[];
         newRules.add(newRule);
-        buildIncrementalRoleLinks(PolicyOperations.PolicyAdd, ptype, newRules);
+        buildIncrementalRoleLinks(PolicyOperations.policyAdd, ptype, newRules);
       } catch (e) {
-        logger.logPrint('An exception occurred:' + e.toString());
+        logger.logPrint('An exception occurred: ${e.toString()}');
         return false;
       }
     }
@@ -170,7 +170,7 @@ class InternalEnforcer extends CoreEnforcer {
       try {
         watcher!.update();
       } catch (e) {
-        logger.logPrint('An exception occurred:' + e.toString());
+        logger.logPrint('An exception occurred: ${e.toString()}');
         return false;
       }
     }
@@ -207,7 +207,7 @@ class InternalEnforcer extends CoreEnforcer {
     if (sec == 'g') {
       var rules = <List<String>>[];
       rules.add(rule);
-      buildIncrementalRoleLinks(PolicyOperations.PolicyRemove, ptype, rules);
+      buildIncrementalRoleLinks(PolicyOperations.policyRemove, ptype, rules);
     }
     if (watcher != null && autoNotifyWatcher) {
       watcher!.update();
@@ -244,7 +244,7 @@ class InternalEnforcer extends CoreEnforcer {
       }
 
       if (sec == 'g') {
-        buildIncrementalRoleLinks(PolicyOperations.PolicyRemove, ptype, rules);
+        buildIncrementalRoleLinks(PolicyOperations.policyRemove, ptype, rules);
       }
       if (watcher != null && autoNotifyWatcher) {
         watcher!.update();
@@ -288,7 +288,7 @@ class InternalEnforcer extends CoreEnforcer {
     }
 
     if (sec == 'g') {
-      buildIncrementalRoleLinks(PolicyOperations.PolicyRemove, ptype, effects);
+      buildIncrementalRoleLinks(PolicyOperations.policyRemove, ptype, effects);
     }
 
     if (watcher != null && autoNotifyWatcher) {

@@ -21,8 +21,8 @@ import 'assertion.dart';
 import 'policy.dart';
 
 enum PolicyOperations {
-  PolicyAdd,
-  PolicyRemove,
+  policyAdd,
+  policyRemove,
 }
 
 /// Model represents the whole access control model.
@@ -55,7 +55,7 @@ class Model extends Policy {
 
   bool loadAssertion(Model model, Config cfg, String sec, String key) {
     var secName = sectionNameMap[sec];
-    var value = cfg.getString(secName! + '::' + key);
+    var value = cfg.getString('$secName::$key');
     return model.addDef(sec, key, value);
   }
 
@@ -76,11 +76,11 @@ class Model extends Policy {
     if (sec == 'r' || sec == 'p') {
       final tokens = value.split(',').map((e) => e.trim()).toList();
       for (var i = 0; i < tokens.length; i++) {
-        tokens[i] = key + '_' + tokens[i];
+        tokens[i] = '${key}_${tokens[i]}';
       }
       ast.tokens = tokens;
     } else if (sec == 'm') {
-      final regEx = RegExp('/\"(.*?)\"/g');
+      final regEx = RegExp(r'"(.*?)"');
       final str = regEx.allMatches(value).toList();
 
       for (var i in str) {
@@ -158,7 +158,7 @@ class Model extends Policy {
 
   /// Saves the section to the text and returns the section text.
   String saveSectionToText(String sec) {
-    final res = StringBuffer('[' + sectionNameMap[sec]! + ']\n');
+    final res = StringBuffer('[${sectionNameMap[sec]!}]\n');
 
     final section = model[sec];
 

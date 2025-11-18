@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:test/test.dart';
-
 import 'package:casbin/src/enforcer.dart';
+import 'package:test/test.dart';
 
 import '../utils/test_utils.dart';
 

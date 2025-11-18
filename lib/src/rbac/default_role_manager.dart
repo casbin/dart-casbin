@@ -17,7 +17,7 @@ import 'domain_roles.dart';
 import 'role.dart';
 import 'role_manager.dart';
 
-const DEFAULT_DOMAIN = 'casbin::default';
+const defaultDomain = 'casbin::default';
 
 class DefaultRoleManager implements RoleManager {
   Map<String, DomainRoles> allDomains;
@@ -43,11 +43,11 @@ class DefaultRoleManager implements RoleManager {
   @override
   void clear() {
     allDomains.clear();
-    allDomains[DEFAULT_DOMAIN] = DomainRoles();
+    allDomains[defaultDomain] = DomainRoles();
   }
 
   String domainName([List<String> domain = const []]) {
-    return domain.isEmpty ? DEFAULT_DOMAIN : domain[0];
+    return domain.isEmpty ? defaultDomain : domain[0];
   }
 
   DomainRoles getOrCreateDomainRoles(final String domain) {
@@ -91,17 +91,16 @@ class DefaultRoleManager implements RoleManager {
     final allRoles = DomainRoles();
     final patternDomain = getPatternMatchedDomainNames(domain);
 
-    patternDomain.forEach((domain) {
-      loadOrDefault(allDomains, domain, DomainRoles())
-          .roles
-          .forEach((key, value) {
-        final role1 = allRoles.createRole(value.name, matchingFunc);
+    for (var domain in patternDomain) {
+      final domainRoles = loadOrDefault(allDomains, domain, DomainRoles());
+      for (var entry in domainRoles.roles.entries) {
+        final role1 = allRoles.createRole(entry.value.name, matchingFunc);
 
-        value.getRoles().forEach((element) {
+        for (var element in entry.value.getRoles()) {
           role1.addRole(allRoles.createRole(element, matchingFunc));
-        });
-      });
-    });
+        }
+      }
+    }
 
     return allRoles;
   }
@@ -113,7 +112,7 @@ class DefaultRoleManager implements RoleManager {
   @override
   void addLink(String name1, String name2, [List<String> domain = const []]) {
     if (domain.isEmpty) {
-      domain = [DEFAULT_DOMAIN];
+      domain = [defaultDomain];
     } else if (domain.length > 1) {
       throw ArgumentError('error: domain should be only 1 parameter');
     }
@@ -133,7 +132,7 @@ class DefaultRoleManager implements RoleManager {
   void deleteLink(String name1, String name2,
       [List<String> domain = const []]) {
     if (domain.isEmpty) {
-      domain = [DEFAULT_DOMAIN];
+      domain = [defaultDomain];
     } else if (domain.length > 1) {
       throw ArgumentError('error: domain should be only 1 parameter');
     }
@@ -160,7 +159,7 @@ class DefaultRoleManager implements RoleManager {
   @override
   bool hasLink(String name1, String name2, [List<String> domain = const []]) {
     if (domain.isEmpty) {
-      domain = [DEFAULT_DOMAIN];
+      domain = [defaultDomain];
     } else if (domain.length > 1) {
       throw ArgumentError('error: domain should be only 1 parameter');
     }
@@ -190,7 +189,7 @@ class DefaultRoleManager implements RoleManager {
   @override
   List<String> getRoles(String name, [List<String> domain = const []]) {
     if (domain.isEmpty) {
-      domain = [DEFAULT_DOMAIN];
+      domain = [defaultDomain];
     } else if (domain.length > 1) {
       throw ArgumentError('error: domain should be only 1 parameter');
     }
@@ -214,7 +213,7 @@ class DefaultRoleManager implements RoleManager {
   @override
   List<String> getUsers(String name, [List<String> domain = const []]) {
     if (domain.isEmpty) {
-      domain = [DEFAULT_DOMAIN];
+      domain = [defaultDomain];
     } else if (domain.length > 1) {
       throw ArgumentError('error: domain should be 1 parameter');
     }

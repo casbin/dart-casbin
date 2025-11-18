@@ -44,7 +44,7 @@ bool keyMatch2(String key1, String key2) {
   final re = RegExp(':[^/]+');
   key2 = key2.replaceAll(re, '[^/]+');
 
-  return regexMatch(key1, '^' + key2 + '\$');
+  return regexMatch(key1, '^$key2\$');
 }
 
 /// keyMatch3 determines whether [key1] matches the pattern of [key2] (similar to RESTful path)
@@ -53,10 +53,10 @@ bool keyMatch2(String key1, String key2) {
 bool keyMatch3(String key1, String key2) {
   key2 = key2.replaceAll('/*', '/.*');
 
-  var reg = RegExp('\{[^/]+\}');
+  var reg = RegExp(r'{[^/]+}');
   key2 = key2.replaceAll(reg, '[^/]+');
 
-  return regexMatch(key1, '^' + key2 + '\$');
+  return regexMatch(key1, '^$key2\$');
 }
 
 /// KeyMatch4 determines whether [key1] matches the pattern of [key2] (similar to RESTful path),
@@ -163,7 +163,7 @@ String keyGet2Func(String key1, String key2, String pathVar) {
   }
 
   key2 = key2.replaceAll(regex, '([^/]+)');
-  key2 = '^' + key2 + '\$';
+  key2 = '^$key2\$';
 
   var values = RegExp(key2).allMatches(key1).toList();
   var valueList = <String>[];

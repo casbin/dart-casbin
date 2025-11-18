@@ -31,10 +31,10 @@ abstract class ConfigInterface {
 }
 
 class Config implements ConfigInterface {
-  static final DEFAULT_SECTION = 'default';
-  static final DEFAULT_COMMENT = '#';
-  static final DEFAULT_COMMENT_SEM = ';';
-  static final DEFAULT_MULTI_LINE_SEPARATOR = '\\';
+  static final defaultSection = 'default';
+  static final defaultComment = '#';
+  static final defaultCommentSem = ';';
+  static final defaultMultiLineSeparator = '\\';
 
   // todo(KNawm): Implement synchronization lock
 
@@ -66,7 +66,7 @@ class Config implements ConfigInterface {
   /// Adds a new section->key:value to the configuration.
   bool addConfig(String section, String option, String value) {
     if (section == '') {
-      section = Config.DEFAULT_SECTION;
+      section = Config.defaultSection;
     }
     final hasKey = data.containsKey(section);
 
@@ -97,13 +97,13 @@ class Config implements ConfigInterface {
     var currentLine = '';
 
     lines.asMap().forEach((index, element) {
-      var commentPos = element.indexOf(Config.DEFAULT_COMMENT);
+      var commentPos = element.indexOf(Config.defaultComment);
 
       if (commentPos > -1) {
         element = element.substring(0, commentPos);
       }
 
-      commentPos = element.indexOf(Config.DEFAULT_COMMENT_SEM);
+      commentPos = element.indexOf(Config.defaultCommentSem);
       if (commentPos > -1) {
         element = element.substring(0, commentPos);
       }
@@ -123,7 +123,7 @@ class Config implements ConfigInterface {
         section = line.substring(1, line.length - 1);
       } else {
         var shouldWrite = false;
-        if (line.contains(Config.DEFAULT_MULTI_LINE_SEPARATOR)) {
+        if (line.contains(Config.defaultMultiLineSeparator)) {
           currentLine += line.substring(0, line.length - 1).trim();
         } else {
           currentLine += line;
@@ -181,7 +181,7 @@ class Config implements ConfigInterface {
     }
 
     var section = '';
-    var option;
+    String option;
 
     final keys = key.toLowerCase().split('::');
 
@@ -196,8 +196,8 @@ class Config implements ConfigInterface {
   }
 
   String get(String key) {
-    var section;
-    var option;
+    String section;
+    String option;
 
     final keys = key.toLowerCase().split('::');
 
@@ -205,7 +205,7 @@ class Config implements ConfigInterface {
       section = keys[0];
       option = keys[1];
     } else {
-      section = Config.DEFAULT_SECTION;
+      section = Config.defaultSection;
       option = keys[0];
     }
 

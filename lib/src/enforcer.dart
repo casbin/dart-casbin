@@ -64,16 +64,16 @@ class Enforcer extends ManagementEnforcer {
   }
 
   factory Enforcer.initWithModelAndAdapter(Model model, [Adapter? adapter]) {
-    final _enforcer = Enforcer._();
-    _enforcer.model = model;
-    _enforcer.fm = FunctionMap.loadFunctionMap();
+    final enforcer = Enforcer._();
+    enforcer.model = model;
+    enforcer.fm = FunctionMap.loadFunctionMap();
 
     if (adapter != null) {
-      _enforcer.adapter = adapter;
-      _enforcer.loadPolicy();
+      enforcer.adapter = adapter;
+      enforcer.loadPolicy();
     }
 
-    return _enforcer;
+    return enforcer;
   }
 
   /// getRolesForUser gets the roles that a user has.

@@ -62,7 +62,7 @@ class DefaultLogger implements Logger {
       for (var entry in model['p']!.entries) {
         var key = entry.key;
         var ast = entry.value;
-        print(key + ': ' + ast.value + ': ' + ast.policy.toString());
+        print('$key: ${ast.value}: ${ast.policy.toString()}');
       }
     }
 
@@ -70,7 +70,7 @@ class DefaultLogger implements Logger {
       for (var entry in model['g']!.entries) {
         var key = entry.key;
         var ast = entry.value;
-        print(key + ': ' + ast.value + ': ' + ast.policy.toString());
+        print('$key: ${ast.value}: ${ast.policy.toString()}');
       }
     }
   }

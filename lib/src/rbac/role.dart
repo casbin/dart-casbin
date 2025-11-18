@@ -73,9 +73,9 @@ class Role {
       if (i == 0) {
         names.add(role.name);
       } else {
-        names.add(', ' + role.name);
+        names.add(', ${role.name}');
       }
     }
-    return name + ' < ' + names.toString();
+    return '$name < ${names.toString()}';
   }
 }

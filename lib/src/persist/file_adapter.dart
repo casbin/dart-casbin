@@ -45,23 +45,27 @@ class FileAdapter implements Adapter {
 
     final pList = model.model['p'];
 
-    pList?.values.forEach((n) {
-      n.policy.forEach((m) {
-        result += n.key + ', ';
-        result += arrayToString(m);
-        result += '\n';
-      });
-    });
+    if (pList != null) {
+      for (var n in pList.values) {
+        for (var m in n.policy) {
+          result += '${n.key}, ';
+          result += arrayToString(m);
+          result += '\n';
+        }
+      }
+    }
 
     final gList = model.model['g'];
 
-    gList?.values.forEach((n) {
-      n.policy.forEach((m) {
-        result += n.key + ', ';
-        result += arrayToString(m);
-        result += '\n';
-      });
-    });
+    if (gList != null) {
+      for (var n in gList.values) {
+        for (var m in n.policy) {
+          result += '${n.key}, ';
+          result += arrayToString(m);
+          result += '\n';
+        }
+      }
+    }
 
     savePolicyFile(result.trim());
   }
@@ -74,9 +78,9 @@ class FileAdapter implements Adapter {
   void loadPolicyData(Model model, Function(Model, String) handler, File f) {
     try {
       var lines = f.readAsLinesSync();
-      lines.forEach((line) {
+      for (var line in lines) {
         handler(model, line.trim());
-      });
+      }
     } catch (e) {
       throw FileSystemException('Policy load error: $e');
     }
