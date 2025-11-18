@@ -62,6 +62,8 @@ jobs:
       - run: npm install -g "@semantic-release/git"
       - run: npm install -g "pub-semantic-release"
       
+      # Setup pub.dev credentials for automated publishing
+      # The credentials.json file should be stored as a repository secret
       - name: Setup Pub Credentials
         run: |
           mkdir -p $HOME/.pub-cache
