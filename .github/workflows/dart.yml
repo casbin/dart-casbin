@@ -13,14 +13,14 @@ env:
 jobs:
   # Check code formatting and static analysis on Ubuntu.
   analyze:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         sdk: [stable]
     steps:
-      - uses: actions/checkout@v2
-      - uses: dart-lang/setup-dart@v1.0
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
         with:
           sdk: ${{ matrix.sdk }}
       - id: install
@@ -32,10 +32,10 @@ jobs:
   # runs dart test
   test:
     needs: analyze
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: dart-lang/setup-dart@v1.0
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
         with:
           sdk: stable
       - name: Install dependencies
@@ -47,13 +47,13 @@ jobs:
   publish:
     needs: test
     if: github.repository == 'casbin/dart-casbin' && github.event_name == 'push'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:    
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: cedx/setup-dart@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: 14
+          node-version: 20
       - run: npm install -g "@semantic-release/changelog"
       - run: npm install -g "@semantic-release/git"
       - run: npm install -g "pub-semantic-release"
