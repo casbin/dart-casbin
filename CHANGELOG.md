@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/casbin/dart-casbin/compare/v1.5.0...v1.6.0) (2025-11-18)
+
+
+### Features
+
+* fix pub.dev OAuth credentials path in publishing workflow ([#79](https://github.com/casbin/dart-casbin/issues/79)) ([ece281c](https://github.com/casbin/dart-casbin/commit/ece281c352a427922cca1542e68a9e8b4a3b034c))
+
 # [1.5.0](https://github.com/casbin/dart-casbin/compare/v1.4.0...v1.5.0) (2025-11-18)
 
 
