@@ -1,30 +1,3 @@
-# [1.0.0](https://github.com/casbin/dart-casbin/compare/v0.2.0...v1.0.0) (2025-11-18)
-
-This is the first stable production-ready release of dart-casbin! 🎉
-
-### Major Changes
-
-* **release:** Promote to 1.0.0 stable version
-* **docs:** Enhanced README with better installation instructions and badges
-* **docs:** Added comprehensive CONTRIBUTING.md guide
-
-### Features
-
-* Full support for ACL, RBAC, and ABAC models
-* Multiple built-in operators for rule matching
-* Management API and RBAC API
-* Comprehensive test coverage (452 tests)
-* Production-ready and stable
-
-### Migration from 0.2.0
-
-No breaking changes. Simply update your pubspec.yaml:
-
-```yaml
-dependencies:
-  casbin: ^1.0.0
-```
-
 # [0.2.0](https://github.com/casbin/dart-casbin/compare/v0.1.0...v0.2.0) (2025-11-18)
 
 
