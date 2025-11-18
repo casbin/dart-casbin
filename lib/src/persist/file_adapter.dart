@@ -45,23 +45,23 @@ class FileAdapter implements Adapter {
 
     final pList = model.model['p'];
 
-    pList?.values.forEach((n) => {
-          n.policy.forEach((m) {
-            result += n.key + ', ';
-            result += arrayToString(m);
-            result += '\n';
-          })
-        });
+    pList?.values.forEach((n) {
+      n.policy.forEach((m) {
+        result += n.key + ', ';
+        result += arrayToString(m);
+        result += '\n';
+      });
+    });
 
     final gList = model.model['g'];
 
-    gList?.values.forEach((n) => {
-          n.policy.forEach((m) {
-            result += n.key + ', ';
-            result += arrayToString(m);
-            result += '\n';
-          })
-        });
+    gList?.values.forEach((n) {
+      n.policy.forEach((m) {
+        result += n.key + ', ';
+        result += arrayToString(m);
+        result += '\n';
+      });
+    });
 
     savePolicyFile(result.trim());
   }
