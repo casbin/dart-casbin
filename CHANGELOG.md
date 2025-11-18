@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/casbin/dart-casbin/compare/v1.6.0...v1.7.0) (2025-11-18)
+
+
+### Features
+
+* fix type check for FilteredAdapter using `is` operator ([#67](https://github.com/casbin/dart-casbin/issues/67)) ([22db549](https://github.com/casbin/dart-casbin/commit/22db5499a804b43dc92ee9e956a5728a62d31c2a))
+
 # [1.6.0](https://github.com/casbin/dart-casbin/compare/v1.5.0...v1.6.0) (2025-11-18)
 
 
