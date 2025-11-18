@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/casbin/dart-casbin/compare/v1.0.0...v1.1.0) (2025-11-18)
+
+
+### Features
+
+* fix CI publish failure: remove unnecessary set literals and update SDK constraint ([#69](https://github.com/casbin/dart-casbin/issues/69)) ([3e045a5](https://github.com/casbin/dart-casbin/commit/3e045a56c8320d8bde50dab94f130e264fde57f9))
+
 # [1.0.0](https://github.com/casbin/dart-casbin/compare/v0.2.0...v1.0.0) (2025-11-18)
 
 
