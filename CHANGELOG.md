@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/casbin/dart-casbin/compare/v1.4.0...v1.5.0) (2025-11-18)
+
+
+### Features
+
+* fix CI publish step: replace deprecated pub action with dart pub publish ([#77](https://github.com/casbin/dart-casbin/issues/77)) ([110270d](https://github.com/casbin/dart-casbin/commit/110270d006b0d4fe8c08fa3285e91449412f22af))
+
 # [1.4.0](https://github.com/casbin/dart-casbin/compare/v1.3.0...v1.4.0) (2025-11-18)
 
 
