@@ -61,6 +61,13 @@ jobs:
       - run: npm install -g "@semantic-release/changelog"
       - run: npm install -g "@semantic-release/git"
       - run: npm install -g "pub-semantic-release"
+      
+      # Setup pub.dev credentials for automated publishing
+      # The credentials.json file should be stored as a repository secret
+      - name: Setup Pub Credentials
+        run: |
+          mkdir -p $HOME/.pub-cache
+          echo '${{ secrets.PUB_CREDENTIALS }}' > $HOME/.pub-cache/credentials.json
 
       - name: Semantic Release
         run: |
@@ -68,11 +75,6 @@ jobs:
           npx semantic-release@17
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Setup Pub Credentials
-        run: |
-          mkdir -p $HOME/.config/dart
-          echo '${{ secrets.PUB_CREDENTIALS }}' > $HOME/.config/dart/pub-credentials.json
       
       - name: Publish to pub.dev
         run: dart pub publish --force
