@@ -216,7 +216,7 @@ class Policy {
       for (var i = 0; i < model[sec]![ptype]!.policy.length; i++) {
         var r = model[sec]![ptype]!.policy[i];
         if (ListEquality().equals(rule, r)) {
-          model[sec]![ptype]!.policy.remove(i);
+          model[sec]![ptype]!.policy.removeAt(i);
         }
       }
     }

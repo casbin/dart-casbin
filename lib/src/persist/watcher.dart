@@ -13,6 +13,7 @@
 // limitations under the License.
 
 /// Watcher is the interface for Casbin watchers.
+library;
 
 abstract class Watcher {
   /// SetUpdateCallback sets the callback function that the watcher will call

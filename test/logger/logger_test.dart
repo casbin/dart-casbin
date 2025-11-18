@@ -13,9 +13,6 @@
 // limitations under the License.
 
 import 'package:casbin/casbin.dart';
-import 'package:casbin/src/log/default_logger.dart';
-import 'package:casbin/src/model/model.dart';
-import 'package:casbin/src/rbac/default_role_manager.dart';
 import 'package:test/test.dart';
 
 import '../utils/test_utils.dart';

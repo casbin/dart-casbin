@@ -44,7 +44,7 @@ class Assertion {
 
     if (count < 2) {
       throw ArgumentError(
-          'the number of \"_\" in role definition should be at least 2');
+          'the number of "_" in role definition should be at least 2');
     }
 
     for (var rule in policy) {
@@ -79,7 +79,7 @@ class Assertion {
 
     if (count < 2) {
       throw ArgumentError(
-          'the number of \"_\" in role definition should be at least 2');
+          'the number of "_" in role definition should be at least 2');
     }
 
     for (var rule in rules) {
@@ -91,14 +91,12 @@ class Assertion {
         rule = rule.sublist(0, count);
       }
       switch (op) {
-        case PolicyOperations.PolicyAdd:
+        case PolicyOperations.policyAdd:
           rm.addLink(rule[0], rule[1], rule.sublist(2));
           break;
-        case PolicyOperations.PolicyRemove:
+        case PolicyOperations.policyRemove:
           rm.deleteLink(rule[0], rule[1], rule.sublist(2));
           break;
-        default:
-          throw ArgumentError('invalid operation:' + op.toString());
       }
     }
   }

@@ -254,12 +254,11 @@ class CoreEnforcer {
   /// [rvals] must contain AbacClass for ABAC requests and String for other requests.
   bool enforce(List<dynamic> rvals) {
     if (rvals
-        .any((element) => (!(element is String) && !(element is AbacClass)))) {
+        .any((element) => (element is! String && element is! AbacClass))) {
       throw ArgumentError(
         'rvals can only contain String or subclass of AbacClass',
       );
     }
-    ;
     if (!_enabled) {
       return true;
     }
@@ -299,7 +298,7 @@ class CoreEnforcer {
     List<double> matcherResults;
 
     if (policyLen != 0) {
-      policyEffects = List<Effect>.filled(policyLen, Effect.Indeterminate);
+      policyEffects = List<Effect>.filled(policyLen, Effect.indeterminate);
       matcherResults = List<double>.filled(policyLen, 0);
       for (var i = 0; i < policyLen; i++) {
         final params = <String, dynamic>{};
@@ -341,12 +340,12 @@ class CoreEnforcer {
 
         if (result.runtimeType == bool) {
           if (!result) {
-            policyEffects[i] = Effect.Indeterminate;
+            policyEffects[i] = Effect.indeterminate;
             continue;
           }
         } else if (result.runtimeType == int) {
           if (result == 0) {
-            policyEffects[i] = Effect.Indeterminate;
+            policyEffects[i] = Effect.indeterminate;
             continue;
           } else {
             matcherResults[i] = result;
@@ -358,14 +357,14 @@ class CoreEnforcer {
         if (params['p_eft'] != null) {
           String eft = params['p_eft'];
           if (eft == 'allow') {
-            policyEffects[i] = Effect.Allow;
+            policyEffects[i] = Effect.allow;
           } else if (eft == 'deny') {
-            policyEffects[i] = Effect.Deny;
+            policyEffects[i] = Effect.deny;
           } else {
-            policyEffects[i] = Effect.Indeterminate;
+            policyEffects[i] = Effect.indeterminate;
           }
         } else {
-          policyEffects[i] = Effect.Allow;
+          policyEffects[i] = Effect.allow;
         }
       }
     } else {
@@ -376,7 +375,7 @@ class CoreEnforcer {
 
       final params = <String, dynamic>{};
 
-      policyEffects = <Effect>[Effect.Indeterminate];
+      policyEffects = <Effect>[Effect.indeterminate];
       matcherResults = <double>[0];
 
       for (var j = 0; j < rTokensLen; j++) {
@@ -393,7 +392,7 @@ class CoreEnforcer {
       final evaluator = const CasbinEvaluator();
       final result = evaluator.eval(expression, context);
 
-      policyEffects[0] = result ? Effect.Allow : Effect.Indeterminate;
+      policyEffects[0] = result ? Effect.allow : Effect.indeterminate;
     }
 
     final result = eft.mergeEffects(

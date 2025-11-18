@@ -40,9 +40,8 @@ class DefaultFilteredAdapter implements FilteredAdapter {
   bool _filtered = true;
   String filepath;
 
-  DefaultFilteredAdapter(String filepath)
-      : filepath = filepath,
-        adapter = FileAdapter(filepath);
+  DefaultFilteredAdapter(this.filepath)
+      : adapter = FileAdapter(filepath);
 
   /// loadFilteredPolicy loads only policy rules that match the filter.
   /// [model] the model.

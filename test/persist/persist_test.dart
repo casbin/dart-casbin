@@ -52,9 +52,9 @@ void main() {
       ['admin', '/', 'PATCH'],
     ];
 
-    testdata.forEach((line) {
+    for (var line in testdata) {
       Helper.loadPolicyLine(m, line);
-    });
+    }
 
     var ast = m.model['p']?['p'];
 

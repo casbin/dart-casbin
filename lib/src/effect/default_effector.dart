@@ -21,20 +21,20 @@ class DefaultEffector implements Effector {
   bool mergeEffects(String expr, List<Effect> effects, List<double> results) {
     var result = false;
     if (expr == 'some(where (p_eft == allow))') {
-      result = effects.any((eft) => eft == Effect.Allow);
+      result = effects.any((eft) => eft == Effect.allow);
     } else if (expr == '!some(where (p_eft == deny))') {
-      result = !effects.any((eft) => eft == Effect.Deny);
+      result = !effects.any((eft) => eft == Effect.deny);
     } else if (expr ==
         'some(where (p_eft == allow)) && !some(where (p_eft == deny))') {
-      if (effects.any((eft) => eft == Effect.Deny)) {
+      if (effects.any((eft) => eft == Effect.deny)) {
         result = false;
-      } else if (effects.any((eft) => eft == Effect.Allow)) {
+      } else if (effects.any((eft) => eft == Effect.allow)) {
         result = true;
       }
     } else if (expr == 'priority(p_eft) || deny') {
       for (var eft in effects) {
-        if (eft != Effect.Indeterminate) {
-          if (eft == Effect.Allow) {
+        if (eft != Effect.indeterminate) {
+          if (eft == Effect.allow) {
             result = true;
           } else {
             result = false;

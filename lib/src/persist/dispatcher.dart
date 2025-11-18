@@ -13,6 +13,7 @@
 // limitations under the License.
 
 /// Dispatcher is the interface for dart-casbin dispatcher
+library;
 
 abstract class Dispatcher {
   /// AddPolicies adds policies rule to all instance.
