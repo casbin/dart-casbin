@@ -1,8 +1,11 @@
 # dart-casbin
 
-An authorization library that supports access control models like ACL, RBAC, ABAC in Dart.
-
+[![pub package](https://img.shields.io/pub/v/casbin.svg)](https://pub.dev/packages/casbin)
+[![Dart CI](https://github.com/casbin/dart-casbin/workflows/Dart%20CI/badge.svg)](https://github.com/casbin/dart-casbin/actions)
 [![Discord](https://img.shields.io/discord/1022748306096537660?logo=discord&label=discord&color=5865F2)](https://discord.gg/S5UjpzGZjN)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+
+An authorization library that supports access control models like ACL, RBAC, ABAC in Dart.
 
 **News**: Are you still worried about how to write the correct Casbin policy? `Casbin online editor` is coming to help! Try it at: http://casbin.org/editor/
 
@@ -98,11 +101,34 @@ You can also use the online editor (https://casbin.org/editor/) to write your Ca
 
 https://casbin.org/docs/tutorials
 
+## Installation
+
+Add this to your package's `pubspec.yaml` file:
+
+```yaml
+dependencies:
+  casbin: ^1.0.0
+```
+
+Then run:
+
+```bash
+dart pub get
+```
+
+Or with Flutter:
+
+```bash
+flutter pub get
+```
+
 ## Get started
 
 1. New a Casbin enforcer with a model file and a policy file:
 
    ```dart
+   import 'package:casbin/casbin.dart';
+
    var e = Enforcer.fromModelPathAndPolicyFile('path/to/model.conf', 'path/to/policy.csv');
    ```
 
