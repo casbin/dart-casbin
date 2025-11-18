@@ -69,12 +69,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
-      - name: Publish to pub
-        run: dart pub publish --dry-run
-
-      - uses: sakebook/actions-flutter-pub-publisher@v1.3.1
-        with:
-          package_directory: ${{ matrix.package }}
-          credential: ${{ secrets.PUB_CREDENTIALS }}
-          flutter_package: false
-          skip_test: true
+      - name: Setup Pub Credentials
+        run: |
+          mkdir -p $HOME/.config/dart
+          echo '${{ secrets.PUB_CREDENTIALS }}' > $HOME/.config/dart/pub-credentials.json
+      
+      - name: Publish to pub.dev
+        run: dart pub publish --force
