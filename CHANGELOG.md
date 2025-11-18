@@ -1,3 +1,16 @@
+# [0.2.0](https://github.com/casbin/dart-casbin/compare/v0.1.0...v0.2.0) (2025-11-18)
+
+
+### Bug Fixes
+
+* fix broken links ([#56](https://github.com/casbin/dart-casbin/issues/56)) ([9c72f3f](https://github.com/casbin/dart-casbin/commit/9c72f3f5839d8cfbb456543a81891dc8c8556137))
+
+
+### Features
+
+* fix CI failure: replace deprecated cedx/setup-dart with dart-lang/setup-dart ([#65](https://github.com/casbin/dart-casbin/issues/65)) ([c1fb01b](https://github.com/casbin/dart-casbin/commit/c1fb01bbe61e056130952b6cbf3ed57cca9339d1))
+* fix CI workflow stuck in queue due to deprecated ubuntu-20.04 runners ([7a2096a](https://github.com/casbin/dart-casbin/commit/7a2096ae87fb9ee85263d53363c9eff07d80fa4a))
+
 # [0.1.0](https://github.com/casbin/dart-casbin/compare/v0.0.1...v0.1.0) (2021-08-20)
 
 
