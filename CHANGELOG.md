@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/casbin/dart-casbin/compare/v1.1.0...v1.2.0) (2025-11-18)
+
+
+### Features
+
+* fix CI: update SDK constraint to >=3.0.0 for lints compatibility ([#71](https://github.com/casbin/dart-casbin/issues/71)) ([71feb0f](https://github.com/casbin/dart-casbin/commit/71feb0f0d0bf3e73433d9ea4020166f0a6d18d58))
+
 # [1.1.0](https://github.com/casbin/dart-casbin/compare/v1.0.0...v1.1.0) (2025-11-18)
 
 
