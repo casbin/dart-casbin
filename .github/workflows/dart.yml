@@ -28,6 +28,8 @@ jobs:
         run: dart pub get
       - name: Check formatting
         run: dart format --output=none --set-exit-if-changed .
+      - name: Analyze code
+        run: dart analyze --fatal-infos
 
   # runs dart test
   test:
