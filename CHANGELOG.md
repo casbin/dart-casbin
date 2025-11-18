@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/casbin/dart-casbin/compare/v1.3.0...v1.4.0) (2025-11-18)
+
+
+### Features
+
+* fix CI publish step failing on Dart SDK version mismatch ([#75](https://github.com/casbin/dart-casbin/issues/75)) ([ecf8801](https://github.com/casbin/dart-casbin/commit/ecf88019f02d077140f5dc07e1248c310e20560c))
+
 # [1.3.0](https://github.com/casbin/dart-casbin/compare/v1.2.0...v1.3.0) (2025-11-18)
 
 
