@@ -1,3 +1,15 @@
+# [1.0.0](https://github.com/casbin/dart-casbin/compare/v0.2.0...v1.0.0) (2025-11-18)
+
+
+### Features
+
+* Publish 1.0.0 stable release ([#66](https://github.com/casbin/dart-casbin/issues/66)) ([a0a2742](https://github.com/casbin/dart-casbin/commit/a0a27429b14580df27f986a21c2babf76262c1ef))
+
+
+### BREAKING CHANGES
+
+* Promoting to 1.0.0 stable release
+
 # [0.2.0](https://github.com/casbin/dart-casbin/compare/v0.1.0...v0.2.0) (2025-11-18)
 
 
