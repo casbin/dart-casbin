@@ -11,6 +11,30 @@ An authorization library that supports access control models like ACL, RBAC, ABA
 
 ![casbin Logo](casbin-logo.png)
 
+## Table of Contents
+
+- [Why Casbin?](#why-casbin)
+- [Installation](#installation)
+- [Get Started](#get-started)
+- [Supported Models](#supported-models)
+- [How It Works](#how-it-works)
+- [Features](#features)
+- [Documentation](#documentation)
+- [Examples](#examples)
+- [Contributing](#how-to-contribute)
+- [License](#license)
+
+## Why Casbin?
+
+Casbin is a powerful and efficient open-source access control library. It provides support for enforcing authorization based on various access control models:
+
+✅ **Multiple Models**: Support for ACL, RBAC, ABAC, and more  
+✅ **Flexible & Scalable**: Easily customize your access control model  
+✅ **Production Ready**: Battle-tested across multiple languages and platforms  
+✅ **Policy Management**: Built-in APIs for managing permissions at runtime  
+✅ **Zero Dependencies**: Minimal footprint with no external runtime dependencies  
+✅ **Well Tested**: Comprehensive test coverage with 452+ test cases
+
 ## All the languages supported by Casbin:
 
 | [![golang](https://casbin.org/img/langs/golang.png)](https://github.com/casbin/casbin) | [![java](https://casbin.org/img/langs/java.png)](https://github.com/casbin/jcasbin) | [![nodejs](https://casbin.org/img/langs/nodejs.png)](https://github.com/casbin/node-casbin) | [![php](https://casbin.org/img/langs/php.png)](https://github.com/php-casbin/php-casbin) |
@@ -220,6 +244,18 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 <a href="https://opencollective.com/casbin/sponsor/0/website" target="_blank"><img src="https://opencollective.com/casbin/sponsor/0/avatar.svg"></a>
 <a href="https://opencollective.com/casbin/sponsor/1/website" target="_blank"><img src="https://opencollective.com/casbin/sponsor/1/avatar.svg"></a>
 <a href="https://opencollective.com/casbin/sponsor/2/website" target="_blank"><img src="https://opencollective.com/casbin/sponsor/2/avatar.svg"></a>
+
+## How to Contribute
+
+Please read the [contributing guide](CONTRIBUTING.md) for details on our development process and how to submit pull requests.
+
+We welcome contributions from the community! Whether it's:
+- 🐛 Bug fixes
+- ✨ New features
+- 📝 Documentation improvements
+- 🧪 Test improvements
+
+All contributions are appreciated! Join our [Discord](https://discord.gg/S5UjpzGZjN) to discuss with the community.
 
 ## License
 
