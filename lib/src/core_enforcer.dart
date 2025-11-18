@@ -176,7 +176,7 @@ class CoreEnforcer {
   void loadFilteredPolicy(var filter) {
     model.clearPolicy();
     FilteredAdapter filteredAdapter;
-    if (adapter.runtimeType == FilteredAdapter) {
+    if (adapter is FilteredAdapter) {
       filteredAdapter = (adapter as FilteredAdapter);
     } else {
       throw CasbinAdapterException(
@@ -195,7 +195,7 @@ class CoreEnforcer {
 
   /// Returns if the loaded policy has been filtered.
   bool isFiltered() {
-    if (adapter.runtimeType == FilteredAdapter) {
+    if (adapter is FilteredAdapter) {
       (adapter as FilteredAdapter).isFiltered();
     }
     return false;
