@@ -76,5 +76,5 @@ jobs:
         with:
           package_directory: ${{ matrix.package }}
           credential: ${{ secrets.PUB_CREDENTIALS }}
-          flutter_package: true
+          flutter_package: false
           skip_test: true
