@@ -25,10 +25,12 @@ class CasbinEvaluator extends ExpressionEvaluator {
 
   @override
   dynamic evalMemberExpression(
-      MemberExpression expression, Map<String, dynamic> context) {
+    MemberExpression expression,
+    Map<String, dynamic> context,
+  ) {
     var objectValue = eval(expression.object, context);
     Map<String, dynamic> object;
-    
+
     // Handle different types of objects
     if (objectValue is String) {
       // Try to parse as JSON
@@ -51,10 +53,12 @@ class CasbinEvaluator extends ExpressionEvaluator {
       try {
         object = objectValue.toMap();
       } catch (e) {
-        throw Exception('Object must be a JSON string, Map, or implement AbacClass: ${objectValue.runtimeType}');
+        throw Exception(
+          'Object must be a JSON string, Map, or implement AbacClass: ${objectValue.runtimeType}',
+        );
       }
     }
-    
+
     return object[expression.property.name];
   }
 }
