@@ -128,67 +128,6 @@ https://casbin.org/docs/tutorials
 
 See [Policy management APIs](#policy-management) for more usage.
 
-## ABAC with JSON strings
-
-Dart-Casbin supports using JSON strings as subjects for Attribute-Based Access Control (ABAC), making it easy to implement ABAC in Flutter and Dart applications without creating custom classes.
-
-```dart
-import 'package:casbin/casbin.dart';
-import 'dart:convert';
-
-// Define an ABAC model
-final model = Model()..loadModelFromText('''
-[request_definition]
-r = sub, obj, act
-
-[policy_definition]
-p = sub, obj, act, condition
-
-[policy_effect]
-e = some(where (p.eft == allow))
-
-[matchers]
-m = eval(p.condition) && r.obj == p.obj && r.act == p.act
-''');
-
-// Create enforcer
-final enforcer = Enforcer.initWithModelAndAdapter(model);
-
-// Add policy with attribute-based condition
-enforcer.addPolicy([
-  '{"age": 18}',
-  '/data1',
-  'read',
-  'r.sub.age >= 18 && r.sub.age < 60'
-]);
-
-// Check access using JSON string
-String userJson = jsonEncode({"age": 25});
-bool allowed = enforcer.enforce([userJson, '/data1', 'read']);
-// Returns: true (access granted)
-```
-
-You can also use multiple attributes:
-
-```dart
-// Add policy with multiple attributes
-enforcer.addPolicy([
-  '{"role": "admin"}',
-  '/admin',
-  'write',
-  'r.sub.role == "admin" && r.sub.age >= 21'
-]);
-
-// Check access with multiple user attributes
-String adminJson = jsonEncode({"role": "admin", "age": 25});
-bool allowed = enforcer.enforce([adminJson, '/admin', 'write']);
-// Returns: true
-```
-
-For complete examples, see:
-- [example/abac_json_example.dart](example/abac_json_example.dart) - Basic ABAC with JSON
-- [example/flutter_abac_example.dart](example/flutter_abac_example.dart) - Flutter-specific examples
-
 ## Policy management
 
 Casbin provides two sets of APIs to manage permissions:
