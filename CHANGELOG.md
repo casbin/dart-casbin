@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/casbin/dart-casbin/compare/v1.7.0...v1.8.0) (2025-12-07)
+
+
+### Features
+
+* add JSON string support for ABAC enforcement ([#59](https://github.com/casbin/dart-casbin/issues/59)) ([b4eb1f9](https://github.com/casbin/dart-casbin/commit/b4eb1f9d9e5e45809fb2df96c9de20f64ca5c6d8))
+
 # [1.7.0](https://github.com/casbin/dart-casbin/compare/v1.6.0...v1.7.0) (2025-11-18)
 
 
