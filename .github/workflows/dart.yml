@@ -58,8 +58,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm install -g "@semantic-release/changelog"
-      - run: npm install -g "@semantic-release/git"
       - run: npm install -g "pub-semantic-release"
       
       # Setup pub.dev credentials for automated publishing
