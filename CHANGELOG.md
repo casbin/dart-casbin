@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/casbin/dart-casbin/compare/v1.8.0...v1.8.1) (2026-01-01)
+
+
+### Bug Fixes
+
+* improve links in README ([5271257](https://github.com/casbin/dart-casbin/commit/527125731f6fecfc7e26d91f3964f9dd7ad66701))
+
 # [1.8.0](https://github.com/casbin/dart-casbin/compare/v1.7.0...v1.8.0) (2025-12-07)
 
 
